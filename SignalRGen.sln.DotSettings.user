@@ -2,5 +2,6 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=1a966f14_002Db566_002D49e2_002D8228_002D1f89ecac3923/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Generates_HubClientAttribute_Correctly" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
   &lt;TestAncestor&gt;
     &lt;TestId&gt;xUnit::2BC10C32-6CFE-442B-9A90-B5B3B7B12E40::net7.0::SignalRGen.Generator.Tests.HubClientAttributeTests.Generates_HubClientAttribute_Correctly&lt;/TestId&gt;
+    &lt;TestId&gt;xUnit::2BC10C32-6CFE-442B-9A90-B5B3B7B12E40::net7.0::SignalRGen.Generator.Tests.HubClientTests.Generates_HubClient_Correctly&lt;/TestId&gt;
   &lt;/TestAncestor&gt;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
