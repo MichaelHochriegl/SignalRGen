@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{156E35FD
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Generator.Tests", "tests\SignalRGen.Generator.Tests\SignalRGen.Generator.Tests.csproj", "{2BC10C32-6CFE-442B-9A90-B5B3B7B12E40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Client.BlazorServer", "example\SignalRGen.Example.Client.BlazorServer\SignalRGen.Example.Client.BlazorServer.csproj", "{012B6133-5D23-4D12-925C-5F9DD6E532C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Contracts", "example\SignalRGen.Example.Contracts\SignalRGen.Example.Contracts.csproj", "{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,6 +22,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{0D84BF69-5C50-40A9-BD7C-9507E609637E} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
 		{2BC10C32-6CFE-442B-9A90-B5B3B7B12E40} = {156E35FD-D926-4394-99BB-23CE485E357A}
+		{012B6133-5D23-4D12-925C-5F9DD6E532C6} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
+		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0D84BF69-5C50-40A9-BD7C-9507E609637E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -28,5 +34,13 @@ Global
 		{2BC10C32-6CFE-442B-9A90-B5B3B7B12E40}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2BC10C32-6CFE-442B-9A90-B5B3B7B12E40}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2BC10C32-6CFE-442B-9A90-B5B3B7B12E40}.Release|Any CPU.Build.0 = Release|Any CPU
+		{012B6133-5D23-4D12-925C-5F9DD6E532C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{012B6133-5D23-4D12-925C-5F9DD6E532C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{012B6133-5D23-4D12-925C-5F9DD6E532C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{012B6133-5D23-4D12-925C-5F9DD6E532C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
