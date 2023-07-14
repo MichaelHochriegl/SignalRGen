@@ -1,7 +1,13 @@
 ﻿//HintName: HubClientAttribute.g.cs
+using System;
+
 namespace SignalRGen.Generator;
-[System.AttributeUsage(System.AttributeTargets.Interface)]
-public sealed class HubClientAttribute : System.Attribute
+/// <summary>
+/// Marker Attribute for a HubClient.
+/// </summary>
+[AttributeUsage(AttributeTargets.Interface)]
+public sealed class HubClientAttribute : Attribute
 {
-    public string? HubName;
+    public string? HubName { get; init; }
+    public required string HubUri { get; init; }
 }

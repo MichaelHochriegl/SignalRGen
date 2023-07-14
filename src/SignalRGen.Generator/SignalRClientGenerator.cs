@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SignalRGen.Generator.Sources;
@@ -7,36 +9,63 @@ namespace SignalRGen.Generator;
 [Generator]
 internal sealed class SignalRClientGenerator : IIncrementalGenerator
 {
+    private const string MarkerAttributeFullQualifiedName = "SignalRGen.Generator.HubClientAttribute";
+ 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
+        Debugger.Launch();
         context.RegisterPostInitializationOutput(ctx => ctx.AddSource("HubClientAttribute.g.cs", HubClientAttributeSource.GetSource()));
-        
-        var interfaces =
-            context.SyntaxProvider.CreateSyntaxProvider(static (syntaxNode, _) =>
-                    syntaxNode is InterfaceDeclarationSyntax { AttributeLists.Count: > 0 }, GetSemanticTargetForGeneration)
-                .Where(n => n is not null);
+        context.RegisterPostInitializationOutput(ctx => ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource()));
+        context.RegisterPostInitializationOutput(ctx => ctx.AddSource("HubClientOptions.g.cs", HubClientOptionsSource.GetSource()));
+        context.RegisterPostInitializationOutput(ctx => ctx.AddSource("IHubClient.g.cs", IHubClientSource.GetSource()));
+        context.RegisterPostInitializationOutput(ctx => ctx.AddSource("SignalRHubServiceCollection.g.cs", FmSignalRHubServiceCollectionSource.GetSource()));
+        context.RegisterPostInitializationOutput(ctx => ctx.AddSource("SignalROptions.g.cs", SignalROptionsSource.GetSource()));
 
-        context.RegisterSourceOutput(interfaces, GenerateHubClient!);
+        var markedInterfaces = context.SyntaxProvider.ForAttributeWithMetadataName(
+            MarkerAttributeFullQualifiedName, static (syntaxNode, _) =>
+                syntaxNode is InterfaceDeclarationSyntax { AttributeLists.Count: > 0 }, GetSemanticTargetForGeneration);
+        var allHubClients = markedInterfaces.Collect();
+
+        context.RegisterSourceOutput(markedInterfaces, GenerateHubClient!);
+        context.RegisterSourceOutput(allHubClients, GenerateHubClientRegistration!);
     }
     
     private static void GenerateHubClient(SourceProductionContext context, HubClientToGenerate hubClientToGenerate)
     {
         context.AddSource($"{hubClientToGenerate.HubName}.g.cs", HubClientSource.GetSourceText(hubClientToGenerate));
     }
-
-    #region Get Hub-Clients To Generate
-
-    private static HubClientToGenerate? GetSemanticTargetForGeneration(GeneratorSyntaxContext context, CancellationToken cancellationToken)
+    
+    private static void GenerateHubClientRegistration(SourceProductionContext context, ImmutableArray<HubClientToGenerate> hubClients)
     {
-        var node = (context.Node as InterfaceDeclarationSyntax)!;
-        var declaredSymbol = context.SemanticModel.GetDeclaredSymbol(node, cancellationToken);
-        if (declaredSymbol is null)
-            return null;
+        context.AddSource("SignalRClientServiceRegistration.g.cs", SignalRClientServiceRegistrationSource.GetSource(hubClients));
+    }
 
-        var hubClientAttribute = declaredSymbol.GetAttributes().FirstOrDefault(x =>
-            x.AttributeClass is not null && x.AttributeClass.ToString() == "HubClient");
-        return hubClientAttribute is null ? null : new HubClientToGenerate(hubName: GetHubNameOrDefaultConvention(hubClientAttribute, node),
+    private static HubClientToGenerate? GetSemanticTargetForGeneration(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
+    {
+        var node = (context.TargetNode as InterfaceDeclarationSyntax)!;
+
+        var markerAttribute =
+            context.SemanticModel.Compilation.GetTypeByMetadataName(MarkerAttributeFullQualifiedName);
+
+        if (markerAttribute is null)
+        {
+            return null;
+        }
+
+        var hubClientAttribute = context.Attributes.FirstOrDefault(x =>
+            x.AttributeClass is not null && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
+
+        return hubClientAttribute is null ? null : new HubClientToGenerate(interfaceName: node.Identifier.Text, hubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), hubUri: GetHubUri(hubClientAttribute),
             usings: GetInterfacesUsings(node), methods: GetInterfaceMethods(node));
+    }
+    
+    private static string GetHubUri(AttributeData hubClientAttribute)
+    {
+        var hubUri = hubClientAttribute.NamedArguments
+            .First(a => a.Key == "HubUri").Value.Value!
+            .ToString();
+
+        return hubUri;
     }
 
     private static IEnumerable<MethodDeclarationSyntax> GetInterfaceMethods(TypeDeclarationSyntax node)
@@ -59,6 +88,4 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         var rValue = hubName?.ToString() ?? syntaxNode.Identifier.Text.Substring(1);
         return rValue;
     }
-
-    #endregion
 }
