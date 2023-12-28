@@ -14,6 +14,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Client.B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Contracts", "example\SignalRGen.Example.Contracts\SignalRGen.Example.Contracts.csproj", "{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Server.Api", "example\SignalRGen.Example.Server.Api\SignalRGen.Example.Server.Api.csproj", "{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,6 +26,7 @@ Global
 		{2BC10C32-6CFE-442B-9A90-B5B3B7B12E40} = {156E35FD-D926-4394-99BB-23CE485E357A}
 		{012B6133-5D23-4D12-925C-5F9DD6E532C6} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
 		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
+		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0D84BF69-5C50-40A9-BD7C-9507E609637E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +45,9 @@ Global
 		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

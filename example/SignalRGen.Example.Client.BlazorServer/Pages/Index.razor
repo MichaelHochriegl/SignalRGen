@@ -11,9 +11,10 @@
 {
     private int _count = 0;
     
-    protected override void OnInitialized()
+    protected override async Task OnInitializedAsync()
     {
         ExampleHubClient.OnReceiveExampleCountUpdate += OnReceiveExampleCountUpdate;
+        await ExampleHubClient.StartAsync();
     }
 
     private async Task OnReceiveExampleCountUpdate(int arg)
