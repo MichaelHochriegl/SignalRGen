@@ -4,7 +4,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddSignalRHubs(c => c.HubBaseUri = new Uri("http://localhost")).WithExampleHubClient();
+builder.Services.AddSignalRHubs(c => c.HubBaseUri = new Uri("http://localhost:5155")).WithExampleHubClient();
 
 var app = builder.Build();
 
