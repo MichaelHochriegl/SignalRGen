@@ -1,5 +1,6 @@
 [![.Net](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml)
-# SignalRGen ![Package-Logo](https://raw.githubusercontent.com/MichaelHochriegl/SignalRGen/chore/readme/SignalRGen.Logo_32x32.png?token=GHSAT0AAAAAACE5S4U5MCWZGGQWVSSZPV72ZMN7LCA)
+# SignalRGen ![Package-Logo](https://raw.githubusercontent.com/MichaelHochriegl/SignalRGen/chore/readme/SignalRGen.Logo_32x32.png)
+
 > A source generator based approach to easily setup `SignalR` communication
 
 ## Purpose
@@ -137,7 +138,7 @@ builder.Services
     });
 ```
 
-With this you can use the `ExampleHubClient` like so (Blazor example code):
+After setting up your DI like described above you can use the `ExampleHubClient` like so (Blazor example code):
 ```csharp
 @page "/"
 @using SignalRGen.Generator
@@ -168,3 +169,5 @@ With this you can use the `ExampleHubClient` like so (Blazor example code):
 
 The `ExampleHubClient.StartAsync()` can be called multiple times, as it checks if the connection is not disconnected and 
 only starts it if the `HubConnectionState` is disconnected. So multiple calls will not start the connection multiple times.
+
+If you want to get a deeper understanding and look at the generated code head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on github.
