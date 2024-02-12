@@ -55,8 +55,8 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         var hubClientAttribute = context.Attributes.FirstOrDefault(x =>
             x.AttributeClass is not null && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
 
-        return hubClientAttribute is null ? null : new HubClientToGenerate(interfaceName: node.Identifier.Text, hubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), hubUri: GetHubUri(hubClientAttribute),
-            usings: GetInterfacesUsings(node), methods: GetInterfaceMethods(node));
+        return hubClientAttribute is null ? null : new HubClientToGenerate(InterfaceName: node.Identifier.Text, HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), HubUri: GetHubUri(hubClientAttribute),
+            Usings: GetInterfacesUsings(node), Methods: GetInterfaceMethods(node));
     }
     
     private static string GetHubUri(AttributeData hubClientAttribute)
