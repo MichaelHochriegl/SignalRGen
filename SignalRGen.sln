@@ -16,6 +16,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Contract
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Server.Api", "example\SignalRGen.Example.Server.Api\SignalRGen.Example.Server.Api.csproj", "{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-files", "01-files", "{DA42828B-9FA9-4497-8826-01F8465D6CE7}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+		SignalRGen.Logo.png = SignalRGen.Logo.png
+		SignalRGen.Logo_32x32.png = SignalRGen.Logo_32x32.png
+		SignalRGen.Logo_128x128.png = SignalRGen.Logo_128x128.png
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
