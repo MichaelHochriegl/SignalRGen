@@ -60,7 +60,7 @@ Apart from that `SignalRGen` currently doesn't do anything for the server experi
 ## Client-Side usage
 
 After you did the setup part you will have a greatly enhanced client experience.
-`SignalRGen` generates generates multiple files, like for example this client:
+`SignalRGen` generates multiple files, like for example this client:
 
 ```csharp
 //------------------------------------------------------------------------------
