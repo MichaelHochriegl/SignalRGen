@@ -12,6 +12,7 @@ using System;
 using SignalRGen.Generator.Tests.TestData;
 using SignalRGen.Generator;
 using Microsoft.AspNetCore.SignalR.Client;
+using SignalRGen.Clients;
 
 #nullable enable
 

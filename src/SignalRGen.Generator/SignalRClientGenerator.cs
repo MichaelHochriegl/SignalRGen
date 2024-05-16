@@ -61,7 +61,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         var usings = GetInterfacesUsings(node);
         var methods = GetInterfaceMethods(node);
         return hubClientAttribute is null ? null : new HubClientToGenerate(InterfaceName: node.Identifier.Text, HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), HubUri: GetHubUri(hubClientAttribute),
-            Usings: usings, Methods: methods);
+            InterfaceNamespace: GetInterfaceNamespace(node), Usings: usings, Methods: methods);
     }
     
     private static string GetHubUri(AttributeData hubClientAttribute)
@@ -71,6 +71,11 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             .ToString();
 
         return hubUri ?? "Borked";
+    }
+
+    private static string GetInterfaceNamespace(InterfaceDeclarationSyntax interfaceDeclarationSyntax)
+    {
+        return interfaceDeclarationSyntax.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>()?.Name.ToString() ?? "Borked";
     }
 
     private static EquatableArray<CacheableMethodDeclaration> GetInterfaceMethods(TypeDeclarationSyntax node)

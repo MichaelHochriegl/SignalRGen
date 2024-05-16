@@ -64,7 +64,9 @@ internal static class HubClientSource
             """;
 
         var allUsings =
-            hubClientToGenerate.Usings.Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.SignalR.Client;"));
+            hubClientToGenerate.Usings
+                .Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.SignalR.Client;"))
+                .Append(new CacheableUsingDeclaration($"using {hubClientToGenerate.InterfaceNamespace};"));
         var usings = string.Join("\n", allUsings.Select(u => u.UsingNamespace));
 
         var methods = hubClientToGenerate.Methods.Select(method =>
