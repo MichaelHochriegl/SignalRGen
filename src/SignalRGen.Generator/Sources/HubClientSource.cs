@@ -60,10 +60,12 @@ internal static class HubClientSource
             """;
         var onMethodTemplate =
             """
-                _hubConnection.On<int>("{~{identifier}~}", {~{identifier}~}Handler);
+                _hubConnection?.On<{~{parameterTypes}~}>("{~{identifier}~}", {~{identifier}~}Handler);
             """;
 
-        var usings = string.Join("\n", hubClientToGenerate.Usings.Select(u => u.UsingNamespace));
+        var allUsings =
+            hubClientToGenerate.Usings.Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.SignalR.Client;"));
+        var usings = string.Join("\n", allUsings.Select(u => u.UsingNamespace));
 
         var methods = hubClientToGenerate.Methods.Select(method =>
             {
@@ -81,7 +83,13 @@ internal static class HubClientSource
             .ToArray();
 
         var onMethods = hubClientToGenerate.Methods
-            .Select(method => onMethodTemplate.Replace("{~{identifier}~}", method.Identifier))
+            .Select(method =>
+            {
+                var parameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type));
+
+                return onMethodTemplate.Replace("{~{identifier}~}", method.Identifier)
+                    .Replace("{~{parameterTypes}~}", parameterTypes);
+            })
             .ToArray();
 
         template = template

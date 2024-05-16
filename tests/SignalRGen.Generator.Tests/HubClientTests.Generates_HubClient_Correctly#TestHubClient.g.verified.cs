@@ -11,6 +11,7 @@
 using System;
 using SignalRGen.Generator.Tests.TestData;
 using SignalRGen.Generator;
+using Microsoft.AspNetCore.SignalR.Client;
 
 #nullable enable
 
@@ -45,7 +46,7 @@ public class TestHubClient : HubClientBase, IHubClient
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection.On<int>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
-	    _hubConnection.On<int>("ReceiveFooUpdate", ReceiveFooUpdateHandler);
+        _hubConnection?.On<IEnumerable<CustomTypeDto>>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
+	    _hubConnection?.On<string, int>("ReceiveFooUpdate", ReceiveFooUpdateHandler);
     }
 }
