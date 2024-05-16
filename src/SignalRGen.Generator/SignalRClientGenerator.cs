@@ -53,6 +53,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             return null;
         }
 
+        // TODO: analyze why the attribute is of type Error, hence the `equals` check is not working
         var hubClientAttribute = context.Attributes.FirstOrDefault(x =>
             x.AttributeClass is not null 
             // && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
@@ -66,6 +67,8 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
     
     private static string GetHubUri(AttributeData hubClientAttribute)
     {
+        // TODO: fix this here not getting the arguments
+        // after fixing it the null return should be removed again
         var hubUri = hubClientAttribute.NamedArguments
             .FirstOrDefault(a => a.Key == "HubUri").Value.Value?
             .ToString();
