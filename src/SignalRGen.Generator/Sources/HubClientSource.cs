@@ -63,7 +63,7 @@ internal static class HubClientSource
                 _hubConnection.On<int>("{~{identifier}~}", {~{identifier}~}Handler);
             """;
 
-        var usings = string.Join("\n", hubClientToGenerate.Usings.Select(u => u.ToString()));
+        var usings = string.Join("\n", hubClientToGenerate.Usings.Select(u => u.UsingNamespace));
 
         var methods = hubClientToGenerate.Methods.Select(method =>
             {

@@ -81,10 +81,12 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
              m.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text)).ToImmutableArray().AsEquatableArray())).ToImmutableArray().AsEquatableArray();
     }
 
-    private static IEnumerable<UsingDirectiveSyntax> GetInterfacesUsings(SyntaxNode syntaxNode)
+    private static EquatableArray<CacheableUsingDeclaration> GetInterfacesUsings(SyntaxNode syntaxNode)
     {
-        return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>()
-               ?? Enumerable.Empty<UsingDirectiveSyntax>();
+        // return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>()
+        //        ?? Enumerable.Empty<UsingDirectiveSyntax>();
+        return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>().Select(u => new CacheableUsingDeclaration(u.ToString())).ToImmutableArray().AsEquatableArray()
+               ?? EquatableArray<CacheableUsingDeclaration>.FromImmutableArray(new ImmutableArray<CacheableUsingDeclaration>());
     }
 
     private static string GetHubNameOrDefaultConvention(AttributeData hubClientAttribute, InterfaceDeclarationSyntax syntaxNode)
