@@ -6,6 +6,8 @@
         <Nullable>enable</Nullable>
         <LangVersion>Latest</LangVersion>
         <IncludeBuildOutput>false</IncludeBuildOutput>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     </PropertyGroup>
 
     <ItemGroup>

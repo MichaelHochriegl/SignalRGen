@@ -8,11 +8,13 @@ public class HubClientTests
     {
         // Arrange
          const string source = @"
+             using System;
              using SignalRGen.Generator.Tests.TestData;
+             using SignalRGen.Generator;
 
              namespace SignalRGen.Clients;
 
-             [HubClient]
+             [HubClient(HubUri = ""examples"")]
              public interface ITestHubClient
              {
                  Task ReceiveCustomTypeUpdate(IEnumerable<CustomTypeDto> customTypes);

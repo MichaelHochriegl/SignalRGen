@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SignalRGen.Generator.Common;
 using SignalRGen.Generator.Sources;
 
 namespace SignalRGen.Generator;
@@ -53,24 +54,31 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         }
 
         var hubClientAttribute = context.Attributes.FirstOrDefault(x =>
-            x.AttributeClass is not null && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
+            x.AttributeClass is not null 
+            // && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
+            && x.AttributeClass.ToString() == markerAttribute.ToString());
 
+        var usings = GetInterfacesUsings(node);
+        var methods = GetInterfaceMethods(node);
         return hubClientAttribute is null ? null : new HubClientToGenerate(InterfaceName: node.Identifier.Text, HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), HubUri: GetHubUri(hubClientAttribute),
-            Usings: GetInterfacesUsings(node), Methods: GetInterfaceMethods(node));
+            Usings: usings, Methods: methods);
     }
     
     private static string GetHubUri(AttributeData hubClientAttribute)
     {
         var hubUri = hubClientAttribute.NamedArguments
-            .First(a => a.Key == "HubUri").Value.Value!
+            .FirstOrDefault(a => a.Key == "HubUri").Value.Value?
             .ToString();
 
-        return hubUri;
+        return hubUri ?? "Borked";
     }
 
-    private static IEnumerable<MethodDeclarationSyntax> GetInterfaceMethods(TypeDeclarationSyntax node)
+    private static EquatableArray<CacheableMethodDeclaration> GetInterfaceMethods(TypeDeclarationSyntax node)
     {
-        return node.Members.OfType<MethodDeclarationSyntax>();
+        // return node.Members.OfType<MethodDeclarationSyntax>();
+        var methods = node.Members.OfType<MethodDeclarationSyntax>();
+        return methods.Select(m => new CacheableMethodDeclaration(m.Identifier.Text,
+             m.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text)).ToImmutableArray().AsEquatableArray())).ToImmutableArray().AsEquatableArray();
     }
 
     private static IEnumerable<UsingDirectiveSyntax> GetInterfacesUsings(SyntaxNode syntaxNode)

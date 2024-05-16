@@ -29,6 +29,43 @@ public static class SignalRClientServiceRegistration
         return new SignalRHubServiceCollection(services, config);
     }
 
+    /// <summary>
+    /// Registers the <see cref = "TestHubClient"/> in the <see cref = "ServiceCollection"/>.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// By default the <see cref = "TestHubClient"/> is registered with <see cref = "ServiceLifetime"/> singleton.
+    /// </para>
+    /// If no <see cref = "IRetryPolicy"/> is configured for the <see cref = "HubConnectionBuilder"/> a default retry policy will be used.
+    /// <list type="bullet">
+    ///     <item>
+    ///         Every second - 10 attempts
+    ///     </item>
+    ///     <item>
+    ///         Every 3 seconds - 5 attempts
+    ///     </item>
+    ///     <item>
+    ///         Every 10 seconds - 2 attempts
+    ///     </item>
+    /// </list>
+    /// </remarks>
+    /// <param name = "services">The <see cref = "SignalRHubServiceCollection"/> to register the Hub.</param>
+    /// <param name = "configuration">An action used to configure the provided options.</param>
+    /// <returns>The <see cref = "SignalRHubServiceCollection"/> to register additional Hubs.</returns>
+    public static SignalRHubServiceCollection WithTestHubClient(this SignalRHubServiceCollection services, Action<HubClientOptions>? configuration = null)
+    {
+        ArgumentNullException.ThrowIfNull(services);
+        var config = new HubClientOptions();
+        configuration?.Invoke(config);
+        services.Services.Add(new ServiceDescriptor(typeof(TestHubClient), factory: _ =>
+        {
+            var hubConnectionBuilder = new HubConnectionBuilder().WithUrl(new Uri(services.GeneralConfiguration.HubBaseUri, TestHubClient.HubUri)).WithAutomaticReconnect(DefaultRetrySteps.ToArray());
+            config.HubConnectionBuilderConfiguration?.Invoke(hubConnectionBuilder);
+            return new TestHubClient(hubConnectionBuilder);
+        }, config.HubClientLifetime));
+        return services;
+    }
+
     private static IEnumerable<TimeSpan> DefaultRetrySteps
     {
         get
