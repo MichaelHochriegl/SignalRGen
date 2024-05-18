@@ -9,11 +9,16 @@ public static class TestHelper
     {
         // Parse the provided string into a C# syntax tree
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
+        IEnumerable<PortableExecutableReference> references = new[]
+        {
+            MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
+        };
 
         // Create a Roslyn compilation for the syntax tree.
         CSharpCompilation compilation = CSharpCompilation.Create(
             assemblyName: "Tests",
-            syntaxTrees: new[] { syntaxTree });
+            syntaxTrees: new[] { syntaxTree },
+            references: references);
 
 
         // Create an instance of our EnumGenerator incremental source generator

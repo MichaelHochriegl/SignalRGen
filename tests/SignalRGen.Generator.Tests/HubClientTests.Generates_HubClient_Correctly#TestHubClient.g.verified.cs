@@ -8,9 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using SignalRGen.Generator.Tests.TestData;
 using SignalRGen.Generator;
+using SignalRGen.Generator.Tests.TestData;
 using Microsoft.AspNetCore.SignalR.Client;
 using SignalRGen.Clients;
 
@@ -23,7 +22,7 @@ namespace SignalRGen.Generator;
 /// </summary>
 public class TestHubClient : HubClientBase, IHubClient
 {
-    public static string HubUri { get; } = "Borked";
+    public static string HubUri { get; } = "examples";
     public TestHubClient(IHubConnectionBuilder hubConnectionBuilder) : base(hubConnectionBuilder)
     {
     }
