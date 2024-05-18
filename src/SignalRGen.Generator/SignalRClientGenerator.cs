@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using SignalRGen.Generator.Common;
 using SignalRGen.Generator.Sources;
 
 namespace SignalRGen.Generator;
@@ -23,8 +24,8 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
 
         var markedInterfaces = context.SyntaxProvider.ForAttributeWithMetadataName(
             MarkerAttributeFullQualifiedName, static (syntaxNode, _) =>
-                syntaxNode is InterfaceDeclarationSyntax { AttributeLists.Count: > 0 }, GetSemanticTargetForGeneration);
-        var allHubClients = markedInterfaces.Collect();
+                syntaxNode is InterfaceDeclarationSyntax { AttributeLists.Count: > 0 }, GetSemanticTargetForGeneration).WithTrackingName(TrackingNames.InitialExtraction);
+        var allHubClients = markedInterfaces.Collect().WithTrackingName(TrackingNames.Collect);
 
         context.RegisterSourceOutput(markedInterfaces, GenerateHubClient!);
         context.RegisterSourceOutput(allHubClients, GenerateHubClientRegistration!);
@@ -51,12 +52,15 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         {
             return null;
         }
-
+        
         var hubClientAttribute = context.Attributes.FirstOrDefault(x =>
-            x.AttributeClass is not null && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
+            x.AttributeClass is not null 
+            && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
 
-        return hubClientAttribute is null ? null : new HubClientToGenerate(interfaceName: node.Identifier.Text, hubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), hubUri: GetHubUri(hubClientAttribute),
-            usings: GetInterfacesUsings(node), methods: GetInterfaceMethods(node));
+        var usings = GetInterfacesUsings(node);
+        var methods = GetInterfaceMethods(node);
+        return hubClientAttribute is null ? null : new HubClientToGenerate(InterfaceName: node.Identifier.Text, HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), HubUri: GetHubUri(hubClientAttribute),
+            InterfaceNamespace: GetInterfaceNamespace(node), Usings: usings, Methods: methods);
     }
     
     private static string GetHubUri(AttributeData hubClientAttribute)
@@ -68,15 +72,25 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         return hubUri;
     }
 
-    private static IEnumerable<MethodDeclarationSyntax> GetInterfaceMethods(TypeDeclarationSyntax node)
+    private static string GetInterfaceNamespace(InterfaceDeclarationSyntax interfaceDeclarationSyntax)
     {
-        return node.Members.OfType<MethodDeclarationSyntax>();
+        return interfaceDeclarationSyntax.FirstAncestorOrSelf<BaseNamespaceDeclarationSyntax>()?.Name.ToString() ?? "Borked";
     }
 
-    private static IEnumerable<UsingDirectiveSyntax> GetInterfacesUsings(SyntaxNode syntaxNode)
+    private static EquatableArray<CacheableMethodDeclaration> GetInterfaceMethods(TypeDeclarationSyntax node)
     {
-        return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>()
-               ?? Enumerable.Empty<UsingDirectiveSyntax>();
+        // return node.Members.OfType<MethodDeclarationSyntax>();
+        var methods = node.Members.OfType<MethodDeclarationSyntax>();
+        return methods.Select(m => new CacheableMethodDeclaration(m.Identifier.Text,
+             m.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text)).ToImmutableArray().AsEquatableArray())).ToImmutableArray().AsEquatableArray();
+    }
+
+    private static EquatableArray<CacheableUsingDeclaration> GetInterfacesUsings(SyntaxNode syntaxNode)
+    {
+        // return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>()
+        //        ?? Enumerable.Empty<UsingDirectiveSyntax>();
+        return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>().Select(u => new CacheableUsingDeclaration(u.ToString())).ToImmutableArray().AsEquatableArray()
+               ?? EquatableArray<CacheableUsingDeclaration>.FromImmutableArray(new ImmutableArray<CacheableUsingDeclaration>());
     }
 
     private static string GetHubNameOrDefaultConvention(AttributeData hubClientAttribute, InterfaceDeclarationSyntax syntaxNode)

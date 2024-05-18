@@ -62,8 +62,8 @@ internal static class HubClientBaseSource
                                                                                             {
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList()),
                                                                                                 XmlTextLiteral(
                                                                                                     TriviaList(
@@ -74,8 +74,8 @@ internal static class HubClientBaseSource
                                                                                                     TriviaList()),
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList()),
                                                                                                 XmlTextLiteral(
                                                                                                     TriviaList(
@@ -100,8 +100,8 @@ internal static class HubClientBaseSource
                                                                                 {
                                                                                     XmlTextNewLine(
                                                                                         TriviaList(),
-                                                                                        Environment.NewLine,
-                                                                                        Environment.NewLine,
+                                                                                        "\n",
+                                                                                        "\n",
                                                                                         TriviaList()),
                                                                                     XmlTextLiteral(
                                                                                         TriviaList(
@@ -120,8 +120,8 @@ internal static class HubClientBaseSource
                                                                                             {
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList()),
                                                                                                 XmlTextLiteral(
                                                                                                     TriviaList(
@@ -132,8 +132,8 @@ internal static class HubClientBaseSource
                                                                                                     TriviaList()),
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList()),
                                                                                                 XmlTextLiteral(
                                                                                                     TriviaList(
@@ -144,8 +144,8 @@ internal static class HubClientBaseSource
                                                                                                     TriviaList()),
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList()),
                                                                                                 XmlTextLiteral(
                                                                                                     TriviaList(
@@ -168,8 +168,8 @@ internal static class HubClientBaseSource
                                                                             TokenList(
                                                                                 XmlTextNewLine(
                                                                                     TriviaList(),
-                                                                                    Environment.NewLine,
-                                                                                    Environment.NewLine,
+                                                                                    "\n",
+                                                                                    "\n",
                                                                                     TriviaList())))
                                                                 })))),
                                                 SyntaxKind.PublicKeyword,
@@ -269,10 +269,8 @@ internal static class HubClientBaseSource
                                                                                                     {
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -302,10 +300,8 @@ internal static class HubClientBaseSource
                                                                                                             TriviaList()),
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -329,8 +325,8 @@ internal static class HubClientBaseSource
                                                                                         TokenList(
                                                                                             XmlTextNewLine(
                                                                                                 TriviaList(),
-                                                                                                Environment.NewLine,
-                                                                                                Environment.NewLine,
+                                                                                                "\n",
+                                                                                                "\n",
                                                                                                 TriviaList())))
                                                                             })))),
                                                             SyntaxKind.PublicKeyword,
@@ -382,10 +378,8 @@ internal static class HubClientBaseSource
                                                                                                     {
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -415,10 +409,8 @@ internal static class HubClientBaseSource
                                                                                                             TriviaList()),
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -442,8 +434,8 @@ internal static class HubClientBaseSource
                                                                                         TokenList(
                                                                                             XmlTextNewLine(
                                                                                                 TriviaList(),
-                                                                                                Environment.NewLine,
-                                                                                                Environment.NewLine,
+                                                                                                "\n",
+                                                                                                "\n",
                                                                                                 TriviaList())))
                                                                             })))),
                                                             SyntaxKind.PublicKeyword,
@@ -489,10 +481,8 @@ internal static class HubClientBaseSource
                                                                                                     {
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -522,10 +512,8 @@ internal static class HubClientBaseSource
                                                                                                             TriviaList()),
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -549,8 +537,8 @@ internal static class HubClientBaseSource
                                                                                         TokenList(
                                                                                             XmlTextNewLine(
                                                                                                 TriviaList(),
-                                                                                                Environment.NewLine,
-                                                                                                Environment.NewLine,
+                                                                                                "\n",
+                                                                                                "\n",
                                                                                                 TriviaList())))
                                                                             })))),
                                                             SyntaxKind.PublicKeyword,
@@ -609,10 +597,8 @@ internal static class HubClientBaseSource
                                                                                                         {
                                                                                                             XmlTextNewLine(
                                                                                                                 TriviaList(),
-                                                                                                                Environment
-                                                                                                                    .NewLine,
-                                                                                                                Environment
-                                                                                                                    .NewLine,
+                                                                                                                "\n",
+                                                                                                                "\n",
                                                                                                                 TriviaList()),
                                                                                                             XmlTextLiteral(
                                                                                                                 TriviaList(
@@ -642,10 +628,8 @@ internal static class HubClientBaseSource
                                                                                                                 TriviaList()),
                                                                                                             XmlTextNewLine(
                                                                                                                 TriviaList(),
-                                                                                                                Environment
-                                                                                                                    .NewLine,
-                                                                                                                Environment
-                                                                                                                    .NewLine,
+                                                                                                                "\n",
+                                                                                                                "\n",
                                                                                                                 TriviaList()),
                                                                                                             XmlTextLiteral(
                                                                                                                 TriviaList(
@@ -672,10 +656,8 @@ internal static class HubClientBaseSource
                                                                                                 {
                                                                                                     XmlTextNewLine(
                                                                                                         TriviaList(),
-                                                                                                        Environment
-                                                                                                            .NewLine,
-                                                                                                        Environment
-                                                                                                            .NewLine,
+                                                                                                        "\n",
+                                                                                                        "\n",
                                                                                                         TriviaList()),
                                                                                                     XmlTextLiteral(
                                                                                                         TriviaList(
@@ -766,8 +748,8 @@ internal static class HubClientBaseSource
                                                                                             TokenList(
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList())))
                                                                                 })))),
                                                                 SyntaxKind.PublicKeyword,
@@ -896,10 +878,8 @@ internal static class HubClientBaseSource
                                                                                                         {
                                                                                                             XmlTextNewLine(
                                                                                                                 TriviaList(),
-                                                                                                                Environment
-                                                                                                                    .NewLine,
-                                                                                                                Environment
-                                                                                                                    .NewLine,
+                                                                                                                "\n",
+                                                                                                                "\n",
                                                                                                                 TriviaList()),
                                                                                                             XmlTextLiteral(
                                                                                                                 TriviaList(
@@ -929,10 +909,8 @@ internal static class HubClientBaseSource
                                                                                                                 TriviaList()),
                                                                                                             XmlTextNewLine(
                                                                                                                 TriviaList(),
-                                                                                                                Environment
-                                                                                                                    .NewLine,
-                                                                                                                Environment
-                                                                                                                    .NewLine,
+                                                                                                                "\n",
+                                                                                                                "\n",
                                                                                                                 TriviaList()),
                                                                                                             XmlTextLiteral(
                                                                                                                 TriviaList(
@@ -959,10 +937,8 @@ internal static class HubClientBaseSource
                                                                                                 {
                                                                                                     XmlTextNewLine(
                                                                                                         TriviaList(),
-                                                                                                        Environment
-                                                                                                            .NewLine,
-                                                                                                        Environment
-                                                                                                            .NewLine,
+                                                                                                        "\n",
+                                                                                                        "\n",
                                                                                                         TriviaList()),
                                                                                                     XmlTextLiteral(
                                                                                                         TriviaList(
@@ -1053,8 +1029,8 @@ internal static class HubClientBaseSource
                                                                                             TokenList(
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList())))
                                                                                 })))),
                                                                 SyntaxKind.PublicKeyword,
@@ -1178,10 +1154,8 @@ internal static class HubClientBaseSource
                                                                                                     {
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -1211,10 +1185,8 @@ internal static class HubClientBaseSource
                                                                                                             TriviaList()),
                                                                                                         XmlTextNewLine(
                                                                                                             TriviaList(),
-                                                                                                            Environment
-                                                                                                                .NewLine,
-                                                                                                            Environment
-                                                                                                                .NewLine,
+                                                                                                            "\n",
+                                                                                                            "\n",
                                                                                                             TriviaList()),
                                                                                                         XmlTextLiteral(
                                                                                                             TriviaList(
@@ -1240,8 +1212,8 @@ internal static class HubClientBaseSource
                                                                                             {
                                                                                                 XmlTextNewLine(
                                                                                                     TriviaList(),
-                                                                                                    Environment.NewLine,
-                                                                                                    Environment.NewLine,
+                                                                                                    "\n",
+                                                                                                    "\n",
                                                                                                     TriviaList()),
                                                                                                 XmlTextLiteral(
                                                                                                     TriviaList(
@@ -1290,8 +1262,8 @@ internal static class HubClientBaseSource
                                                                                         TokenList(
                                                                                             XmlTextNewLine(
                                                                                                 TriviaList(),
-                                                                                                Environment.NewLine,
-                                                                                                Environment.NewLine,
+                                                                                                "\n",
+                                                                                                "\n",
                                                                                                 TriviaList())))
                                                                             })))),
                                                             SyntaxKind.PublicKeyword,
