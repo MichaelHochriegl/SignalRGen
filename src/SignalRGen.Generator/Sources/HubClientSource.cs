@@ -69,7 +69,7 @@ internal static class HubClientSource
                 .Append(new CacheableUsingDeclaration($"using {hubClientToGenerate.InterfaceNamespace};"));
         var usings = string.Join("\n", allUsings.Select(u => u.UsingNamespace));
 
-        var methods = hubClientToGenerate.Methods.Select(method =>
+        var methods = hubClientToGenerate.ServerToClientMethods.Select(method =>
             {
                 var parameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type));
                 var parameterList = string.Join(", ", method.Parameters.Select(p => $"{p.Type} {p.Name}"));
@@ -84,7 +84,7 @@ internal static class HubClientSource
             })
             .ToArray();
 
-        var onMethods = hubClientToGenerate.Methods
+        var onMethods = hubClientToGenerate.ServerToClientMethods
             .Select(method =>
             {
                 var parameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type));

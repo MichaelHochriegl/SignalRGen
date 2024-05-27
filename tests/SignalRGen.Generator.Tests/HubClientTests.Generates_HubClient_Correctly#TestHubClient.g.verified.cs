@@ -43,10 +43,28 @@ public class TestHubClient : HubClientBase, IHubClient
     {
         return OnReceiveFooUpdate?.Invoke(bar, bass) ?? Task.CompletedTask;
     }
+    /// <summary>
+    /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "ITestHubClient"/> gets invoked.
+    /// </summary>
+    public Func<string, int, Task>? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
+    private Task ReceiveNormalTypeWithSpecificAttributeAppliedHandler(string bazz, int buzz)
+    {
+        return OnReceiveNormalTypeWithSpecificAttributeApplied?.Invoke(bazz, buzz) ?? Task.CompletedTask;
+    }
+    /// <summary>
+    /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "ITestHubClient"/> gets invoked.
+    /// </summary>
+    public Func<int, Task>? OnReceiveWithArbitraryAttribute = default;
+    private Task ReceiveWithArbitraryAttributeHandler(int blub)
+    {
+        return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? Task.CompletedTask;
+    }
     
     protected override void RegisterHubMethods()
     {
         _hubConnection?.On<IEnumerable<CustomTypeDto>>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
 	    _hubConnection?.On<string, int>("ReceiveFooUpdate", ReceiveFooUpdateHandler);
+	    _hubConnection?.On<string, int>("ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
+	    _hubConnection?.On<int>("ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
     }
 }

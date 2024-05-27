@@ -33,4 +33,13 @@
       <ProjectReference Include="..\..\src\SignalRGen.Generator\SignalRGen.Generator.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="HubClientAttributeTests.Generates_HubClientAttribute_Correctly#ClientToServerMethodAttribute.g.verified.cs">
+        <DependentUpon>HubClientAttributeTests.cs</DependentUpon>
+      </None>
+      <None Update="HubClientTests.Generates_HubClient_Correctly#ClientToServerMethodAttribute.g.verified.cs">
+        <DependentUpon>HubClientTests.cs</DependentUpon>
+      </None>
+    </ItemGroup>
+
 </Project>
