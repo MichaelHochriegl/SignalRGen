@@ -86,15 +86,14 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
 
         var usings = GetInterfacesUsings(node);
-        // var methods = GetInterfaceMethods(node);
-
+        
         var serverToClientMethods = new List<CacheableMethodDeclaration>();
         var clientToServerMethods = new List<CacheableMethodDeclaration>();
         foreach (var method in node.Members.OfType<MethodDeclarationSyntax>())
         {
             var cacheableMethodDeclaration = new CacheableMethodDeclaration(method.Identifier.Text,
-                method.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text))
-                    .ToImmutableArray().AsEquatableArray());
+                method.ParameterList.Parameters.Select(p => new Parameter(p.Type!.ToString(), p.Identifier.Text))
+                    .ToImmutableArray(), method.ReturnType.ToString());
             if (method.AttributeLists.Count == 0)
             {
                 serverToClientMethods.Add(cacheableMethodDeclaration);
@@ -115,7 +114,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
                     
                     // We are not checking here if the `ServerToClientAttribute` is applied, as this is the default case.
                     // Maybe this should be re-evaluated at a later date
-                    
                     serverToClientMethods.Add(cacheableMethodDeclaration);
                 }
             }
@@ -124,8 +122,14 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         return hubClientAttribute is null
             ? null
             : new HubClientToGenerate(InterfaceName: node.Identifier.Text,
-                HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), HubUri: GetHubUri(hubClientAttribute),
-                InterfaceNamespace: GetInterfaceNamespace(node), Usings: usings, ServerToClientMethods: serverToClientMethods.ToImmutableArray().AsEquatableArray());
+                HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), 
+                HubUri: GetHubUri(hubClientAttribute),
+                InterfaceNamespace: GetInterfaceNamespace(node),
+                Usings: usings,
+                ServerToClientMethods: serverToClientMethods
+                    .ToImmutableArray(),
+                ClientToServerMethods: clientToServerMethods
+                    .ToImmutableArray());
     }
 
     private static string GetHubUri(AttributeData hubClientAttribute)
@@ -143,14 +147,14 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
                "Borked";
     }
 
-    private static EquatableArray<CacheableMethodDeclaration> GetInterfaceMethods(TypeDeclarationSyntax node)
-    {
-        // return node.Members.OfType<MethodDeclarationSyntax>();
-        var methods = node.Members.OfType<MethodDeclarationSyntax>();
-        return methods.Select(m => new CacheableMethodDeclaration(m.Identifier.Text,
-            m.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text))
-                .ToImmutableArray().AsEquatableArray())).ToImmutableArray().AsEquatableArray();
-    }
+    // private static EquatableArray<CacheableMethodDeclaration> GetInterfaceMethods(TypeDeclarationSyntax node)
+    // {
+    //     // return node.Members.OfType<MethodDeclarationSyntax>();
+    //     var methods = node.Members.OfType<MethodDeclarationSyntax>();
+    //     return methods.Select(m => new CacheableMethodDeclaration(m.Identifier.Text,
+    //         m.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text))
+    //             .ToImmutableArray().AsEquatableArray())).ToImmutableArray().AsEquatableArray();
+    // }
 
     private static EquatableArray<CacheableUsingDeclaration> GetInterfacesUsings(SyntaxNode syntaxNode)
     {

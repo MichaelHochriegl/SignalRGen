@@ -59,6 +59,18 @@ public class TestHubClient : HubClientBase, IHubClient
     {
         return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? Task.CompletedTask;
     }
+
+public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
+{
+    ValidateHubConnection();
+    return _hubConnection!.InvokeAsync("SendClientToServerNoReturnType", rick, age, cancellationToken: ct);
+}
+public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
+{
+    ValidateHubConnection();
+    return _hubConnection!.InvokeAsync("SendClientToServerWithReturnType", morty, partOfMission, cancellationToken: ct);
+}
+
     
     protected override void RegisterHubMethods()
     {
@@ -66,5 +78,13 @@ public class TestHubClient : HubClientBase, IHubClient
 	    _hubConnection?.On<string, int>("ReceiveFooUpdate", ReceiveFooUpdateHandler);
 	    _hubConnection?.On<string, int>("ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
 	    _hubConnection?.On<int>("ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
+    }
+}
+
+private void ValidateHubConnection()
+{
+    if (_hubConnection is null)
+    {
+        throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
     }
 }
