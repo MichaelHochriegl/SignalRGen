@@ -60,11 +60,17 @@ public class TestHubClient : HubClientBase, IHubClient
         return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? Task.CompletedTask;
     }
 
+    /// <summary>
+    /// Can be invoked to trigger the SendClientToServerNoReturnType on the <see cref = "ITestHubClient"/>.
+    /// </summary>
     public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
     {
         ValidateHubConnection();
         return _hubConnection!.InvokeAsync("SendClientToServerNoReturnType", rick, age, cancellationToken: ct);
     }
+    /// <summary>
+    /// Can be invoked to trigger the SendClientToServerWithReturnType on the <see cref = "ITestHubClient"/>.
+    /// </summary>
     public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
     {
         ValidateHubConnection();

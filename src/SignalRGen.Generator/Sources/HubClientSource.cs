@@ -68,6 +68,9 @@ internal static class HubClientSource
 
     private const string ClientToServerMethodTemplate =
         """
+            /// <summary>
+            /// Can be invoked to trigger the {~{identifier}~} on the <see cref = "{~{hubClientInterface}~}"/>.
+            /// </summary>
             public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, CancellationToken ct = default)
             {
                 ValidateHubConnection();
