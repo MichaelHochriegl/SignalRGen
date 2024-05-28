@@ -60,16 +60,16 @@ public class TestHubClient : HubClientBase, IHubClient
         return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? Task.CompletedTask;
     }
 
-public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
-{
-    ValidateHubConnection();
-    return _hubConnection!.InvokeAsync("SendClientToServerNoReturnType", rick, age, cancellationToken: ct);
-}
-public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
-{
-    ValidateHubConnection();
-    return _hubConnection!.InvokeAsync("SendClientToServerWithReturnType", morty, partOfMission, cancellationToken: ct);
-}
+    public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
+    {
+        ValidateHubConnection();
+        return _hubConnection!.InvokeAsync("SendClientToServerNoReturnType", rick, age, cancellationToken: ct);
+    }
+    public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
+    {
+        ValidateHubConnection();
+        return _hubConnection!.InvokeAsync<string>("SendClientToServerWithReturnType", morty, partOfMission, cancellationToken: ct);
+    }
 
     
     protected override void RegisterHubMethods()

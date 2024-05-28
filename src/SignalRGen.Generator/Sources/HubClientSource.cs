@@ -68,11 +68,11 @@ internal static class HubClientSource
 
     private const string ClientToServerMethodTemplate =
         """
-        public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, CancellationToken ct = default)
-        {
-            ValidateHubConnection();
-            return _hubConnection!.InvokeAsync("{~{identifier}~}", {~{parameters}~}, cancellationToken: ct);
-        }
+            public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, CancellationToken ct = default)
+            {
+                ValidateHubConnection();
+                return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", {~{parameters}~}, cancellationToken: ct);
+            }
         """;
     private const string OnMethodTemplate = """
                                                 _hubConnection?.On<{~{parameterTypes}~}>("{~{identifier}~}", {~{identifier}~}Handler);
@@ -111,9 +111,11 @@ internal static class HubClientSource
                 .Replace("{~{identifier}~}", method.Identifier)
                 .Replace("{~{parameterTypes}~}", parameterTypes)
                 .Replace("{~{parameterList}~}", parameterList)
-                .Replace("{~{parameters}~}", parameters);
+                .Replace("{~{parameters}~}", parameters)
+                .Replace("{~{returnType}~}", method.ReturnType)
+                .Replace("{~{genericReturnType}~}", method.ReturnType.Replace("Task", ""));
 
-            return template.Replace("{~{returnType}~}", method.ReturnType);
+            return template;
         });
 
         var onMethods = hubClientToGenerate.ServerToClientMethods
