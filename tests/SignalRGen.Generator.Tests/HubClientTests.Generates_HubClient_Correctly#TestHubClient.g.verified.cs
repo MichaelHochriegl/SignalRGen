@@ -79,12 +79,12 @@ public class TestHubClient : HubClientBase, IHubClient
 	    _hubConnection?.On<string, int>("ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
 	    _hubConnection?.On<int>("ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
     }
-}
-
-private void ValidateHubConnection()
-{
-    if (_hubConnection is null)
+    
+    private void ValidateHubConnection()
     {
-        throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+        if (_hubConnection is null)
+        {
+            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+        }
     }
 }

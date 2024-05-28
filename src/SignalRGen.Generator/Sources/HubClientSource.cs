@@ -45,13 +45,13 @@ internal static class HubClientSource
                                                  {
                                                  {~{onMethods}~}
                                                  }
-                                             }
-                                             
-                                             private void ValidateHubConnection()
-                                             {
-                                                 if (_hubConnection is null)
+                                                 
+                                                 private void ValidateHubConnection()
                                                  {
-                                                     throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+                                                     if (_hubConnection is null)
+                                                     {
+                                                         throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+                                                     }
                                                  }
                                              }
                                              """;
