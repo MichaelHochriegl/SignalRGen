@@ -71,6 +71,7 @@ internal static class HubClientSource
             /// <summary>
             /// Can be invoked to trigger the {~{identifier}~} on the <see cref = "{~{hubClientInterface}~}"/>.
             /// </summary>
+            /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="{~{hubName}~}.StartAsync"/></exception>
             public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, CancellationToken ct = default)
             {
                 ValidateHubConnection();
@@ -110,7 +111,9 @@ internal static class HubClientSource
             var parameterList = string.Join(", ", method.Parameters.Select(p => $"{p.Type} {p.Name}"));
             var parameters = string.Join(", ", method.Parameters.Select(p => p.Name));
 
-            var template = ClientToServerMethodTemplate.Replace("{~{hubClientInterface}~}", hubClientToGenerate.InterfaceName)
+            var template = ClientToServerMethodTemplate
+                .Replace("{~{hubClientInterface}~}", hubClientToGenerate.InterfaceName)
+                .Replace("{~{hubName}~}", hubClientToGenerate.HubName)
                 .Replace("{~{identifier}~}", method.Identifier)
                 .Replace("{~{parameterTypes}~}", parameterTypes)
                 .Replace("{~{parameterList}~}", parameterList)

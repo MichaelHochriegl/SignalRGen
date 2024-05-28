@@ -63,6 +63,7 @@ public class TestHubClient : HubClientBase, IHubClient
     /// <summary>
     /// Can be invoked to trigger the SendClientToServerNoReturnType on the <see cref = "ITestHubClient"/>.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
     public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
     {
         ValidateHubConnection();
@@ -71,6 +72,7 @@ public class TestHubClient : HubClientBase, IHubClient
     /// <summary>
     /// Can be invoked to trigger the SendClientToServerWithReturnType on the <see cref = "ITestHubClient"/>.
     /// </summary>
+    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
     public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
     {
         ValidateHubConnection();
