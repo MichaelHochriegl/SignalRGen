@@ -16,10 +16,22 @@ public class HubClientTests
                               public interface ITestHubClient
                               {
                                 Task ReceiveCustomTypeUpdate(IEnumerable<CustomTypeDto> customTypes);
-                                  Task ReceiveFooUpdate(string bar, int bass);
+                                Task ReceiveFooUpdate(string bar, int bass);
+                                
+                                [ServerToClientMethod]  
+                                Task ReceiveNormalTypeWithSpecificAttributeApplied(string bazz, int buzz);
+                                
+                                [NoOpTest]
+                                Task ReceiveWithArbitraryAttribute(int blub);
+                                
+                                [ClientToServerMethod]
+                                Task SendClientToServerNoReturnType(string rick, int age);
+                                
+                                [ClientToServerMethod]
+                                Task<string> SendClientToServerWithReturnType(string morty, bool partOfMission);
                               }
                               """;
 
-        return TestHelper.Verify(source);
+        return TestHelper.Verify(source, true);
     }
 }
