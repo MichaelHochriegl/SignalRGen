@@ -11,11 +11,10 @@
 using SignalRGen.Generator;
 using SignalRGen.Generator.Tests.TestData;
 using Microsoft.AspNetCore.SignalR.Client;
-using SignalRGen.Clients;
 
 #nullable enable
 
-namespace SignalRGen.Generator;
+namespace SignalRGen.Clients;
 
 /// <summary>
 /// Represents a HubClient for the <see cref = "ITestHubClient"/> interface.

@@ -7,12 +7,16 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-using SignalRGen.Generator.Client.Configuration;
+
+using SignalRGen.Clients;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
+using SignalRGen.Generator.Client.Configuration;
 
 #nullable enable
+
 namespace SignalRGen.Generator.Client.Extensions.DependencyInjection;
+
 public static class SignalRClientServiceRegistration
 {
     /// <summary>

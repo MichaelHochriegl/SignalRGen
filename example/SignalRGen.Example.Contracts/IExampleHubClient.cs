@@ -6,7 +6,6 @@ namespace SignalRGen.Example.Contracts;
 public interface IExampleHubClient
 {
     Task ReceiveExampleCountUpdate(int count);
-    Task ReceiveExampleCount2Update(int count, string foo);
 
     [ClientToServerMethod]
     Task<string> SendExampleMessage(string myClientMessage);
