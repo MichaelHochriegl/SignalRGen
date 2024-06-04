@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Clients;
+using SignalRGen.Clients.Nested;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using SignalRGen.Generator.Client.Configuration;

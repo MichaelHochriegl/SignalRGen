@@ -8,13 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
-using SignalRGen.Generator.Tests.TestData;
 using Microsoft.AspNetCore.SignalR.Client;
 
 #nullable enable
 
-namespace SignalRGen.Clients;
+namespace SignalRGen.Clients.Nested;
 
 /// <summary>
 /// Represents a HubClient for the <see cref = "ITestHubClient"/> interface.
