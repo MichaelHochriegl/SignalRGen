@@ -171,3 +171,9 @@ The `ExampleHubClient.StartAsync()` can be called multiple times, as it checks i
 only starts it if the `HubConnectionState` is disconnected. So multiple calls will not start the connection multiple times.
 
 If you want to get a deeper understanding and look at the generated code head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on github.
+
+## Recognitions
+This library wouldn't have been possible if not for the following people (please note: the order is completely random):
+* [Andrew Lock](https://andrewlock.net)
+* [Anton Wieslander (aka RawCoding)](https://www.youtube.com/RawCoding)
+* [Jeffrey T. Fritz (aka csharpfritz)](https://www.twitch.tv/csharpfritz)
