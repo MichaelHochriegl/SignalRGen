@@ -7,10 +7,12 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 using System;
 
 #nullable enable
 namespace SignalRGen.Generator;
+
 /// <summary>
 /// Marker Attribute for a HubClient.
 /// </summary>

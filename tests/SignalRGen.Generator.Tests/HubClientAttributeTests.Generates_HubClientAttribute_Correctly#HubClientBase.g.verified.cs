@@ -7,10 +7,12 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 using Microsoft.AspNetCore.SignalR.Client;
 
 #nullable enable
 namespace SignalRGen.Generator;
+
 /// <summary>
 /// Base class for generated HubClients.
 /// </summary>
@@ -23,18 +25,22 @@ public abstract partial class HubClientBase : IAsyncDisposable
     protected bool _isRegistered;
     protected HubConnection? _hubConnection;
     protected readonly IHubConnectionBuilder HubConnectionBuilder;
+    
     /// <summary>
     /// Gets invoked each time the Closed event from the underlying <see cref = "HubConnection"/> occurs.
     /// </summary>
     public Func<Exception?, Task>? Closed;
+    
     /// <summary>
     /// Gets invoked each time the Reconnecting event from the underlying <see cref = "HubConnection"/> occurs.
     /// </summary>
     public Func<Exception?, Task>? Reconnecting;
+    
     /// <summary>
     /// Gets invoked each time the reconnected event from the underlying <see cref = "HubConnection"/> occurs.
     /// </summary>
     public Func<Task>? Reconnected;
+    
     protected HubClientBase(IHubConnectionBuilder hubConnectionBuilder)
     {
         HubConnectionBuilder = hubConnectionBuilder;

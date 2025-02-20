@@ -7,11 +7,13 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 
 #nullable enable
 namespace SignalRGen.Generator.Client.Configuration;
+
 /// <summary>
 /// Encapsulates the options to configure a SignalR Hub Client.
 /// </summary>
@@ -19,6 +21,7 @@ public class HubClientOptions
 {
     /// <summary>The configuration used to setup the <see cref = "HubConnectionBuilder"/> that will be used to build to the <see cref = "HubConnection"/>.</summary>
     public Action<IHubConnectionBuilder> HubConnectionBuilderConfiguration { get; set; } = default !;
+    
     /// <summary>The <see cref = "ServiceLifetime"/> used to register the Hub Client with the DI container.</summary>
     public ServiceLifetime HubClientLifetime { get; set; } = ServiceLifetime.Singleton;
 }
