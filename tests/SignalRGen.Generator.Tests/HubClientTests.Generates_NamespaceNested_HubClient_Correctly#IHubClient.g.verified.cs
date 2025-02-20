@@ -7,8 +7,10 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 #nullable enable
 namespace SignalRGen.Generator;
+
 public interface IHubClient
 {
     static abstract string HubUri { get; }
