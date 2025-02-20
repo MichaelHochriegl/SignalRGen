@@ -7,8 +7,10 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+
 #nullable enable
 namespace SignalRGen.Generator.Client.Configuration;
+
 public class SignalROptions
 {
     public Uri HubBaseUri { get; set; } = default !;
