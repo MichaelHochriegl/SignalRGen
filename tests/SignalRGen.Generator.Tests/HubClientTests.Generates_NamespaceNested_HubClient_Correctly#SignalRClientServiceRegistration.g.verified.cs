@@ -63,7 +63,7 @@ public static class SignalRClientServiceRegistration
         configuration?.Invoke(config);
         services.Services.Add(new ServiceDescriptor(typeof(TestHubClient), factory: _ =>
         {
-            var hubConnectionBuilder = new HubConnectionBuilder().WithUrl(new Uri(services.GeneralConfiguration.HubBaseUri, TestHubClient.HubUri)).WithAutomaticReconnect(DefaultRetrySteps.ToArray());
+            var hubConnectionBuilder = new HubConnectionBuilder().WithUrl(new Uri(services.GeneralConfiguration.HubBaseUri, TestHubClient.HubUri), config.HttpConnectionOptionsConfiguration!).WithAutomaticReconnect(DefaultRetrySteps.ToArray());
             config.HubConnectionBuilderConfiguration?.Invoke(hubConnectionBuilder);
             return new TestHubClient(hubConnectionBuilder);
         }, config.HubClientLifetime));
