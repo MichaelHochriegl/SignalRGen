@@ -17,22 +17,22 @@ public static class TestHelper
         // get all the const string fields on the TrackingName type
         var trackingNames = typeof(TrackingNames)
             .GetFields()
-            .Where(fi => fi.IsLiteral && !fi.IsInitOnly && fi.FieldType == typeof(string))
+            .Where(fi => fi is { IsLiteral: true, IsInitOnly: false } && fi.FieldType == typeof(string))
             .Select(x => x.GetRawConstantValue() as string)
             .Where(x => !string.IsNullOrEmpty(x))
             .ToArray();
         
         // Parse the provided string into a C# syntax tree
         var syntaxTree = CSharpSyntaxTree.ParseText(source);
-        IEnumerable<PortableExecutableReference> references = new[]
-        {
+        IEnumerable<PortableExecutableReference> references =
+        [
             MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-        };
+        ];
 
         // Create a Roslyn compilation for the syntax tree.
         var compilation = CSharpCompilation.Create(
             assemblyName: "Tests",
-            syntaxTrees: new[] { syntaxTree },
+            syntaxTrees: [syntaxTree],
             references: references);
 
         // Create a clone of the compilation that we will use later
@@ -127,8 +127,8 @@ public static class TestHelper
             var runStep2 = runSteps2[i];
 
             // The outputs should be equal between different runs
-            IEnumerable<object> outputs1 = runStep1.Outputs.Select(x => x.Value);
-            IEnumerable<object> outputs2 = runStep2.Outputs.Select(x => x.Value);
+            var outputs1 = runStep1.Outputs.Select(x => x.Value);
+            var outputs2 = runStep2.Outputs.Select(x => x.Value);
 
             outputs1.Should()
                 .Equal(outputs2, $"because {stepName} should produce cacheable outputs");
@@ -158,7 +158,9 @@ public static class TestHelper
             Visit(obj);
         }
 
-        void Visit(object node)
+        return;
+
+        void Visit(object? node)
         {
             // If we've already seen this object, or it's null, stop.
             if (node is null || !visited.Add(node))
@@ -173,7 +175,7 @@ public static class TestHelper
                 .And.NotBeOfType<SyntaxNode>(because);
 
             // Examine the object
-            Type type = node.GetType();
+            var type = node.GetType();
             if (type.IsPrimitive || type.IsEnum || type == typeof(string))
             {
                 return;
@@ -182,19 +184,18 @@ public static class TestHelper
             // If the object is a collection, check each of the values
             if (node is IEnumerable collection and not string)
             {
-                foreach (object element in collection)
+                foreach (var element in collection)
                 {
                     // recursively check each element in the collection
                     Visit(element);
                 }
-
                 return;
             }
 
             // Recursively check each field in the object
-            foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance))
             {
-                object fieldValue = field.GetValue(node);
+                var fieldValue = field.GetValue(node);
                 Visit(fieldValue);
             }
         }
