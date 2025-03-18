@@ -30,7 +30,7 @@ internal static class HubClientBaseSource
                                       private readonly Action<IHubConnectionBuilder>?
                                           _hubConnectionBuilderConfiguration;
                                           
-                                      private readonly Action<HttpConnectionOptions>?
+                                      private Action<HttpConnectionOptions>?
                                           _httpConnectionOptions;
                                       
                                       private readonly Uri _baseHubUri;

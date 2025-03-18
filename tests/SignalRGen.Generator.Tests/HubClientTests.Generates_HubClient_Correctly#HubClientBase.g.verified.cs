@@ -28,7 +28,7 @@ public abstract partial class HubClientBase : IAsyncDisposable
     private readonly Action<IHubConnectionBuilder>?
         _hubConnectionBuilderConfiguration;
         
-    private readonly Action<HttpConnectionOptions>?
+    private Action<HttpConnectionOptions>?
         _httpConnectionOptions;
     
     private readonly Uri _baseHubUri;
