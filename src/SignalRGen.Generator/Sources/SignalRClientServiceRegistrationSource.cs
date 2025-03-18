@@ -1,10 +1,5 @@
 using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using SignalRGen.Generator.Common;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace SignalRGen.Generator.Sources;
 
@@ -37,17 +32,6 @@ internal static class SignalRClientServiceRegistrationSource
             }
         
         {~{withHubMethods}~}
-        
-            private static IEnumerable<TimeSpan> DefaultRetrySteps
-            {
-                get
-                {
-                    var retrySteps = Enumerable.Repeat(TimeSpan.FromSeconds(1), 10);
-                    retrySteps = retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(3), 5));
-                    retrySteps = retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(10), 2));
-                    return retrySteps;
-                }
-            }
         }
         """;
     
@@ -83,9 +67,9 @@ internal static class SignalRClientServiceRegistrationSource
                 configuration?.Invoke(config);
                 services.Services.Add(new ServiceDescriptor(typeof({~{hubName}~}), factory: _ =>
                 {
-                    var hubConnectionBuilder = new HubConnectionBuilder().WithUrl(new Uri(services.GeneralConfiguration.HubBaseUri, {~{hubName}~}.HubUri), config.HttpConnectionOptionsConfiguration!).WithAutomaticReconnect(DefaultRetrySteps.ToArray());
-                    config.HubConnectionBuilderConfiguration?.Invoke(hubConnectionBuilder);
-                    return new {~{hubName}~}(hubConnectionBuilder);
+                    return new {~{hubName}~}(config.HubConnectionBuilderConfiguration,
+                    new Uri(services.GeneralConfiguration.HubBaseUri, {~{hubName}~}.HubUri),
+                    config.HttpConnectionOptionsConfiguration!);
                 }, config.HubClientLifetime));
                 return services;
             }

@@ -1,10 +1,6 @@
 using System.Text;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using SignalRGen.Generator.Common;
-using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
 namespace SignalRGen.Generator.Sources;
 
@@ -25,7 +21,7 @@ internal static class HubClientSource
                                              public class {~{hubName}~} : HubClientBase, IHubClient
                                              {
                                                  public static string HubUri { get; } = "{~{hubUri}~}";
-                                                 public {~{hubName}~}(IHubConnectionBuilder hubConnectionBuilder) : base(hubConnectionBuilder)
+                                                 public {~{hubName}~}(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
                                                  {
                                                  }
                                                  
@@ -79,7 +75,8 @@ internal static class HubClientSource
     {
         var allUsings =
             hubClientToGenerate.Usings
-                .Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.SignalR.Client;"));
+                .Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.SignalR.Client;"))
+                .Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.Http.Connections.Client;"));
         var usings = string.Join("\n", allUsings.Select(u => u.UsingNamespace));
 
         var serverToClientMethods = hubClientToGenerate.ServerToClientMethods.Select(method =>

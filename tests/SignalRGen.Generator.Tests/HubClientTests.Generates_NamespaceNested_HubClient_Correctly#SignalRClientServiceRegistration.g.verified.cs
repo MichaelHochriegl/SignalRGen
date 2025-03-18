@@ -63,21 +63,10 @@ public static class SignalRClientServiceRegistration
         configuration?.Invoke(config);
         services.Services.Add(new ServiceDescriptor(typeof(TestHubClient), factory: _ =>
         {
-            var hubConnectionBuilder = new HubConnectionBuilder().WithUrl(new Uri(services.GeneralConfiguration.HubBaseUri, TestHubClient.HubUri), config.HttpConnectionOptionsConfiguration!).WithAutomaticReconnect(DefaultRetrySteps.ToArray());
-            config.HubConnectionBuilderConfiguration?.Invoke(hubConnectionBuilder);
-            return new TestHubClient(hubConnectionBuilder);
+            return new TestHubClient(config.HubConnectionBuilderConfiguration,
+            new Uri(services.GeneralConfiguration.HubBaseUri, TestHubClient.HubUri),
+            config.HttpConnectionOptionsConfiguration!);
         }, config.HubClientLifetime));
         return services;
-    }
-
-    private static IEnumerable<TimeSpan> DefaultRetrySteps
-    {
-        get
-        {
-            var retrySteps = Enumerable.Repeat(TimeSpan.FromSeconds(1), 10);
-            retrySteps = retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(3), 5));
-            retrySteps = retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(10), 2));
-            return retrySteps;
-        }
     }
 }

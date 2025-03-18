@@ -33,15 +33,4 @@ public static class SignalRClientServiceRegistration
     }
 
 
-
-    private static IEnumerable<TimeSpan> DefaultRetrySteps
-    {
-        get
-        {
-            var retrySteps = Enumerable.Repeat(TimeSpan.FromSeconds(1), 10);
-            retrySteps = retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(3), 5));
-            retrySteps = retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(10), 2));
-            return retrySteps;
-        }
-    }
 }

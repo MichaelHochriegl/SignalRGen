@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.Http.Connections.Client;
 
 #nullable enable
 
@@ -20,7 +21,7 @@ namespace SignalRGen.Clients.Nested;
 public class TestHubClient : HubClientBase, IHubClient
 {
     public static string HubUri { get; } = "examples";
-    public TestHubClient(IHubConnectionBuilder hubConnectionBuilder) : base(hubConnectionBuilder)
+    public TestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     

@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.AspNetCore.Http.Connections.Client;
 
 #nullable enable
 namespace SignalRGen.Generator;
@@ -22,9 +23,17 @@ namespace SignalRGen.Generator;
 /// </remarks>
 public abstract partial class HubClientBase : IAsyncDisposable
 {
-    protected bool _isRegistered;
     protected HubConnection? _hubConnection;
-    protected readonly IHubConnectionBuilder HubConnectionBuilder;
+
+    private readonly Action<IHubConnectionBuilder>?
+        _hubConnectionBuilderConfiguration;
+        
+    private readonly Action<HttpConnectionOptions>?
+        _httpConnectionOptions;
+    
+    private readonly Uri _baseHubUri;
+    private bool _isRegistered;
+    private readonly HubConnectionBuilder _hubConnectionBuilder;
     
     /// <summary>
     /// Gets invoked each time the Closed event from the underlying <see cref = "HubConnection"/> occurs.
@@ -41,18 +50,35 @@ public abstract partial class HubClientBase : IAsyncDisposable
     /// </summary>
     public Func<Task>? Reconnected;
     
-    protected HubClientBase(IHubConnectionBuilder hubConnectionBuilder)
+    protected HubClientBase(
+      Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+      Uri baseHubUri,
+      Action<HttpConnectionOptions>? httpConnectionOptions)
     {
-        HubConnectionBuilder = hubConnectionBuilder;
+        _hubConnectionBuilderConfiguration = hubConnectionBuilderConfiguration;
+        _baseHubUri = baseHubUri;
+        _httpConnectionOptions = httpConnectionOptions;
+        _hubConnectionBuilder = new HubConnectionBuilder();
     }
 
     /// <summary>
     /// Asynchronously starts the underlying <see cref = "HubConnection"/> and registers the event callbacks for the SignalR client methods.
     /// </summary>
+    /// <param name="queryStrings">A dictionary of query string parameters to be added to the connection URL.</param>
+    /// <param name="headers">A dictionary of headers to be included in the SignalR client's HTTP requests.</param>
     /// <param name = "cancellationToken">A <see cref = "CancellationToken"/> to cancel the start of the <see cref = "HubConnection"/>.</param>
-    public virtual Task StartAsync(CancellationToken cancellationToken = default)
+    public virtual Task StartAsync(
+      Dictionary<string, string>? queryStrings = null,
+      Dictionary<string, string>? headers = null,
+      CancellationToken cancellationToken = default)
     {
-        _hubConnection ??= HubConnectionBuilder.Build();
+        AddHeaders(headers);      
+    
+        _hubConnectionBuilder
+            .WithUrl(AddParametersToUri(queryStrings, _baseHubUri), _httpConnectionOptions!)
+            .WithAutomaticReconnect(DefaultRetrySteps.ToArray());
+        _hubConnectionBuilderConfiguration?.Invoke(_hubConnectionBuilder);
+        _hubConnection ??= _hubConnectionBuilder.Build();
         if (!_isRegistered)
         {
             _hubConnection.Closed += Closed;
@@ -95,5 +121,66 @@ public abstract partial class HubClientBase : IAsyncDisposable
         _hubConnection.Reconnected -= OnReconnected;
         _hubConnection.Reconnecting -= Reconnecting;
         return _hubConnection.DisposeAsync();
+    }
+    
+    private void AddHeaders(Dictionary<string, string>? headers)
+    {
+        if (headers is null || headers.Count == 0) return;
+    
+        var originalOptions = _httpConnectionOptions;
+    
+        _httpConnectionOptions = options =>
+        {
+            originalOptions?.Invoke(options);
+    
+            options.Headers ??= new Dictionary<string, string>();
+    
+            foreach (var header in headers)
+            {
+                if (options.Headers.ContainsKey(header.Key))
+                {
+                    options.Headers[header.Key] = header.Value;
+                }
+                else
+                {
+                    options.Headers.Add(header.Key, header.Value);
+                }
+            }
+        };
+    }
+    
+    private static Uri AddParametersToUri(
+    Dictionary<string, string>? parameters, Uri uri)
+    {
+        if (parameters == null || parameters.Count == 0)
+        {
+            return uri;
+        }
+    
+        var uriBuilder = new UriBuilder(uri);
+        var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+    
+        foreach (var parameter in parameters)
+        {
+            query[parameter.Key] = parameter.Value;
+        }
+    
+        uriBuilder.Query = query.ToString();
+        return uriBuilder.Uri;
+    }
+    
+    private static IEnumerable<TimeSpan> DefaultRetrySteps
+    {
+        get
+        {
+            var retrySteps = Enumerable.Repeat(TimeSpan.FromSeconds(1), 10);
+            retrySteps =
+                retrySteps.Concat(Enumerable.Repeat(TimeSpan.FromSeconds(3),
+                    5));
+            retrySteps =
+                retrySteps.Concat(
+                    Enumerable.Repeat(TimeSpan.FromSeconds(10), 2));
+            return retrySteps;
+        }
     }
 }
