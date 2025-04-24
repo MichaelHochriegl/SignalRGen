@@ -1,5 +1,5 @@
 [![.Net](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml)
-# SignalRGen ![Package-Logo](https://raw.githubusercontent.com/MichaelHochriegl/SignalRGen/chore/readme/SignalRGen.Logo_32x32.png)
+# SignalRGen ![Package-Logo](https://raw.githubusercontent.com/MichaelHochriegl/SignalRGen/refs/heads/master/SignalRGen.Logo_32x32.png)
 
 > A source generator based approach to easily setup `SignalR` communication
 
