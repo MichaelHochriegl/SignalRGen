@@ -16,7 +16,7 @@
         <PackageTags>SignalRGen;ASP.NET Core;Source Generator;SignalR</PackageTags>
         <Authors>Michael Hochriegl</Authors>
         <PackageProjectUrl>https://signalrgen.net</PackageProjectUrl>
-        <PackageIcon>assets/logo_128x128.png</PackageIcon>
+        <PackageIcon>logo_128x128.png</PackageIcon>
         <RepositoryType>git</RepositoryType>
         <RepositoryUrl>https://github.com/MichaelHochriegl/SignalRGen</RepositoryUrl>
         <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -38,6 +38,12 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
             <_Parameter1>SignalRGen.Generator.Tests</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../LICENSE" Pack="true" PackagePath="\" />
+        <None Include="../../README.md" Pack="true" PackagePath="\" />
+        <None Include="../../assets/logo_128x128.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>
