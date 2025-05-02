@@ -19,6 +19,11 @@ env:
   # Official NuGet Feed settings
   NUGET_FEED: https://api.nuget.org/v3/index.json
   NUGET_KEY: ${{ secrets.NUGET_KEY }}
+
+permissions:
+  packages: write
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
