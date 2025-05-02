@@ -1,4 +1,4 @@
-import { defineConfig } from 'vitepress'
+import {defineConfig} from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -6,6 +6,7 @@ export default defineConfig({
   description: "A dev-friendly experience to SignalR communication",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    logo: 'logo.webp',
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Examples', link: '/markdown-examples' }
