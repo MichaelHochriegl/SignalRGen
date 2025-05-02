@@ -14,11 +14,16 @@ env:
   PROJECT_NAME: SignalRGen.Generator
   # NUGET_TEST_PROJECT: ./test/SignalRGen.Nuget.Tests.Integration
   # GitHub Packages Feed settings
-  GITHUB_FEED: https://nuget.pkg.github.com/MichaelHochriegl/index.json
+  GITHUB_FEED: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Official NuGet Feed settings
   NUGET_FEED: https://api.nuget.org/v3/index.json
   NUGET_KEY: ${{ secrets.NUGET_KEY }}
+
+permissions:
+  packages: write
+  contents: read
+
 jobs:
   build:
     runs-on: ${{ matrix.os }}
