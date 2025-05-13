@@ -1,7 +1,7 @@
 [![.Net](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml)
 # SignalRGen ![Package-Logo](https://raw.githubusercontent.com/MichaelHochriegl/SignalRGen/chore/readme/SignalRGen.Logo_32x32.png)
 
-> A source generator based approach to easily setup `SignalR` communication
+> A source-generator-based approach to easily setup `SignalR` communication
 
 ## Purpose
 
@@ -13,16 +13,16 @@ With `SignalRGen` you can easily share your `SignalR` client easily with a nice 
 
 ## Installation
 
-`SignalRGen` is published as a nuget package, so installation is simple:
+`SignalRGen` is published as a nuget package, you can install it with:
 ```shell
 dotnet add package SignalRGen
 ```
 
-There are also YOLO packages pushed here on this Github repository.
+There are also YOLO packages pushed here in this GitHub repository.
 
 ## Setup
 
-You describe your `SignalR` client with a interface and add the `HubClientAttribute` (this is in the namespace `SignalRGen.Generator`) to it.
+You describe your `SignalR` client with an interface and add the `HubClientAttribute` (this is in the namespace `SignalRGen.Generator`) to it.
 
 Example:
 ```csharp
@@ -37,9 +37,9 @@ public interface IExampleHubClient
 }
 ```
 
-In the example above you see a simply client description that has one simple method that will be translated into a client
+In the example above, you see a simple client description that has one simple method that will be translated into a client
 method.
-Notice the `HubUri` that is set inside the `HubClient` attribute. With this you can define on which route your hub is 
+Notice the `HubUri` that is set inside the `HubClient` attribute. With this, you can define on which route your hub is 
 listening on.
 Also notice that your method should return a `Task`.
 
@@ -48,7 +48,7 @@ the necessary boilerplate for you.
 
 ## Server-Side usage
 
-After you did the setup part you can register your `Hub` like this to point to the correct `Uri`:
+After you did the setup part, you can register your `Hub` like this to point to the correct `Uri`:
 ```csharp
 var app = builder.Build();
 
@@ -59,8 +59,8 @@ Apart from that `SignalRGen` currently doesn't do anything for the server experi
 
 ## Client-Side usage
 
-After you did the setup part you will have a greatly enhanced client experience.
-`SignalRGen` generates multiple files, like for example this client:
+After you have done the setup part, you will have a greatly enhanced client experience.
+`SignalRGen` generates multiple files, like, for example, this client:
 
 ```csharp
 //------------------------------------------------------------------------------
@@ -170,7 +170,7 @@ After setting up your DI like described above you can use the `ExampleHubClient`
 The `ExampleHubClient.StartAsync()` can be called multiple times, as it checks if the connection is not disconnected and 
 only starts it if the `HubConnectionState` is disconnected. So multiple calls will not start the connection multiple times.
 
-If you want to get a deeper understanding and look at the generated code head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on github.
+If you want to get a deeper understanding and look at the generated code, head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on GitHub.
 
 ## Recognitions
 This library wouldn't have been possible if not for the following people (please note: the order is completely random):
