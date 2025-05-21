@@ -177,4 +177,4 @@ This library wouldn't have been possible if not for the following people (please
 * [Andrew Lock](https://andrewlock.net)
 * [Anton Wieslander (aka RawCoding)](https://www.youtube.com/RawCoding)
 * [Jeffrey T. Fritz (aka csharpfritz)](https://www.twitch.tv/csharpfritz)
-* [Chris M.](https://github.com/BissauCam)
+* [BissauCam](https://github.com/BissauCam)
