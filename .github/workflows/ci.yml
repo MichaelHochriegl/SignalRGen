@@ -99,8 +99,8 @@ jobs:
           echo Clean Version: $VERSION
           dotnet pack -v normal -c Release --include-symbols --include-source -p:PackageVersion=$VERSION -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.*proj
       - name: Push to GitHub Feed
-        run: dotnet nuget push ./*.nupkg --source $GITHUB_FEED --no-symbols --skip-duplicate --api-key $GITHUB_TOKEN
+        run: dotnet nuget push ./nupkg/*.nupkg --source $GITHUB_FEED --no-symbols --skip-duplicate --api-key $GITHUB_TOKEN
         env:
           NUGET_AUTH_TOKEN: $GITHUB_TOKEN
       - name: Push to NuGet Feed
-        run: dotnet nuget push ./*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
+        run: dotnet nuget push ./nupkg/*.nupkg --source $NUGET_FEED --skip-duplicate --api-key $NUGET_KEY
