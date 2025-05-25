@@ -244,7 +244,7 @@ builder.Services.AddSignalRHubs(c => c.HubBaseUri = new Uri("http://localhost:51
 
 ::: tip
 This is just a very basic configuration, `SignalRGen` allows for way more customization regarding the `Hub`.
-All the possible configuration-settings can be found [here](TODO_add-proper-link-here).
+All the possible configuration-settings can be found [here](../configuration/config-overview.md).
 :::
 
 ## Trigger Client-to-Server method
