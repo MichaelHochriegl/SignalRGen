@@ -24,6 +24,7 @@ export default defineConfig({
         text: 'Configuration',
         items: [
           { text: 'Config-Overview', link: '/configuration/config-overview' },
+          { text: 'Global', link: '/configuration/config-global' },
         ]
       }
     ],
