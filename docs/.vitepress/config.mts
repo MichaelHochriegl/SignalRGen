@@ -25,6 +25,7 @@ export default defineConfig({
         items: [
           { text: 'Config-Overview', link: '/configuration/config-overview' },
           { text: 'Global', link: '/configuration/config-global' },
+          { text: 'Per-Hub', link: '/configuration/config-per-hub' },
         ]
       }
     ],
