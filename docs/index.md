@@ -12,7 +12,7 @@ hero:
       link: /guide/what-is-signalrgen
     - theme: alt
       text: Quickstart
-      link: /api-examples
+      link: /guide/getting-started
     - theme: alt
       text: GitHub
       link: https://github.com/MichaelHochriegl/SignalRGen
