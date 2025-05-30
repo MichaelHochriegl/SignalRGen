@@ -5,3 +5,7 @@ riderModule.iml
 /_ReSharper.Caches/
 
 **/*.g.received.*
+
+node_modules
+docs/.vitepress/dist
+docs/.vitepress/cache
