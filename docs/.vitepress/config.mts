@@ -9,7 +9,6 @@ export default defineConfig({
     logo: 'logo.webp',
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
     ],
 
     sidebar: [
