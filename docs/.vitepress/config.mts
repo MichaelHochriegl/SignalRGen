@@ -9,7 +9,6 @@ export default defineConfig({
     logo: 'logo.webp',
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Examples', link: '/markdown-examples' }
     ],
 
     sidebar: [
@@ -31,7 +30,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
+      { icon: 'github', link: 'https://github.com/MichaelHochriegl/SignalRGen' }
     ]
   }
 })
