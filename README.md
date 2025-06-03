@@ -14,12 +14,12 @@ With `SignalRGen` you can easily share your `SignalR` client with a nice develop
 
 ## Installation
 
-`SignalRGen` is published as a nuget package, so installation is simple:
+`SignalRGen` is published as a nuget package, you can install it with:
 ```shell
 dotnet add package SignalRGen
 ```
 
-There are also YOLO packages pushed here on this GitHub repository.
+There are also YOLO packages pushed here in this GitHub repository.
 
 ## Setup
 
@@ -38,9 +38,9 @@ public interface IExampleHubClient
 }
 ```
 
-In the example above you see a simple client description that has one method that will be translated into a client
+In the example above, you see a simple client description that has one method that will be translated into a client
 method.
-Notice the `HubUri` that is set inside the `HubClient` attribute. With this you can define on which route your hub is 
+Notice the `HubUri` that is set inside the `HubClient` attribute. With this, you can define on which route your hub is 
 listening on.
 Also notice that your method should return a `Task`.
 
@@ -49,7 +49,7 @@ the necessary boilerplate for you.
 
 ## Server-Side usage
 
-After you did the setup part you can register your `Hub` like this to point to the correct `Uri`:
+After you did the setup part, you can register your `Hub` like this to point to the correct `Uri`:
 ```csharp
 var app = builder.Build();
 
@@ -60,7 +60,7 @@ Apart from that `SignalRGen` currently doesn't do anything for the server experi
 
 ## Client-Side usage
 
-After you did the setup part, you will have a greatly enhanced client experience.
+After you have done the setup part, you will have a greatly enhanced client experience.
 `SignalRGen` generates multiple files, like, for example, this client:
 
 ```csharp
@@ -172,3 +172,10 @@ The `ExampleHubClient.StartAsync()` can be called multiple times, as it checks i
 only starts it if the `HubConnectionState` is disconnected. So multiple calls will not start the connection multiple times.
 
 If you want to get a deeper understanding and look at the generated code, head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on GitHub.
+
+## Recognitions
+This library wouldn't have been possible if not for the following people (please note: the order is completely random):
+* [Andrew Lock](https://andrewlock.net)
+* [Anton Wieslander (aka RawCoding)](https://www.youtube.com/RawCoding)
+* [Jeffrey T. Fritz (aka csharpfritz)](https://www.twitch.tv/csharpfritz)
+* [BissauCam](https://github.com/BissauCam)

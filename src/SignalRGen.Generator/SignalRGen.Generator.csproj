@@ -10,6 +10,21 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     </PropertyGroup>
 
+    <PropertyGroup>
+        <!-- NuGet settings -->
+        <PackageId>SignalRGen</PackageId>
+        <PackageTags>SignalRGen;ASP.NET Core;Source Generator;SignalR</PackageTags>
+        <Authors>Michael Hochriegl</Authors>
+        <PackageProjectUrl>https://signalrgen.net</PackageProjectUrl>
+        <PackageIcon>logo_128x128.png</PackageIcon>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/MichaelHochriegl/SignalRGen</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <IncludeContentInPack>true</IncludeContentInPack>
+    </PropertyGroup>
+
     <ItemGroup>
       <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
       <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
@@ -23,6 +38,12 @@
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
             <_Parameter1>SignalRGen.Generator.Tests</_Parameter1>
         </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../LICENSE" Pack="true" PackagePath="\" />
+        <None Include="../../README.md" Pack="true" PackagePath="\" />
+        <None Include="../../assets/logo_128x128.png" Pack="true" PackagePath="\" />
     </ItemGroup>
 
 </Project>

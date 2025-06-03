@@ -44,18 +44,22 @@ internal static class HubClientSource
                                                  }
                                              }
                                              """;
+    
+    private const string FuncWithParams = "public Func<{~{parameterTypes}~}, Task>? On{~{identifier}~} = default;";
+    private const string FuncNoParams = "public Func<Task>? On{~{identifier}~} = default;";
+    
     private const string ServerToClientMethodTemplate = """
                                                             /// <summary>
                                                             /// Is invoked whenever the client method {~{identifier}~} of the <see cref = "{~{hubClientInterface}~}"/> gets invoked.
                                                             /// </summary>
-                                                            public Func<{~{parameterTypes}~}, Task>? On{~{identifier}~} = default;
+                                                            {~{func}~}
                                                             private Task {~{identifier}~}Handler({~{parameterList}~})
                                                             {
                                                                 return On{~{identifier}~}?.Invoke({~{parameters}~}) ?? Task.CompletedTask;
                                                             }
                                                         """;
 
-    private const string ClientToServerMethodTemplate =
+    private const string ClientToServerMethodWithParamsTemplate =
         """
             /// <summary>
             /// Can be invoked to trigger the {~{identifier}~} on the <see cref = "{~{hubClientInterface}~}"/>.
@@ -67,9 +71,26 @@ internal static class HubClientSource
                 return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", {~{parameters}~}, cancellationToken: ct);
             }
         """;
-    private const string OnMethodTemplate = """
-                                                _hubConnection?.On<{~{parameterTypes}~}>("{~{identifier}~}", {~{identifier}~}Handler);
-                                            """;
+    
+    private const string ClientToServerMethodNoParamsTemplate =
+        """
+            /// <summary>
+            /// Can be invoked to trigger the {~{identifier}~} on the <see cref = "{~{hubClientInterface}~}"/>.
+            /// </summary>
+            /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="{~{hubName}~}.StartAsync"/></exception>
+            public {~{returnType}~} Invoke{~{identifier}~}Async(CancellationToken ct = default)
+            {
+                ValidateHubConnection();
+                return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", cancellationToken: ct);
+            }
+        """;
+    
+    private const string OnMethodWithParamsTemplate = """
+                                                          _hubConnection?.On<{~{parameterTypes}~}>("{~{identifier}~}", {~{identifier}~}Handler);
+                                                      """;
+    private const string OnMethodNoParamsTemplate = """
+                                                        _hubConnection?.On("{~{identifier}~}", {~{identifier}~}Handler);
+                                                    """;
 
     internal static SourceText GetSourceText(HubClientToGenerate hubClientToGenerate)
     {
@@ -86,6 +107,7 @@ internal static class HubClientSource
                 var parameters = string.Join(", ", method.Parameters.Select(p => p.Name));
 
                 return ServerToClientMethodTemplate
+                    .Replace("{~{func}~}", parameterTypes.Length > 0 ? FuncWithParams : FuncNoParams)
                     .Replace("{~{hubClientInterface}~}", hubClientToGenerate.InterfaceName)
                     .Replace("{~{identifier}~}", method.Identifier)
                     .Replace("{~{parameterTypes}~}", parameterTypes)
@@ -100,7 +122,11 @@ internal static class HubClientSource
             var parameterList = string.Join(", ", method.Parameters.Select(p => $"{p.Type} {p.Name}"));
             var parameters = string.Join(", ", method.Parameters.Select(p => p.Name));
 
-            var template = ClientToServerMethodTemplate
+            var templateToUse = parameterTypes.Length > 0
+                ? ClientToServerMethodWithParamsTemplate
+                : ClientToServerMethodNoParamsTemplate;
+            
+            var template = templateToUse
                 .Replace("{~{hubClientInterface}~}", hubClientToGenerate.InterfaceName)
                 .Replace("{~{hubName}~}", hubClientToGenerate.HubName)
                 .Replace("{~{identifier}~}", method.Identifier)
@@ -118,8 +144,10 @@ internal static class HubClientSource
             {
                 var parameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type));
 
-                return OnMethodTemplate.Replace("{~{identifier}~}", method.Identifier)
-                    .Replace("{~{parameterTypes}~}", parameterTypes);
+                return parameterTypes.Length > 0
+                    ? OnMethodWithParamsTemplate.Replace("{~{identifier}~}", method.Identifier)
+                        .Replace("{~{parameterTypes}~}", parameterTypes)
+                    : OnMethodNoParamsTemplate.Replace("{~{identifier}~}", method.Identifier);
             })
             .ToArray();
 
