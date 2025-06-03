@@ -21,6 +21,12 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Core Concepts',
+        items: [
+          { text: 'Generated Hub Clients', link: '/concepts/generated-hub-clients' },
+        ]
+      },
+      {
         text: 'Configuration',
         items: [
           { text: 'Config-Overview', link: '/configuration/config-overview' },
