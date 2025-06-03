@@ -17,6 +17,7 @@ export default defineConfig({
         items: [
           { text: 'What is SignalRGen?', link: '/guide/what-is-signalrgen' },
           { text: 'Getting Started', link: '/guide/getting-started' },
+          { text: 'Detailed Tutorial', link: '/guide/detailed-tutorial' },
         ]
       },
       {
