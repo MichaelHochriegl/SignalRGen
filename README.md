@@ -1,4 +1,5 @@
-[![.Net](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml)
+[![.Net](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/MichaelHochriegl/SignalRGen/actions/workflows/ci.yml) ![License](https://img.shields.io/badge/license-mit?style=flat&logo=refinedgithub&logoColor=white&label=MIT&color=blue)
+
 # SignalRGen ![Package-Logo](https://raw.githubusercontent.com/MichaelHochriegl/SignalRGen/refs/heads/main/assets/logo_32x32.png)
 
 > A source-generator-based approach to easily setup `SignalR` communication
@@ -9,7 +10,7 @@
 of boilerplate-code. `SignalRGen` will take the boilerplate off your shoulders and allows easy integration of your `Hubs`
 inside your client/s.
 
-With `SignalRGen` you can easily share your `SignalR` client easily with a nice developer experience to integrate with.
+With `SignalRGen` you can easily share your `SignalR` client with a nice developer experience to integrate with.
 
 ## Installation
 
@@ -37,7 +38,7 @@ public interface IExampleHubClient
 }
 ```
 
-In the example above, you see a simple client description that has one simple method that will be translated into a client
+In the example above, you see a simple client description that has one method that will be translated into a client
 method.
 Notice the `HubUri` that is set inside the `HubClient` attribute. With this, you can define on which route your hub is 
 listening on.
@@ -170,7 +171,7 @@ After setting up your DI like described above you can use the `ExampleHubClient`
 The `ExampleHubClient.StartAsync()` can be called multiple times, as it checks if the connection is not disconnected and 
 only starts it if the `HubConnectionState` is disconnected. So multiple calls will not start the connection multiple times.
 
-If you want to get a deeper understanding and look at the generated code, head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on GitHub.
+If you want to get a deeper understanding and look at the generated code, head over to the [documentation](https://signalrgen.net).
 
 ## Recognitions
 This library wouldn't have been possible if not for the following people (please note: the order is completely random):
