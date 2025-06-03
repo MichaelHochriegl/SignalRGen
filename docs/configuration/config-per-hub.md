@@ -1,8 +1,10 @@
 # Per-Hub configuration
 
-This configuration can be done for each `Hub` differently.
+Configure individual SignalR hubs with specific settings that apply only to that particular hub connection.
 
-To set it up, you use the DI registration:
+## Setup
+
+Register hub-specific configurations after setting up global configuration:
 
 ::: code-group
 
@@ -32,29 +34,59 @@ builder.Services.AddSignalRHubs(c => c.HubBaseUri = new Uri("http://localhost:51
 
 In the example above we define a couple of example settings.
 
-## Configuration values
+## Available Options
+
+The `HubClientOptions` class provides the following configuration options:
 
 ### `HubConnectionBuilderConfiguration`
 
-Allows you to configure the `HubConnectionBuilder` that is used to build the `Hub`.
+Allows direct access to configure the underlying `HubConnectionBuilder` that builds the SignalR connection.
 
-| Name                                |               Type               | Required? | Default Value                                                                    |
-|-------------------------------------|:--------------------------------:|-----------|----------------------------------------------------------------------------------|
-| `HubConnectionBuilderConfiguration` | `Action<IHubConnectionBuilder>?` | ❌         | `null`, so the default values will be used, as described in the MS documentation |
+| Property | Type | Required | Default |
+|----------|:----:|:--------:|---------|
+| `HubConnectionBuilderConfiguration` | `Action<IHubConnectionBuilder>?` | ❌ | `null` |
 
+**Common usages**:
+- Setting authentication providers
+- Configuring logging
+- Implementing custom reconnection policies
+- Setting message size limits
 
 ### `HttpConnectionOptionsConfiguration`
 
-Allows you to configure the underlying `HttpConnection` of the `Hub`.
+Provides configuration for the HTTP connection used by SignalR.
 
-| Name                                 |               Type               | Required? | Default Value                                                                    |
-|--------------------------------------|:--------------------------------:|-----------|----------------------------------------------------------------------------------|
-| `HttpConnectionOptionsConfiguration` | `Action<HttpConnectionOptions>?` | ❌          | `null`, so the default values will be used, as described in the MS documentation |
+| Property | Type | Required | Default |
+|----------|:----:|:--------:|---------|
+| `HttpConnectionOptionsConfiguration` | `Action<HttpConnectionOptions>?` | ❌ | `null` |
+
+**Common usages**:
+- Adding custom, static headers
+- Setting transport types (WebSockets, ServerSentEvents, etc.)
+- Configuring proxy settings
+- Setting connection timeouts
 
 ### `HubClientLifetime`
 
-Allows you to configure what lifetime is used for the `Hub`.
+Controls the DI lifetime of the hub client instance.
 
-| Name                |       Type        | Required? | Default Value                                                                          |
-|---------------------|:-----------------:|-----------|----------------------------------------------------------------------------------------|
-| `HubClientLifetime` | `ServiceLifetime` | ❌          | `ServiceLifetime.Singleton`, so only one instance is created and shared across the app |
+| Property | Type | Required | Default |
+|----------|:----:|:--------:|---------|
+| `HubClientLifetime` | `ServiceLifetime` | ❌ | `ServiceLifetime.Singleton` |
+
+**Available options**:
+- `ServiceLifetime.Singleton` - One instance shared across the application (default)
+- `ServiceLifetime.Scoped` - New instance per scope (e.g., per request in ASP.NET)
+- `ServiceLifetime.Transient` - New instance each time it's requested
+
+## Default Behavior
+
+When no configuration is provided, SignalRGen sets up sensible defaults:
+
+- The hub client is registered as a `Singleton`
+- A default retry policy is applied with:
+    - 10 attempts at 1-second intervals
+    - 5 attempts at 3-second intervals
+    - 2 attempts at 10-second intervals
+- The hub URI is constructed by combining the global `HubBaseUri` (see [global configuration](config-global.md#hubbaseuri))
+with the hub-specific `HubUri`
