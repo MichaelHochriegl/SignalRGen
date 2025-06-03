@@ -23,6 +23,7 @@ export default defineConfig({
       {
         text: 'Core Concepts',
         items: [
+          { text: 'Hub Interface Definition', link: '/concepts/hub-interface-definition' },
           { text: 'Generated Hub Clients', link: '/concepts/generated-hub-clients' },
         ]
       },

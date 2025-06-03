@@ -91,7 +91,7 @@ Remember to register your Hub in `Program.cs`:
 
 ::: code-group
 ```csharp
-app.MapHub<PongHub>("/ping-pong");
+app.MapHub<PingPongHub>($"/{PingPongHub.HubUri}");
 ```
 :::
 
@@ -164,10 +164,6 @@ app.MapGet("/ping", async ([FromServices] PingPongHub hub) =>
 - Methods with `[ClientToServerMethod]` are client-to-server calls
 - Use the generated class (`PingPongHub`) in your client code, not the interface
 - The server implements both the interface and inherits from `Hub<TInterface>`
-
-## Next Steps
-
-For more advanced configuration options, see the [Configuration Guide](../configuration/config-overview.md).
 
 ## Complete Example
 
