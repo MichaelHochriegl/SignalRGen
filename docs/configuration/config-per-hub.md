@@ -38,23 +38,23 @@ In the example above we define a couple of example settings.
 
 Allows you to configure the `HubConnectionBuilder` that is used to build the `Hub`.
 
-| Name                                 |               Type               | Default Value                                                                    |
-|--------------------------------------|:--------------------------------:|----------------------------------------------------------------------------------|
-| `HubConnectionBuilderConfiguration` | `Action<IHubConnectionBuilder>?` | `null`, so the default values will be used, as described in the MS documentation |
+| Name                                |               Type               | Required? | Default Value                                                                    |
+|-------------------------------------|:--------------------------------:|-----------|----------------------------------------------------------------------------------|
+| `HubConnectionBuilderConfiguration` | `Action<IHubConnectionBuilder>?` | ❌         | `null`, so the default values will be used, as described in the MS documentation |
 
 
 ### `HttpConnectionOptionsConfiguration`
 
 Allows you to configure the underlying `HttpConnection` of the `Hub`.
 
-| Name                                 |               Type               | Default Value                                                                    |
-|--------------------------------------|:--------------------------------:|----------------------------------------------------------------------------------|
-| `HttpConnectionOptionsConfiguration` | `Action<HttpConnectionOptions>?` | `null`, so the default values will be used, as described in the MS documentation |
+| Name                                 |               Type               | Required? | Default Value                                                                    |
+|--------------------------------------|:--------------------------------:|-----------|----------------------------------------------------------------------------------|
+| `HttpConnectionOptionsConfiguration` | `Action<HttpConnectionOptions>?` | ❌          | `null`, so the default values will be used, as described in the MS documentation |
 
 ### `HubClientLifetime`
 
 Allows you to configure what lifetime is used for the `Hub`.
 
-| Name                |       Type        | Default Value                                                                          |
-|---------------------|:-----------------:|----------------------------------------------------------------------------------------|
-| `HubClientLifetime` | `ServiceLifetime` | `ServiceLifetime.Singleton`, so only one instance is created and shared across the app |
+| Name                |       Type        | Required? | Default Value                                                                          |
+|---------------------|:-----------------:|-----------|----------------------------------------------------------------------------------------|
+| `HubClientLifetime` | `ServiceLifetime` | ❌          | `ServiceLifetime.Singleton`, so only one instance is created and shared across the app |

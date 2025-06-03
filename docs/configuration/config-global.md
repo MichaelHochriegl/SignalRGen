@@ -21,6 +21,6 @@ In the example above we define the global URI from the server we want to talk to
 
 Allows you to define the server URI all the Hubs will be talking too.
 
-| Name         | Type  | Default Value |
-|--------------|:-----:|---------------|
-| `HubBaseUri` | `Uri` | `null`        |
+| Name         | Type  | Required? | Default Value |
+|--------------|:-----:|-----------|---------------|
+| `HubBaseUri` | `Uri` |  ✅         | `null`        |
