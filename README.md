@@ -171,7 +171,7 @@ After setting up your DI like described above you can use the `ExampleHubClient`
 The `ExampleHubClient.StartAsync()` can be called multiple times, as it checks if the connection is not disconnected and 
 only starts it if the `HubConnectionState` is disconnected. So multiple calls will not start the connection multiple times.
 
-If you want to get a deeper understanding and look at the generated code, head over to the [wiki](https://github.com/MichaelHochriegl/SignalRGen/wiki) here on GitHub.
+If you want to get a deeper understanding and look at the generated code, head over to the [documentation](https://signalrgen.net).
 
 ## Recognitions
 This library wouldn't have been possible if not for the following people (please note: the order is completely random):
