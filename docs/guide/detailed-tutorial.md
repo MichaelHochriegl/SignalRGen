@@ -146,7 +146,7 @@ builder.Services.AddSignalR();
 var app = builder.Build();
 
 // Map the SignalR hub to the path matching our HubUri
-app.MapHub<PongHub>("/ping-pong");
+app.MapHub<PongHub>($"/{PingPongHub.HubUri}");
 
 app.Run();
 ```

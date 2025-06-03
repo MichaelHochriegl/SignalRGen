@@ -91,7 +91,7 @@ Remember to register your Hub in `Program.cs`:
 
 ::: code-group
 ```csharp
-app.MapHub<PongHub>("/ping-pong");
+app.MapHub<PingPongHub>($"/{PingPongHub.HubUri}");
 ```
 :::
 
