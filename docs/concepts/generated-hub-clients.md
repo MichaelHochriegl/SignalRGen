@@ -311,8 +311,3 @@ For more detailed diagnostic information, enable SignalR logging:
 })
 ```
 :::
-
-## Related Topics
-
-- [Global Configuration](../configuration/config-global.md)
-- [Per-Hub Configuration](../configuration/config-per-hub.md)

@@ -334,12 +334,3 @@ For registration, you can access the generated URI with:
 ```csharp
 app.MapHub<ChatHubClient>($"/{ChatHubClient.HubUri}");
 ```
-
-## Next Steps
-
-After defining your hub interfaces:
-
-1. Learn about [Generated Hub Clients](./generated-hub-clients.md) to understand what code SignalRGen creates
-2. Explore [Global Configuration](../configuration/config-global.md) for setting up your hub connections
-3. Check [Per-Hub Configuration](../configuration/config-per-hub.md) for fine-tuning individual hubs
-```

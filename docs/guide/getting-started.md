@@ -165,10 +165,6 @@ app.MapGet("/ping", async ([FromServices] PingPongHub hub) =>
 - Use the generated class (`PingPongHub`) in your client code, not the interface
 - The server implements both the interface and inherits from `Hub<TInterface>`
 
-## Next Steps
-
-For more advanced configuration options, see the [Configuration Guide](../configuration/config-overview.md).
-
 ## Complete Example
 
 For the full step-by-step example including project setup, see our [detailed tutorial](./detailed-tutorial.md).
