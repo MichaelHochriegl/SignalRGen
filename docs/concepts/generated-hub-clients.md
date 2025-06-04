@@ -81,7 +81,7 @@ The naming convention is to add the "On" prefix to the original method name.
 
 :::tip
 `SignalRGen` will treat every method in your interface as a server-to-client method by default, so the `[ServerToClientMethod]`
-attribute is optional, but can be used if you want to be specific.
+attribute is optional, but can be used if you want to be explicit.
 :::
 
 ### Client-to-Server Methods
