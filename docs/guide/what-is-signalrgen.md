@@ -1,8 +1,8 @@
-# What is SignalRGen?
+# What is `SignalRGen`?
 
-SignalRGen is a source generator library for .NET that transforms the way you work with SignalR, Microsoft's real-time communication framework. It eliminates boilerplate code and provides a strongly-typed, developer-friendly experience.
+`SignalRGen` is a source generator library for .NET that transforms the way you work with SignalR, Microsoft's real-time communication framework. It eliminates boilerplate code and provides a strongly-typed, developer-friendly experience.
 
-## The Problem SignalRGen Solves
+## The Problem `SignalRGen` Solves
 
 Traditional SignalR client implementation requires:
 - Writing repetitive connection management code
@@ -12,9 +12,9 @@ Traditional SignalR client implementation requires:
 
 This leads to verbose, error-prone code challenging to maintain as your application grows.
 
-## How SignalRGen Works
+## How `SignalRGen` Works
 
-SignalRGen takes a different approach:
+`SignalRGen` takes a different approach:
 
 1. **Define Once**: Create a simple interface that defines your SignalR contract
 2. **Generate Automatically**: The source generator creates a complete client implementation
@@ -30,7 +30,7 @@ No more string-based method names, manual connection handling, or tedious boiler
 - **Automatic Reconnection**: Built-in resilient connection handling
 - **Full Customization**: Configure every aspect of the SignalR connection when needed
 
-## Example: The SignalRGen Difference
+## Example: The `SignalRGen` Difference
 
 ### Traditional SignalR Implementation
 
@@ -106,9 +106,9 @@ client.MessageReceived += (user, message) => Console.WriteLine($"{user}: {messag
 await client.SendMessageAsync("Hello world");
 ```
 
-### SignalRGen Implementation
+### `SignalRGen` Implementation
 
-With SignalRGen, you only need to define a simple interface, and everything else is generated for you:
+With `SignalRGen`, you only need to define a simple interface, and everything else is generated for you:
 
 ```csharp
 // 1. Define your hub interface - that's it!
@@ -153,7 +153,7 @@ public class ChatService
 }
 ```
 
-## Who Should Use SignalRGen?
+## Who Should Use `SignalRGen`?
 
 - .NET developers building real-time applications with SignalR
 - Teams seeking to reduce boilerplate code and improve maintainability
