@@ -146,19 +146,8 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         return interfaceSymbol.ContainingNamespace.ToString();
     }
 
-    // private static EquatableArray<CacheableMethodDeclaration> GetInterfaceMethods(TypeDeclarationSyntax node)
-    // {
-    //     // return node.Members.OfType<MethodDeclarationSyntax>();
-    //     var methods = node.Members.OfType<MethodDeclarationSyntax>();
-    //     return methods.Select(m => new CacheableMethodDeclaration(m.Identifier.Text,
-    //         m.ParameterList.Parameters.Select(p => new Parameter(p.Type.ToString(), p.Identifier.Text))
-    //             .ToImmutableArray().AsEquatableArray())).ToImmutableArray().AsEquatableArray();
-    // }
-
     private static EquatableArray<CacheableUsingDeclaration> GetInterfacesUsings(SyntaxNode syntaxNode)
     {
-        // return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>()
-        //        ?? Enumerable.Empty<UsingDirectiveSyntax>();
         return syntaxNode.Parent?.Parent?.ChildNodes().OfType<UsingDirectiveSyntax>()
                    .Select(u => new CacheableUsingDeclaration(u.ToString())).ToImmutableArray().AsEquatableArray()
                ?? EquatableArray<CacheableUsingDeclaration>.FromImmutableArray(
