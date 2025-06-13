@@ -79,7 +79,9 @@ internal class InterfaceMethodExtractor
             
             foreach (var syntaxRef in baseInterface.DeclaringSyntaxReferences)
             {
-                if (syntaxRef.GetSyntax(_cancellationToken) is InterfaceDeclarationSyntax baseInterfaceSyntax)
+                var isPartOfCompilation = _semanticModel.Compilation.SyntaxTrees.Contains(syntaxRef.SyntaxTree);
+                
+                if (isPartOfCompilation && syntaxRef.GetSyntax(_cancellationToken) is InterfaceDeclarationSyntax baseInterfaceSyntax)
                 {
                     // Get the semantic model for the syntax tree if different
                     var baseInterfaceModel = syntaxRef.SyntaxTree != _semanticModel.SyntaxTree
