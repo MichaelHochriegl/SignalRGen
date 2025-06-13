@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SignalRGen.Generator.Common;
+using SignalRGen.Generator.Extractors;
 using SignalRGen.Generator.Sources;
 
 namespace SignalRGen.Generator;
@@ -57,7 +58,8 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             SignalRClientServiceRegistrationSource.GetSource(hubClients));
     }
 
-    private static HubClientToGenerate? GetSemanticTargetForGeneration(GeneratorAttributeSyntaxContext context,
+    private static HubClientToGenerate? GetSemanticTargetForGeneration(
+        GeneratorAttributeSyntaxContext context,
         CancellationToken cancellationToken)
     {
         var node = (context.TargetNode as InterfaceDeclarationSyntax)!;
@@ -85,51 +87,35 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             x.AttributeClass is not null
             && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
 
-        var usings = GetInterfacesUsings(node);
-        
-        var serverToClientMethods = new List<CacheableMethodDeclaration>();
-        var clientToServerMethods = new List<CacheableMethodDeclaration>();
-        foreach (var method in node.Members.OfType<MethodDeclarationSyntax>())
+        if (hubClientAttribute is null)
         {
-            var cacheableMethodDeclaration = new CacheableMethodDeclaration(method.Identifier.Text,
-                method.ParameterList.Parameters.Select(p => new Parameter(p.Type!.ToString(), p.Identifier.Text))
-                    .ToImmutableArray(), method.ReturnType.ToString());
-            if (method.AttributeLists.Count == 0)
-            {
-                serverToClientMethods.Add(cacheableMethodDeclaration);
-            }
-
-            foreach (var attributeList in method.AttributeLists)
-            {
-                foreach (var attribute in attributeList.Attributes)
-                {
-                    var attributeSymbol = context.SemanticModel.GetSymbolInfo(attribute).Symbol;
-
-                    if (attributeSymbol is not null &&
-                        attributeSymbol.ContainingType.Equals(clientToServerAttribute, SymbolEqualityComparer.Default))
-                    {
-                        clientToServerMethods.Add(cacheableMethodDeclaration);
-                        break;
-                    }
-                    
-                    // We are not checking here if the `ServerToClientAttribute` is applied, as this is the default case.
-                    // Maybe this should be re-evaluated at a later date
-                    serverToClientMethods.Add(cacheableMethodDeclaration);
-                }
-            }
+            return null;
         }
 
-        return hubClientAttribute is null
-            ? null
-            : new HubClientToGenerate(InterfaceName: node.Identifier.Text,
-                HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node), 
-                HubUri: GetHubUri(hubClientAttribute),
-                InterfaceNamespace: GetInterfaceNamespace(context.TargetSymbol),
-                Usings: usings,
-                ServerToClientMethods: serverToClientMethods
-                    .ToImmutableArray(),
-                ClientToServerMethods: clientToServerMethods
-                    .ToImmutableArray());
+        // Get the interface symbol
+        if (context.SemanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol interfaceSymbol)
+        {
+            return null;
+        }
+
+        // Extract all methods and usings from the interface and its base interfaces
+        var extractor = new InterfaceMethodExtractor(
+            context.SemanticModel,
+            node,
+            interfaceSymbol,
+            clientToServerAttribute,
+            cancellationToken);
+    
+        var extractedData = extractor.Extract();
+
+        return new HubClientToGenerate(
+            InterfaceName: node.Identifier.Text,
+            HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node),
+            HubUri: GetHubUri(hubClientAttribute),
+            InterfaceNamespace: GetInterfaceNamespace(context.TargetSymbol),
+            Usings: extractedData.Usings,
+            ServerToClientMethods: extractedData.ServerToClientMethods,
+            ClientToServerMethods: extractedData.ClientToServerMethods);
     }
 
     private static string GetHubUri(AttributeData hubClientAttribute)
