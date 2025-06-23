@@ -35,7 +35,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         // context.RegisterPostInitializationOutput(ctx =>
         //     ctx.AddSource("ClientToServerMethodAttribute.g.cs", ClientToServerMethodAttributeSource.GetSource()));
         context.RegisterSourceOutput(msBuildOptions, (ctx, options) => 
-            ctx.AddSource("HubClienBase.g.cs", HubClientBaseSource.GetSource(options))
+            ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(options))
             );
         // context.RegisterPostInitializationOutput(ctx =>
         //     ctx.AddSource("HubClientOptions.g.cs", HubClientOptionsSource.GetSource()));
