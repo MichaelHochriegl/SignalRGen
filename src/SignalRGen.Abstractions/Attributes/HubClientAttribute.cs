@@ -1,4 +1,4 @@
-namespace SignalRGen.Abstractions;
+namespace SignalRGen.Abstractions.Attributes;
 
 /// <summary>
 /// An attribute used to designate an interface as a SignalR client hub

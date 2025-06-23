@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace SignalRGen.Abstractions;
+namespace SignalRGen.Abstractions.Configuration;
 
 /// <summary>
 /// Encapsulates the options to configure a SignalR Hub Client.

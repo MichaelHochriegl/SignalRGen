@@ -18,7 +18,7 @@ internal static class HubClientSource
                                              /// <summary>
                                              /// Represents a HubClient for the <see cref = "{~{hubClientInterface}~}"/> interface.
                                              /// </summary>
-                                             public class {~{hubName}~} : HubClientBase, IHubClient
+                                             public class {~{hubName}~} : HubClientBase
                                              {
                                                  public static string HubUri { get; } = "{~{hubUri}~}";
                                                  public {~{hubName}~}(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)

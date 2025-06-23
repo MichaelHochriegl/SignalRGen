@@ -82,7 +82,7 @@ internal static class SignalRClientServiceRegistrationSource
                 .Select(h => $"using {h.InterfaceNamespace};")
                 .Append("using Microsoft.AspNetCore.SignalR.Client;")
                 .Append("using Microsoft.Extensions.DependencyInjection;")
-                .Append("using SignalRGen.Generator.Client.Configuration;")
+                .Append("using SignalRGen.Abstractions.Configuration;")
                 .Distinct();
         var usings = string.Join("\n", allUsings);
 
