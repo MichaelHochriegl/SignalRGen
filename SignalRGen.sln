@@ -21,6 +21,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01-files", "01-files", "{DA
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Abstractions", "src\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj", "{8F936405-A748-4EBC-8894-CD9371D4634B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,7 @@ Global
 		{012B6133-5D23-4D12-925C-5F9DD6E532C6} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
 		{F5810CC3-BAA1-4DD4-91BC-CB34AEE5D751} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
 		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
+		{8F936405-A748-4EBC-8894-CD9371D4634B} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0D84BF69-5C50-40A9-BD7C-9507E609637E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -54,5 +57,9 @@ Global
 		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EE229EA4-D3FD-40A7-9FCE-4F50747EE401}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F936405-A748-4EBC-8894-CD9371D4634B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F936405-A748-4EBC-8894-CD9371D4634B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F936405-A748-4EBC-8894-CD9371D4634B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F936405-A748-4EBC-8894-CD9371D4634B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

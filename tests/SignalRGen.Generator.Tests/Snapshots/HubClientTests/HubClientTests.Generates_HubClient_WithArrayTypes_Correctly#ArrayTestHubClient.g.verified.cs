@@ -10,6 +10,7 @@
 
 using SignalRGen.Generator;
 using SignalRGen.Generator.Tests.TestData;
+using SignalRGen.Abstractions.Attributes;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -20,7 +21,7 @@ namespace SignalRGen.Clients;
 /// <summary>
 /// Represents a HubClient for the <see cref = "IArrayTestHubClient"/> interface.
 /// </summary>
-public class ArrayTestHubClient : HubClientBase, IHubClient
+public class ArrayTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "arrays";
     public ArrayTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)

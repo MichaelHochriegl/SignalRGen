@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 using SignalRGen.Generator;
+using SignalRGen.Abstractions.Attributes;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -19,7 +20,7 @@ namespace SignalRGen.Clients;
 /// <summary>
 /// Represents a HubClient for the <see cref = "ILongMethodNamesTestHubClient"/> interface.
 /// </summary>
-public class LongMethodNamesTestHubClient : HubClientBase, IHubClient
+public class LongMethodNamesTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "longmethods";
     public LongMethodNamesTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)

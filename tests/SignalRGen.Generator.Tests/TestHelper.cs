@@ -4,6 +4,7 @@ using System.Reflection;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using SignalRGen.Abstractions.Attributes;
 using SignalRGen.Generator.Common;
 
 namespace SignalRGen.Generator.Tests;
@@ -21,13 +22,17 @@ public static class TestHelper
             .Select(x => x.GetRawConstantValue() as string)
             .Where(x => !string.IsNullOrEmpty(x))
             .ToArray();
-        
+
         // Parse the provided string into a C# syntax tree
         var syntaxTree = CSharpSyntaxTree.ParseText(source);
-        IEnumerable<PortableExecutableReference> references =
-        [
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location)
-        ];
+        var references = AppDomain.CurrentDomain.GetAssemblies()
+            .Where(a => !a.IsDynamic && !string.IsNullOrWhiteSpace(a.Location))
+            .Select(a => MetadataReference.CreateFromFile(a.Location))
+            .Concat(
+            [
+                MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(HubClientAttribute).Assembly.Location),
+            ]);
 
         // Create a Roslyn compilation for the syntax tree.
         var compilation = CSharpCompilation.Create(
@@ -38,9 +43,9 @@ public static class TestHelper
         // Create a clone of the compilation that we will use later
         var clone = compilation.Clone();
 
-        // Create an instance of our EnumGenerator incremental source generator
+        // Create an instance of our incremental source generator
         var generator = new SignalRClientGenerator().AsSourceGenerator();
-        
+
         // ⚠ Tell the driver to track all the incremental generator outputs
         // without this, you'll have no tracked outputs!
         var opts = new GeneratorDriverOptions(
@@ -60,10 +65,10 @@ public static class TestHelper
             var runResult2 = driver
                 .RunGenerators(clone)
                 .GetRunResult();
-            
+
             // Compare all the tracked outputs, throw if there's a failure
             AssertRunsEqual(runResult, runResult2, trackingNames!);
-            
+
             // verify the second run only generated cached source outputs
             runResult2.Results[0]
                 .TrackedOutputSteps
@@ -76,7 +81,7 @@ public static class TestHelper
         // Use verify to snapshot test the source generator output!
         return Verifier.Verify(driver);
     }
-    
+
     private static void AssertRunsEqual(
         GeneratorDriverRunResult runResult1,
         GeneratorDriverRunResult runResult2,
@@ -101,7 +106,7 @@ public static class TestHelper
             var runSteps2 = trackedSteps2[trackingName];
             AssertEqual(runSteps1, runSteps2, trackingName);
         }
-    
+
         return;
 
         // Local function that extracts the tracked steps
@@ -113,7 +118,7 @@ public static class TestHelper
                 .Where(step => trackingNames.Contains(step.Key)) // filter to known steps
                 .ToDictionary(x => x.Key, x => x.Value); // Convert to a dictionary
     }
-    
+
     private static void AssertEqual(
         ImmutableArray<IncrementalGeneratorRunStep> runSteps1,
         ImmutableArray<IncrementalGeneratorRunStep> runSteps2,
@@ -189,6 +194,7 @@ public static class TestHelper
                     // recursively check each element in the collection
                     Visit(element);
                 }
+
                 return;
             }
 
@@ -200,5 +206,4 @@ public static class TestHelper
             }
         }
     }
-
 }

@@ -8,7 +8,7 @@ public class HubClientInheritanceTests
         // A simple case with a client interface that inherits from another interface but doesn't add its own methods
         const string source = """
             using System.Threading.Tasks;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             
@@ -35,7 +35,7 @@ public class HubClientInheritanceTests
         // A case with methods from both the client interface and its base
         const string source = """
             using System.Threading.Tasks;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             
@@ -66,7 +66,7 @@ public class HubClientInheritanceTests
         // Tests inheritance across multiple levels (IExampleHubClient -> IMidInterface -> IBaseInterface)
         const string source = """
             using System.Threading.Tasks;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             
@@ -97,7 +97,7 @@ public class HubClientInheritanceTests
         // Tests multiple interface inheritance (IExampleHubClient implements both IBaseInterface1 and IBaseInterface2)
         const string source = """
             using System.Threading.Tasks;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             
@@ -129,7 +129,7 @@ public class HubClientInheritanceTests
         // Note: This scenario would typically cause compilation errors in C#, but testing edge cases is valuable
         const string source = """
             using System.Threading.Tasks;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             
@@ -165,7 +165,7 @@ public class HubClientInheritanceTests
         // Tests whether attributes on the derived interface methods correctly override base interface defaults
         const string source = """
             using System.Threading.Tasks;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             
@@ -196,7 +196,7 @@ public class HubClientInheritanceTests
         const string source = """
             using System.Threading.Tasks;
             using System.Collections.Generic;
-            using SignalRGen.Generator;
+            using SignalRGen.Abstractions.Attributes;
             
             namespace SignalRGen.Example.Contracts;
             

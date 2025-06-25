@@ -1,4 +1,4 @@
-using SignalRGen.Generator;
+using SignalRGen.Abstractions.Attributes;
 
 namespace SignalRGen.Example.Contracts;
 
