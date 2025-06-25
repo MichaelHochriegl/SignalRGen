@@ -10,7 +10,7 @@
 
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
-using SignalRGen.Generator.Client.Configuration;
+using SignalRGen.Abstractions.Configuration;
 
 #nullable enable
 

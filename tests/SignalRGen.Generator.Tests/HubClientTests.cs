@@ -10,6 +10,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
                               
                               namespace SignalRGen.Clients;
                               
@@ -43,6 +44,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients {
                                     namespace Nested {
@@ -78,6 +80,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -112,6 +115,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -138,6 +142,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -166,6 +171,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -193,6 +199,7 @@ public class HubClientTests
         const string source = """
                               using SignalRGen.Generator;
                               using SignalRGen.Generator.Tests.TestData;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -219,6 +226,7 @@ public class HubClientTests
         // Arrange
         const string source = """
                               using SignalRGen.Generator;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -238,6 +246,7 @@ public class HubClientTests
         // Arrange
         const string source = """
                               using SignalRGen.Generator;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 
@@ -263,6 +272,7 @@ public class HubClientTests
         // Arrange
         const string source = """
                               using SignalRGen.Generator;
+                              using SignalRGen.Abstractions.Attributes;
 
                               namespace SignalRGen.Clients;
 

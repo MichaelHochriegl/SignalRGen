@@ -30,6 +30,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\src\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" />
       <ProjectReference Include="..\..\src\SignalRGen.Generator\SignalRGen.Generator.csproj" />
     </ItemGroup>
 

@@ -9,6 +9,7 @@
 //------------------------------------------------------------------------------
 
 using SignalRGen.Generator;
+using SignalRGen.Abstractions.Attributes;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -19,7 +20,7 @@ namespace SignalRGen.Clients;
 /// <summary>
 /// Represents a HubClient for the <see cref = "IValueTupleTestHubClient"/> interface.
 /// </summary>
-public class ValueTupleTestHubClient : HubClientBase, IHubClient
+public class ValueTupleTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "valuetuples";
     public ValueTupleTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)

@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
-using SignalRGen.Generator;
+using SignalRGen.Abstractions.Attributes;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -20,7 +20,7 @@ namespace SignalRGen.Example.Contracts;
 /// <summary>
 /// Represents a HubClient for the <see cref = "IExampleHubClient"/> interface.
 /// </summary>
-public class ExampleHubClient : HubClientBase, IHubClient
+public class ExampleHubClient : HubClientBase
 {
     public static string HubUri { get; } = "example";
     public ExampleHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
