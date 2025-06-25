@@ -22,29 +22,14 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         
         var msBuildOptions = context
             .AnalyzerConfigOptionsProvider
-            // Retrieve the RootNamespace property
             .Select((c, _) =>
                 c.GlobalOptions.TryGetValue("build_property.RootNamespace", out var rootNamespace)
                     ? new MsBuildOptions(rootNamespace)
                     : null);
         
-        // context.RegisterPostInitializationOutput(ctx =>
-            // ctx.AddSource("HubClientAttribute.g.cs", HubClientAttributeSource.GetSource()));
-        // context.RegisterPostInitializationOutput(ctx =>
-        //     ctx.AddSource("ServerToClientMethodAttribute.g.cs", ServerToClientMethodAttributeSource.GetSource()));
-        // context.RegisterPostInitializationOutput(ctx =>
-        //     ctx.AddSource("ClientToServerMethodAttribute.g.cs", ClientToServerMethodAttributeSource.GetSource()));
         context.RegisterSourceOutput(msBuildOptions, (ctx, options) => 
             ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(options))
             );
-        // context.RegisterPostInitializationOutput(ctx =>
-        //     ctx.AddSource("HubClientOptions.g.cs", HubClientOptionsSource.GetSource()));
-        // context.RegisterPostInitializationOutput(ctx => 
-        //     ctx.AddSource("IHubClient.g.cs", IHubClientSource.GetSource()));
-        // context.RegisterPostInitializationOutput(ctx =>
-        //     ctx.AddSource("SignalRHubServiceCollection.g.cs", FmSignalRHubServiceCollectionSource.GetSource()));
-        // context.RegisterPostInitializationOutput(ctx =>
-        //     ctx.AddSource("SignalROptions.g.cs", SignalROptionsSource.GetSource()));
 
         var markedInterfaces = context.SyntaxProvider.ForAttributeWithMetadataName(
                 MarkerAttributeFullQualifiedName, static (syntaxNode, _) =>
