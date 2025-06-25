@@ -9,7 +9,9 @@
 //------------------------------------------------------------------------------
 
 using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using System;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -18,7 +20,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Example.Contracts;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IExampleHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "IExampleHub"/> interface.
 /// </summary>
 public class ExampleHubClient : HubClientBase
 {
@@ -28,7 +30,7 @@ public class ExampleHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "IExampleHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "IExampleHub"/> gets invoked.
     /// </summary>
     public Func<int, Task>? OnReceiveExampleCountUpdate = default;
     private Task ReceiveExampleCountUpdateHandler(int count)
@@ -36,7 +38,7 @@ public class ExampleHubClient : HubClientBase
         return OnReceiveExampleCountUpdate?.Invoke(count) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveBase1Message of the <see cref = "IExampleHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveBase1Message of the <see cref = "IExampleHub"/> gets invoked.
     /// </summary>
     public Func<string, Task>? OnReceiveBase1Message = default;
     private Task ReceiveBase1MessageHandler(string message)
@@ -45,7 +47,7 @@ public class ExampleHubClient : HubClientBase
     }
 
     /// <summary>
-    /// Can be invoked to trigger the SendBase2Message on the <see cref = "IExampleHubClient"/>.
+    /// Can be invoked to trigger the SendBase2Message on the <see cref = "IExampleHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ExampleHubClient.StartAsync"/></exception>
     public Task<int> InvokeSendBase2MessageAsync(int value, CancellationToken ct = default)

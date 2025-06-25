@@ -8,9 +8,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
-using SignalRGen.Generator.Tests.TestData;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using SignalRGen.Generator.Tests.TestData;
+using System;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -19,7 +21,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients.Nested;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ITestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "ITestHub"/> interface.
 /// </summary>
 public class TestHubClient : HubClientBase
 {
@@ -29,15 +31,15 @@ public class TestHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
-    public Func<IEnumerable<CustomTypeDto>, Task>? OnReceiveCustomTypeUpdate = default;
-    private Task ReceiveCustomTypeUpdateHandler(IEnumerable<CustomTypeDto> customTypes)
+    public Func<IEnumerable<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnReceiveCustomTypeUpdate = default;
+    private Task ReceiveCustomTypeUpdateHandler(IEnumerable<SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes)
     {
         return OnReceiveCustomTypeUpdate?.Invoke(customTypes) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveFooUpdate of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveFooUpdate of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<string, int, Task>? OnReceiveFooUpdate = default;
     private Task ReceiveFooUpdateHandler(string bar, int bass)
@@ -45,7 +47,7 @@ public class TestHubClient : HubClientBase
         return OnReceiveFooUpdate?.Invoke(bar, bass) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<string, int, Task>? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
     private Task ReceiveNormalTypeWithSpecificAttributeAppliedHandler(string bazz, int buzz)
@@ -53,7 +55,7 @@ public class TestHubClient : HubClientBase
         return OnReceiveNormalTypeWithSpecificAttributeApplied?.Invoke(bazz, buzz) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<int, Task>? OnReceiveWithArbitraryAttribute = default;
     private Task ReceiveWithArbitraryAttributeHandler(int blub)
@@ -62,7 +64,7 @@ public class TestHubClient : HubClientBase
     }
 
     /// <summary>
-    /// Can be invoked to trigger the SendClientToServerNoReturnType on the <see cref = "ITestHubClient"/>.
+    /// Can be invoked to trigger the SendClientToServerNoReturnType on the <see cref = "ITestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
     public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
@@ -71,7 +73,7 @@ public class TestHubClient : HubClientBase
         return _hubConnection!.InvokeAsync("SendClientToServerNoReturnType", rick, age, cancellationToken: ct);
     }
     /// <summary>
-    /// Can be invoked to trigger the SendClientToServerWithReturnType on the <see cref = "ITestHubClient"/>.
+    /// Can be invoked to trigger the SendClientToServerWithReturnType on the <see cref = "ITestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
     public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
@@ -83,7 +85,7 @@ public class TestHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<IEnumerable<CustomTypeDto>>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
+        _hubConnection?.On<IEnumerable<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
 	    _hubConnection?.On<string, int>("ReceiveFooUpdate", ReceiveFooUpdateHandler);
 	    _hubConnection?.On<string, int>("ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
 	    _hubConnection?.On<int>("ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);

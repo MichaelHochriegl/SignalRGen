@@ -8,7 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
@@ -18,7 +19,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IEmptyTestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "IEmptyTestHub"/> interface.
 /// </summary>
 public class EmptyTestHubClient : HubClientBase
 {
