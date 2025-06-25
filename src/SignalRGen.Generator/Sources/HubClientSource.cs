@@ -133,8 +133,8 @@ internal static class HubClientSource
                 .Replace("{~{parameterTypes}~}", parameterTypes)
                 .Replace("{~{parameterList}~}", parameterList)
                 .Replace("{~{parameters}~}", parameters)
-                .Replace("{~{returnType}~}", method.ReturnType)
-                .Replace("{~{genericReturnType}~}", method.ReturnType.Replace("Task", ""));
+                .Replace("{~{returnType}~}", method.ReturnType.Replace("System.Threading.Tasks.", ""))
+                .Replace("{~{genericReturnType}~}", method.ReturnType.Replace("System.Threading.Tasks.Task", ""));
 
             return template;
         });

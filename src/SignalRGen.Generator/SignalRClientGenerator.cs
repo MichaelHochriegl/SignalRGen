@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
 using SignalRGen.Generator.Common;
 using SignalRGen.Generator.Extractors;
 using SignalRGen.Generator.Sources;
@@ -13,8 +12,6 @@ namespace SignalRGen.Generator;
 internal sealed class SignalRClientGenerator : IIncrementalGenerator
 {
     private const string MarkerAttributeFullQualifiedName = "SignalRGen.Abstractions.Attributes.HubClientAttribute";
-    private const string ServerToClientAttributeFullQualifiedName = "SignalRGen.Abstractions.Attributes.ServerToClientMethodAttribute";
-    private const string ClientToServerAttributeFullQualifiedName = "SignalRGen.Abstractions.Attributes.ClientToServerMethodAttribute";
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -68,17 +65,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             return null;
         }
 
-        var serverToClientAttribute =
-            context.SemanticModel.Compilation.GetTypeByMetadataName(ServerToClientAttributeFullQualifiedName);
-
-        var clientToServerAttribute =
-            context.SemanticModel.Compilation.GetTypeByMetadataName(ClientToServerAttributeFullQualifiedName);
-
-        if (serverToClientAttribute is null || clientToServerAttribute is null)
-        {
-            return null;
-        }
-
         var hubClientAttribute = context.Attributes.FirstOrDefault(x =>
             x.AttributeClass is not null
             && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
@@ -99,7 +85,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             context.SemanticModel,
             node,
             interfaceSymbol,
-            clientToServerAttribute,
             cancellationToken);
     
         var extractedData = extractor.Extract();
@@ -143,7 +128,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             .Value.Value;
 
 
-        var rValue = hubName?.ToString() ?? syntaxNode.Identifier.Text.Substring(1);
+        var rValue = hubName?.ToString() ?? $"{syntaxNode.Identifier.Text.Substring(1)}Client";
         return rValue;
     }
 }

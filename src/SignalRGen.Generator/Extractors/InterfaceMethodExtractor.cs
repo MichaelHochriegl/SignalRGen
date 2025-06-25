@@ -13,7 +13,6 @@ internal class InterfaceMethodExtractor
     private readonly SemanticModel _semanticModel;
     private readonly InterfaceDeclarationSyntax _interfaceSyntax;
     private readonly INamedTypeSymbol _interfaceSymbol;
-    private readonly INamedTypeSymbol _clientToServerAttribute;
     private readonly CancellationToken _cancellationToken;
 
     private readonly List<CacheableMethodDeclaration> _serverToClientMethods = [];
@@ -25,13 +24,11 @@ internal class InterfaceMethodExtractor
         SemanticModel semanticModel,
         InterfaceDeclarationSyntax interfaceSyntax,
         INamedTypeSymbol interfaceSymbol,
-        INamedTypeSymbol clientToServerAttribute,
         CancellationToken cancellationToken)
     {
         _semanticModel = semanticModel;
         _interfaceSyntax = interfaceSyntax;
         _interfaceSymbol = interfaceSymbol;
-        _clientToServerAttribute = clientToServerAttribute;
         _cancellationToken = cancellationToken;
     }
 
@@ -42,9 +39,6 @@ internal class InterfaceMethodExtractor
     {
         // First, collect usings from the current interface
         CollectUsingsFromCurrentInterface();
-
-        // Process methods from the current interface
-        ProcessMethodsFromSyntax(_interfaceSyntax, _semanticModel);
 
         // Process methods from base interfaces
         ProcessBaseInterfaces();
@@ -77,113 +71,50 @@ internal class InterfaceMethodExtractor
         {
             _cancellationToken.ThrowIfCancellationRequested();
 
-            foreach (var syntaxRef in baseInterface.DeclaringSyntaxReferences)
+            // This has to work with magic strings, unfortunately, as `nameof` is not supported for generic types
+            if (IsMarkerInterface(baseInterface, "IBidirectionalHub"))
             {
-                var isPartOfCompilation = _semanticModel.Compilation.SyntaxTrees.Contains(syntaxRef.SyntaxTree);
-
-                if (isPartOfCompilation &&
-                    syntaxRef.GetSyntax(_cancellationToken) is InterfaceDeclarationSyntax baseInterfaceSyntax)
+                // Extract methods from both generic parameters
+                var typeArguments = baseInterface.TypeArguments;
+                if (typeArguments.Length == 2)
                 {
-                    // Get the semantic model for the syntax tree if different
-                    var baseInterfaceModel = syntaxRef.SyntaxTree != _semanticModel.SyntaxTree
-                        ? _semanticModel.Compilation.GetSemanticModel(syntaxRef.SyntaxTree)
-                        : _semanticModel;
-
-                    // Collect usings from the base interface
-                    var compilationUnit = baseInterfaceSyntax.Ancestors().OfType<CompilationUnitSyntax>()
-                        .FirstOrDefault();
-                    if (compilationUnit != null)
-                    {
-                        foreach (var usingDirective in compilationUnit.Usings)
-                        {
-                            _usings.Add(usingDirective.ToString());
-                        }
-                    }
-
-                    // Process methods from the base interface
-                    ProcessMethodsFromSyntax(baseInterfaceSyntax, baseInterfaceModel);
-                }
-                else
-                {
-                    ProcessInterfaceFromMetadata(baseInterface);
+                    // First type argument is server-to-client methods
+                    ProcessMethodsFromInterface(typeArguments[0], isServerToClient: true);
+                    // Second type argument is client-to-server methods  
+                    ProcessMethodsFromInterface(typeArguments[1], isServerToClient: false);
                 }
             }
-        }
-    }
-
-    private void ProcessMethodsFromSyntax(
-        InterfaceDeclarationSyntax interfaceSyntax,
-        SemanticModel semanticModel)
-    {
-        foreach (var method in interfaceSyntax.Members.OfType<MethodDeclarationSyntax>())
-        {
-            _cancellationToken.ThrowIfCancellationRequested();
-
-            // Create method declaration
-            var methodDeclaration = new CacheableMethodDeclaration(
-                method.Identifier.Text,
-                method.ParameterList.Parameters
-                    .Select(p => new Parameter(p.Type!.ToString(), p.Identifier.Text))
-                    .ToImmutableArray(),
-                method.ReturnType.ToString());
-
-            // Check if we've already processed a method with this signature
-            var signature = GetMethodSignature(methodDeclaration);
-            if (!_methodSignatures.Add(signature))
+            else if (IsMarkerInterface(baseInterface, "IServerToClientHub"))
             {
-                // Skip duplicate methods
-                continue;
-            }
-
-            // Check if method has ClientToServerMethodAttribute
-            var isClientToServer = HasClientToServerAttribute(method, semanticModel);
-
-            if (isClientToServer)
-            {
-                _clientToServerMethods.Add(methodDeclaration);
-            }
-            else
-            {
-                _serverToClientMethods.Add(methodDeclaration);
-            }
-        }
-    }
-
-    private bool HasClientToServerAttribute(MethodDeclarationSyntax method, SemanticModel semanticModel)
-    {
-        foreach (var attributeList in method.AttributeLists)
-        {
-            foreach (var attribute in attributeList.Attributes)
-            {
-                var attributeSymbol = semanticModel.GetSymbolInfo(attribute).Symbol;
-
-                if (attributeSymbol is not null &&
-                    attributeSymbol.ContainingType.Equals(_clientToServerAttribute, SymbolEqualityComparer.Default))
+                var typeArguments = baseInterface.TypeArguments;
+                if (typeArguments.Length == 1)
                 {
-                    return true;
+                    // Only have one type argument, so it's server-to-client methods
+                    ProcessMethodsFromInterface(typeArguments[0], isServerToClient: true);
+                }
+            }
+            else if (IsMarkerInterface(baseInterface, "IClientToServerHub"))
+            {
+                var typeArguments = baseInterface.TypeArguments;
+                if (typeArguments.Length == 1)
+                {
+                    // Only have one type argument, so it's client-to-server methods
+                    ProcessMethodsFromInterface(typeArguments[0], isServerToClient: false);
                 }
             }
         }
-
-        return false;
     }
-
-    private static string GetMethodSignature(CacheableMethodDeclaration method)
+    
+    private void ProcessMethodsFromInterface(ITypeSymbol typeSymbol, bool isServerToClient)
     {
-        var parameterTypes = string.Join(",", method.Parameters.Select(p => p.Type));
-        return $"{method.Identifier}({parameterTypes}):{method.ReturnType}";
-    }
+        if (typeSymbol is not INamedTypeSymbol namedTypeSymbol) return;
 
-    private void ProcessInterfaceFromMetadata(INamedTypeSymbol interfaceSymbol)
-    {
-        // For cross-assembly interfaces, we work directly with symbols
-        foreach (var member in interfaceSymbol.GetMembers())
+        foreach (var member in namedTypeSymbol.GetMembers())
         {
             if (member is IMethodSymbol method && method.MethodKind == MethodKind.Ordinary)
             {
                 _cancellationToken.ThrowIfCancellationRequested();
 
-                // Create method declaration from symbol
                 var methodDeclaration = new CacheableMethodDeclaration(
                     method.Name,
                     method.Parameters
@@ -198,24 +129,31 @@ internal class InterfaceMethodExtractor
                     continue;
                 }
 
-                // Check if method has ClientToServerMethodAttribute
-                var isClientToServer = method.GetAttributes()
-                    .Any(attr =>
-                        attr.AttributeClass?.Equals(_clientToServerAttribute, SymbolEqualityComparer.Default) == true);
-
-                if (isClientToServer)
-                {
-                    _clientToServerMethods.Add(methodDeclaration);
-                }
-                else
+                if (isServerToClient)
                 {
                     _serverToClientMethods.Add(methodDeclaration);
                 }
+                else
+                {
+                    _clientToServerMethods.Add(methodDeclaration);
+                }
 
-                // Add namespace usings for cross-assembly types
+                // Add namespace usings
                 AddNamespaceUsings(method);
             }
         }
+
+        // Also process methods from base interfaces of the type argument
+        foreach (var baseInterface in namedTypeSymbol.AllInterfaces)
+        {
+            ProcessMethodsFromInterface(baseInterface, isServerToClient);
+        }
+    }
+
+    private static string GetMethodSignature(CacheableMethodDeclaration method)
+    {
+        var parameterTypes = string.Join(",", method.Parameters.Select(p => p.Type));
+        return $"{method.Identifier}({parameterTypes}):{method.ReturnType}";
     }
 
     private void AddNamespaceUsings(IMethodSymbol method)
@@ -235,6 +173,13 @@ internal class InterfaceMethodExtractor
             }
         }
     }
+    
+    private bool IsMarkerInterface(INamedTypeSymbol interfaceSymbol, string interfaceName)
+    {
+        return interfaceSymbol.Name == interfaceName && 
+               interfaceSymbol.ContainingNamespace.ToDisplayString() == "SignalRGen.Abstractions";
+    }
+
 }
 
 /// <summary>
