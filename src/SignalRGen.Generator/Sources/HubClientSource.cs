@@ -110,9 +110,10 @@ internal static class HubClientSource
                     .Replace("{~{func}~}", parameterTypes.Length > 0 ? FuncWithParams : FuncNoParams)
                     .Replace("{~{hubClientInterface}~}", hubClientToGenerate.InterfaceName)
                     .Replace("{~{identifier}~}", method.Identifier)
-                    .Replace("{~{parameterTypes}~}", parameterTypes)
-                    .Replace("{~{parameterList}~}", parameterList)
-                    .Replace("{~{parameters}~}", parameters);
+                    // These are ugly hacks right now -.-
+                    .Replace("{~{parameterTypes}~}", parameterTypes.Replace("*", ""))
+                    .Replace("{~{parameterList}~}", parameterList).Replace("*", "")
+                    .Replace("{~{parameters}~}", parameters).Replace("*", "");
             })
             .ToArray();
 
@@ -133,8 +134,9 @@ internal static class HubClientSource
                 .Replace("{~{parameterTypes}~}", parameterTypes)
                 .Replace("{~{parameterList}~}", parameterList)
                 .Replace("{~{parameters}~}", parameters)
-                .Replace("{~{returnType}~}", method.ReturnType.Replace("System.Threading.Tasks.", ""))
-                .Replace("{~{genericReturnType}~}", method.ReturnType.Replace("System.Threading.Tasks.Task", ""));
+                // These two are ugly hacks right now -.-
+                .Replace("{~{returnType}~}", method.ReturnType.Replace("System.Threading.Tasks.", "").Replace("*", ""))
+                .Replace("{~{genericReturnType}~}", method.ReturnType.Replace("System.Threading.Tasks.Task", "").Replace("*", ""));
 
             return template;
         });
@@ -145,9 +147,15 @@ internal static class HubClientSource
                 var parameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type));
 
                 return parameterTypes.Length > 0
-                    ? OnMethodWithParamsTemplate.Replace("{~{identifier}~}", method.Identifier)
+                    ? OnMethodWithParamsTemplate
+                        .Replace("{~{identifier}~}", method.Identifier)
                         .Replace("{~{parameterTypes}~}", parameterTypes)
-                    : OnMethodNoParamsTemplate.Replace("{~{identifier}~}", method.Identifier);
+                        // Ugly hack right now -.-
+                        .Replace("*", "")
+                    : OnMethodNoParamsTemplate
+                        .Replace("{~{identifier}~}", method.Identifier)
+                        // Ugly hack right now -.-
+                        .Replace("*", "");
             })
             .ToArray();
 
