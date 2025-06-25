@@ -167,7 +167,7 @@ internal class InterfaceMethodExtractor
         // Add usings for parameter types
         foreach (var parameter in method.Parameters)
         {
-            if (!parameter.Type.ContainingNamespace.IsGlobalNamespace)
+            if (parameter.Type.ContainingNamespace is not null && !parameter.Type.ContainingNamespace.IsGlobalNamespace)
             {
                 _usings.Add($"using {parameter.Type.ContainingNamespace.ToDisplayString()};");
             }
