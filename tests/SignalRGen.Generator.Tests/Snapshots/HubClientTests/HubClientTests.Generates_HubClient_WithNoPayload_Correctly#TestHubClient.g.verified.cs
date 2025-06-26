@@ -8,8 +8,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
-using SignalRGen.Generator.Tests.TestData;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ITestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "ITestHub"/> interface.
 /// </summary>
 public class TestHubClient : HubClientBase
 {
@@ -29,7 +29,7 @@ public class TestHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method NotifyNoAttributeApplied of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method NotifyNoAttributeApplied of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<Task>? OnNotifyNoAttributeApplied = default;
     private Task NotifyNoAttributeAppliedHandler()
@@ -37,7 +37,7 @@ public class TestHubClient : HubClientBase
         return OnNotifyNoAttributeApplied?.Invoke() ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyServerToClient of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method NotifyServerToClient of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<Task>? OnNotifyServerToClient = default;
     private Task NotifyServerToClientHandler()
@@ -45,7 +45,7 @@ public class TestHubClient : HubClientBase
         return OnNotifyServerToClient?.Invoke() ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyWithReturnNoAttributeApplied of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method NotifyWithReturnNoAttributeApplied of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<Task>? OnNotifyWithReturnNoAttributeApplied = default;
     private Task NotifyWithReturnNoAttributeAppliedHandler()
@@ -53,7 +53,7 @@ public class TestHubClient : HubClientBase
         return OnNotifyWithReturnNoAttributeApplied?.Invoke() ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyWithReturnServerToClient of the <see cref = "ITestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method NotifyWithReturnServerToClient of the <see cref = "ITestHub"/> gets invoked.
     /// </summary>
     public Func<Task>? OnNotifyWithReturnServerToClient = default;
     private Task NotifyWithReturnServerToClientHandler()
@@ -62,7 +62,7 @@ public class TestHubClient : HubClientBase
     }
 
     /// <summary>
-    /// Can be invoked to trigger the NotifyClientToServer on the <see cref = "ITestHubClient"/>.
+    /// Can be invoked to trigger the NotifyClientToServer on the <see cref = "ITestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
     public Task InvokeNotifyClientToServerAsync(CancellationToken ct = default)
@@ -71,7 +71,7 @@ public class TestHubClient : HubClientBase
         return _hubConnection!.InvokeAsync("NotifyClientToServer", cancellationToken: ct);
     }
     /// <summary>
-    /// Can be invoked to trigger the NotifyWithReturnClientToServer on the <see cref = "ITestHubClient"/>.
+    /// Can be invoked to trigger the NotifyWithReturnClientToServer on the <see cref = "ITestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
     public Task<string> InvokeNotifyWithReturnClientToServerAsync(CancellationToken ct = default)

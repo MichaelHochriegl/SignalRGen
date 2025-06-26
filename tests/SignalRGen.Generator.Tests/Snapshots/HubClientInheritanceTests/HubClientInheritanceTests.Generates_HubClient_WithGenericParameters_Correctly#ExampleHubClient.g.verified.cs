@@ -10,7 +10,9 @@
 
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using System;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -19,7 +21,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Example.Contracts;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IExampleHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "IExampleHub"/> interface.
 /// </summary>
 public class ExampleHubClient : HubClientBase
 {
@@ -29,7 +31,7 @@ public class ExampleHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "IExampleHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "IExampleHub"/> gets invoked.
     /// </summary>
     public Func<int, Task>? OnReceiveExampleCountUpdate = default;
     private Task ReceiveExampleCountUpdateHandler(int count)
@@ -37,29 +39,29 @@ public class ExampleHubClient : HubClientBase
         return OnReceiveExampleCountUpdate?.Invoke(count) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCollection of the <see cref = "IExampleHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCollection of the <see cref = "IExampleHub"/> gets invoked.
     /// </summary>
-    public Func<IEnumerable<T>, Task>? OnReceiveCollection = default;
-    private Task ReceiveCollectionHandler(IEnumerable<T> items)
+    public Func<System.Collections.Generic.IEnumerable<T>, Task>? OnReceiveCollection = default;
+    private Task ReceiveCollectionHandler(System.Collections.Generic.IEnumerable<T> items)
     {
         return OnReceiveCollection?.Invoke(items) ?? Task.CompletedTask;
     }
 
     /// <summary>
-    /// Can be invoked to trigger the RequestItems on the <see cref = "IExampleHubClient"/>.
+    /// Can be invoked to trigger the RequestItems on the <see cref = "IExampleHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ExampleHubClient.StartAsync"/></exception>
-    public Task<IEnumerable<T>> InvokeRequestItemsAsync(string filter, CancellationToken ct = default)
+    public Task<System.Collections.Generic.IEnumerable<T>> InvokeRequestItemsAsync(string filter, CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<IEnumerable<T>>("RequestItems", filter, cancellationToken: ct);
+        return _hubConnection!.InvokeAsync<System.Collections.Generic.IEnumerable<T>>("RequestItems", filter, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
         _hubConnection?.On<int>("ReceiveExampleCountUpdate", ReceiveExampleCountUpdateHandler);
-	    _hubConnection?.On<IEnumerable<T>>("ReceiveCollection", ReceiveCollectionHandler);
+	    _hubConnection?.On<System.Collections.Generic.IEnumerable<T>>("ReceiveCollection", ReceiveCollectionHandler);
     }
     
     private void ValidateHubConnection()

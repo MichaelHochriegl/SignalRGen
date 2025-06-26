@@ -8,8 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using System;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -18,7 +20,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ILongMethodNamesTestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "ILongMethodNamesTestHub"/> interface.
 /// </summary>
 public class LongMethodNamesTestHubClient : HubClientBase
 {
@@ -28,7 +30,7 @@ public class LongMethodNamesTestHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming of the <see cref = "ILongMethodNamesTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming of the <see cref = "ILongMethodNamesTestHub"/> gets invoked.
     /// </summary>
     public Func<string, Task>? OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming = default;
     private Task ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingHandler(string message)
@@ -37,7 +39,7 @@ public class LongMethodNamesTestHubClient : HubClientBase
     }
 
     /// <summary>
-    /// Can be invoked to trigger the SendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignature on the <see cref = "ILongMethodNamesTestHubClient"/>.
+    /// Can be invoked to trigger the SendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignature on the <see cref = "ILongMethodNamesTestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="LongMethodNamesTestHubClient.StartAsync"/></exception>
     public Task InvokeSendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignatureAsync(string firstParam, int secondParam, bool thirdParam, CancellationToken ct = default)
@@ -46,7 +48,7 @@ public class LongMethodNamesTestHubClient : HubClientBase
         return _hubConnection!.InvokeAsync("SendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignature", firstParam, secondParam, thirdParam, cancellationToken: ct);
     }
     /// <summary>
-    /// Can be invoked to trigger the RequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParameters on the <see cref = "ILongMethodNamesTestHubClient"/>.
+    /// Can be invoked to trigger the RequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParameters on the <see cref = "ILongMethodNamesTestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="LongMethodNamesTestHubClient.StartAsync"/></exception>
     public Task<string> InvokeRequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParametersAsync(Dictionary<string, List<int>> complexParam, CancellationToken ct = default)

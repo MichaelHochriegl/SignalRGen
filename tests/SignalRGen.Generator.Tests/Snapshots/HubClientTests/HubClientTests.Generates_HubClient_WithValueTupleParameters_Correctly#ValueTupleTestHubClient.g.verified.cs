@@ -8,8 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using System;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -18,7 +20,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IValueTupleTestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "IValueTupleTestHub"/> interface.
 /// </summary>
 public class ValueTupleTestHubClient : HubClientBase
 {
@@ -28,7 +30,7 @@ public class ValueTupleTestHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveTuple of the <see cref = "IValueTupleTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveTuple of the <see cref = "IValueTupleTestHub"/> gets invoked.
     /// </summary>
     public Func<(string name, int age), Task>? OnReceiveTuple = default;
     private Task ReceiveTupleHandler((string name, int age) person)
@@ -36,7 +38,7 @@ public class ValueTupleTestHubClient : HubClientBase
         return OnReceiveTuple?.Invoke(person) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNestedTuple of the <see cref = "IValueTupleTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNestedTuple of the <see cref = "IValueTupleTestHub"/> gets invoked.
     /// </summary>
     public Func<(string, (int, bool)), Task>? OnReceiveNestedTuple = default;
     private Task ReceiveNestedTupleHandler((string, (int, bool)) complexTuple)
@@ -44,7 +46,7 @@ public class ValueTupleTestHubClient : HubClientBase
         return OnReceiveNestedTuple?.Invoke(complexTuple) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNamedTuple of the <see cref = "IValueTupleTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNamedTuple of the <see cref = "IValueTupleTestHub"/> gets invoked.
     /// </summary>
     public Func<(string FirstName, string LastName, int Age), Task>? OnReceiveNamedTuple = default;
     private Task ReceiveNamedTupleHandler((string FirstName, string LastName, int Age) person)
@@ -53,7 +55,7 @@ public class ValueTupleTestHubClient : HubClientBase
     }
 
     /// <summary>
-    /// Can be invoked to trigger the SendAndReceiveTuple on the <see cref = "IValueTupleTestHubClient"/>.
+    /// Can be invoked to trigger the SendAndReceiveTuple on the <see cref = "IValueTupleTestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ValueTupleTestHubClient.StartAsync"/></exception>
     public Task<(bool success, string message)> InvokeSendAndReceiveTupleAsync((int id, string data) input, CancellationToken ct = default)

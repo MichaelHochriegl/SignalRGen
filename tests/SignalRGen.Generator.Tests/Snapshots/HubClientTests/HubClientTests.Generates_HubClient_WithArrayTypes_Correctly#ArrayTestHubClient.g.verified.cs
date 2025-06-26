@@ -8,9 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
-using SignalRGen.Generator.Tests.TestData;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using SignalRGen.Generator.Tests.TestData;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -19,7 +20,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IArrayTestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "IArrayTestHub"/> interface.
 /// </summary>
 public class ArrayTestHubClient : HubClientBase
 {
@@ -29,7 +30,7 @@ public class ArrayTestHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveStringArray of the <see cref = "IArrayTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveStringArray of the <see cref = "IArrayTestHub"/> gets invoked.
     /// </summary>
     public Func<string[], Task>? OnReceiveStringArray = default;
     private Task ReceiveStringArrayHandler(string[] messages)
@@ -37,7 +38,7 @@ public class ArrayTestHubClient : HubClientBase
         return OnReceiveStringArray?.Invoke(messages) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveIntArray of the <see cref = "IArrayTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveIntArray of the <see cref = "IArrayTestHub"/> gets invoked.
     /// </summary>
     public Func<int[], Task>? OnReceiveIntArray = default;
     private Task ReceiveIntArrayHandler(int[] numbers)
@@ -45,15 +46,15 @@ public class ArrayTestHubClient : HubClientBase
         return OnReceiveIntArray?.Invoke(numbers) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCustomTypeArray of the <see cref = "IArrayTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCustomTypeArray of the <see cref = "IArrayTestHub"/> gets invoked.
     /// </summary>
-    public Func<CustomTypeDto[], Task>? OnReceiveCustomTypeArray = default;
-    private Task ReceiveCustomTypeArrayHandler(CustomTypeDto[] dtos)
+    public Func<SignalRGen.Generator.Tests.TestData.CustomTypeDto[], Task>? OnReceiveCustomTypeArray = default;
+    private Task ReceiveCustomTypeArrayHandler(SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
     {
         return OnReceiveCustomTypeArray?.Invoke(dtos) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveMultidimensionalArray of the <see cref = "IArrayTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveMultidimensionalArray of the <see cref = "IArrayTestHub"/> gets invoked.
     /// </summary>
     public Func<int[,], Task>? OnReceiveMultidimensionalArray = default;
     private Task ReceiveMultidimensionalArrayHandler(int[,] matrix)
@@ -61,7 +62,7 @@ public class ArrayTestHubClient : HubClientBase
         return OnReceiveMultidimensionalArray?.Invoke(matrix) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveJaggedArray of the <see cref = "IArrayTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveJaggedArray of the <see cref = "IArrayTestHub"/> gets invoked.
     /// </summary>
     public Func<string[][], Task>? OnReceiveJaggedArray = default;
     private Task ReceiveJaggedArrayHandler(string[][] jaggedArray)
@@ -70,7 +71,7 @@ public class ArrayTestHubClient : HubClientBase
     }
 
     /// <summary>
-    /// Can be invoked to trigger the SendAndReceiveArray on the <see cref = "IArrayTestHubClient"/>.
+    /// Can be invoked to trigger the SendAndReceiveArray on the <see cref = "IArrayTestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ArrayTestHubClient.StartAsync"/></exception>
     public Task<string[]> InvokeSendAndReceiveArrayAsync(int[] input, CancellationToken ct = default)
@@ -84,7 +85,7 @@ public class ArrayTestHubClient : HubClientBase
     {
         _hubConnection?.On<string[]>("ReceiveStringArray", ReceiveStringArrayHandler);
 	    _hubConnection?.On<int[]>("ReceiveIntArray", ReceiveIntArrayHandler);
-	    _hubConnection?.On<CustomTypeDto[]>("ReceiveCustomTypeArray", ReceiveCustomTypeArrayHandler);
+	    _hubConnection?.On<SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>("ReceiveCustomTypeArray", ReceiveCustomTypeArrayHandler);
 	    _hubConnection?.On<int[,]>("ReceiveMultidimensionalArray", ReceiveMultidimensionalArrayHandler);
 	    _hubConnection?.On<string[][]>("ReceiveJaggedArray", ReceiveJaggedArrayHandler);
     }

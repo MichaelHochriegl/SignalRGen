@@ -8,9 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Generator;
-using SignalRGen.Generator.Tests.TestData;
+using System.Threading.Tasks;
+using SignalRGen.Abstractions;
 using SignalRGen.Abstractions.Attributes;
+using SignalRGen.Generator.Tests.TestData;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
@@ -19,7 +20,7 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IGenericTestHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "IGenericTestHub"/> interface.
 /// </summary>
 public class GenericTestHubClient : HubClientBase
 {
@@ -29,15 +30,15 @@ public class GenericTestHubClient : HubClientBase
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveGenericList of the <see cref = "IGenericTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveGenericList of the <see cref = "IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<List<CustomTypeDto>, Task>? OnReceiveGenericList = default;
-    private Task ReceiveGenericListHandler(List<CustomTypeDto> items)
+    public Func<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnReceiveGenericList = default;
+    private Task ReceiveGenericListHandler(List<SignalRGen.Generator.Tests.TestData.CustomTypeDto> items)
     {
         return OnReceiveGenericList?.Invoke(items) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveDictionary of the <see cref = "IGenericTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveDictionary of the <see cref = "IGenericTestHub"/> gets invoked.
     /// </summary>
     public Func<Dictionary<string, int>, Task>? OnReceiveDictionary = default;
     private Task ReceiveDictionaryHandler(Dictionary<string, int> keyValuePairs)
@@ -45,27 +46,27 @@ public class GenericTestHubClient : HubClientBase
         return OnReceiveDictionary?.Invoke(keyValuePairs) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNestedGeneric of the <see cref = "IGenericTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNestedGeneric of the <see cref = "IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<Dictionary<string, List<CustomTypeDto>>, Task>? OnReceiveNestedGeneric = default;
-    private Task ReceiveNestedGenericHandler(Dictionary<string, List<CustomTypeDto>> complexData)
+    public Func<Dictionary<string, List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>, Task>? OnReceiveNestedGeneric = default;
+    private Task ReceiveNestedGenericHandler(Dictionary<string, List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>> complexData)
     {
         return OnReceiveNestedGeneric?.Invoke(complexData) ?? Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method SendAndReceiveGeneric of the <see cref = "IGenericTestHubClient"/> gets invoked.
+    /// Is invoked whenever the client method SendAndReceiveGeneric of the <see cref = "IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<List<CustomTypeDto>, Task>? OnSendAndReceiveGeneric = default;
-    private Task SendAndReceiveGenericHandler(List<CustomTypeDto> input)
+    public Func<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnSendAndReceiveGeneric = default;
+    private Task SendAndReceiveGenericHandler(List<SignalRGen.Generator.Tests.TestData.CustomTypeDto> input)
     {
         return OnSendAndReceiveGeneric?.Invoke(input) ?? Task.CompletedTask;
     }
 
     /// <summary>
-    /// Can be invoked to trigger the SendNestedTask on the <see cref = "IGenericTestHubClient"/>.
+    /// Can be invoked to trigger the SendNestedTask on the <see cref = "IGenericTestHub"/>.
     /// </summary>
     /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="GenericTestHubClient.StartAsync"/></exception>
-    public Task<Task<string>> InvokeSendNestedTaskAsync(Task<int> nestedTask, CancellationToken ct = default)
+    public Task<Task<string>> InvokeSendNestedTaskAsync(System.Threading.Tasks.Task<int> nestedTask, CancellationToken ct = default)
     {
         ValidateHubConnection();
         return _hubConnection!.InvokeAsync<<string>>("SendNestedTask", nestedTask, cancellationToken: ct);
@@ -74,10 +75,10 @@ public class GenericTestHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<List<CustomTypeDto>>("ReceiveGenericList", ReceiveGenericListHandler);
+        _hubConnection?.On<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("ReceiveGenericList", ReceiveGenericListHandler);
 	    _hubConnection?.On<Dictionary<string, int>>("ReceiveDictionary", ReceiveDictionaryHandler);
-	    _hubConnection?.On<Dictionary<string, List<CustomTypeDto>>>("ReceiveNestedGeneric", ReceiveNestedGenericHandler);
-	    _hubConnection?.On<List<CustomTypeDto>>("SendAndReceiveGeneric", SendAndReceiveGenericHandler);
+	    _hubConnection?.On<Dictionary<string, List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>>("ReceiveNestedGeneric", ReceiveNestedGenericHandler);
+	    _hubConnection?.On<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("SendAndReceiveGeneric", SendAndReceiveGenericHandler);
     }
     
     private void ValidateHubConnection()
