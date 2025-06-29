@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SignalRGen.Generator.Common;
@@ -15,8 +14,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        Debugger.Launch();
-        
         var msBuildOptions = context
             .AnalyzerConfigOptionsProvider
             .Select((c, _) =>
