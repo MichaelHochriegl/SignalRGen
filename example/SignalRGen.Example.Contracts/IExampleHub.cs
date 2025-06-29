@@ -8,16 +8,9 @@ public interface IExampleHub : IBidirectionalHub<IExampleHubServerToClient, IExa
 {
 }
 
-public interface IExampleHubClientToServer
+[HubClient(HubUri = "example-server-to-client-only")]
+public interface IExampleServerToClientOnlyHub : IServerToClientHub<IExampleHubServerToClient>
 {
-    Task<string> SendExampleMessage(string myClientMessage);
-    
-    Task SendWithoutReturnType(string myClientMessage);
-}
-
-public interface IExampleHubServerToClient
-{
-    Task ReceiveExampleCountUpdate(int count);
 }
 
 public record MyCustomType(string Hey, int Dude);
