@@ -6,18 +6,14 @@ namespace SignalRGen.Example.Contracts;
 [HubClient(HubUri = "example")]
 public interface IExampleHub : IBidirectionalHub<IExampleHubServerToClient, IExampleHubClientToServer>
 {
+    Task FooBar();
+    Task Foo1();
 }
 
-public interface IExampleHubClientToServer
+[HubClient(HubUri = "example-server-to-client-only")]
+public interface IExampleServerToClientOnlyHub : IServerToClientHub<IExampleHubServerToClient>
 {
-    Task<string> SendExampleMessage(string myClientMessage);
-    
-    Task SendWithoutReturnType(string myClientMessage);
-}
-
-public interface IExampleHubServerToClient
-{
-    Task ReceiveExampleCountUpdate(int count);
+    Task Bar();
 }
 
 public record MyCustomType(string Hey, int Dude);
