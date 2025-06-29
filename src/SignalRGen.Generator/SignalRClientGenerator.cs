@@ -71,8 +71,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             return null;
         }
 
-        // Get the interface symbol
-        if (context.SemanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol interfaceSymbol)
+        if (context.TargetSymbol is not INamedTypeSymbol interfaceSymbol)
         {
             return null;
         }
