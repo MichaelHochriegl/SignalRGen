@@ -1,7 +1,5 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 namespace SignalRGen.Analyzers;
@@ -9,7 +7,7 @@ namespace SignalRGen.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class HubContractAnalyzer : DiagnosticAnalyzer
 {
-    public static readonly DiagnosticDescriptor MethodInHubInterfaceRule = new DiagnosticDescriptor(
+    public static readonly DiagnosticDescriptor MethodInHubInterfaceRule = new(
         id: DiagnosticIds.SRG0001NoMethodsInHubContractAllowed,
         title: "Methods should not be declared in hub interfaces",
         messageFormat:
@@ -27,28 +25,26 @@ public class HubContractAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeInterfaceDeclaration, SyntaxKind.InterfaceDeclaration);
+        context.RegisterSymbolAction(AnalyzeInterfaceDeclaration, SymbolKind.NamedType);
     }
 
-    private static void AnalyzeInterfaceDeclaration(SyntaxNodeAnalysisContext context)
+    private static void AnalyzeInterfaceDeclaration(SymbolAnalysisContext context)
     {
-        var interfaceDeclaration = (InterfaceDeclarationSyntax)context.Node;
-        var semanticModel = context.SemanticModel;
-
-        if (semanticModel.GetDeclaredSymbol(interfaceDeclaration) is not INamedTypeSymbol
-            interfaceSymbol)
+        if (context.Symbol is not INamedTypeSymbol interfaceSymbol) return;
+        
+        if (interfaceSymbol.TypeKind != TypeKind.Interface)
             return;
 
         if (!InheritsFromHubInterface(interfaceSymbol))
             return;
 
-        var methods = interfaceDeclaration.Members.OfType<MethodDeclarationSyntax>();
+        var methods = interfaceSymbol.GetMembers();
         foreach (var method in methods)
         {
             var diagnostic = Diagnostic.Create(
                 MethodInHubInterfaceRule,
-                method.GetLocation(),
-                method.Identifier.ValueText,
+                method.Locations.FirstOrDefault(),
+                method.Name,
                 interfaceSymbol.Name);
 
             context.ReportDiagnostic(diagnostic);

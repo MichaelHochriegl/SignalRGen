@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
@@ -9,7 +8,7 @@ namespace SignalRGen.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class ServerToClientAnalyzer : DiagnosticAnalyzer
 {
-    public static readonly DiagnosticDescriptor ServerToClientReturnTypeRule = new DiagnosticDescriptor(
+    public static readonly DiagnosticDescriptor ServerToClientReturnTypeRule = new(
         id: DiagnosticIds.SRG0002OnlyTaskMethodsAllowedInServerToClientHubContract,
         title: "Server-to-client methods must return Task, not Task<T>",
         messageFormat:
@@ -27,48 +26,51 @@ public class ServerToClientAnalyzer : DiagnosticAnalyzer
     {
         context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
         context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeInterfaceDeclaration, SyntaxKind.InterfaceDeclaration);
+        context.RegisterSymbolAction(AnalyzeInterfaceDeclaration, SymbolKind.NamedType);
     }
-
-    private static void AnalyzeInterfaceDeclaration(SyntaxNodeAnalysisContext context)
+    
+    private static void AnalyzeInterfaceDeclaration(SymbolAnalysisContext context)
     {
-        var interfaceDeclaration = (InterfaceDeclarationSyntax)context.Node;
-        var semanticModel = context.SemanticModel;
-
-        if (semanticModel.GetDeclaredSymbol(interfaceDeclaration) is not INamedTypeSymbol
-            interfaceSymbol)
+        if (context.Symbol is not INamedTypeSymbol interfaceSymbol) return;
+        
+        if (interfaceSymbol.TypeKind != TypeKind.Interface)
             return;
 
-        // Check if this interface is used as a server-to-client interface
-        if (!IsServerToClientInterface(interfaceSymbol, context.Compilation))
+        if (!IsServerToClientInterface(interfaceSymbol, context.Compilation, context.CancellationToken))
             return;
-
-        // Analyze all methods in this interface
-        var methods = interfaceDeclaration.Members.OfType<MethodDeclarationSyntax>();
+        
+        var methods = interfaceSymbol.GetMembers();
         foreach (var method in methods)
         {
-            var methodSymbol = semanticModel.GetDeclaredSymbol(method);
-            if (methodSymbol == null) continue;
+            if (method is not IMethodSymbol methodSymbol) continue;
 
-            // Check if the return type is Task<T> instead of Task
-            if (IsGenericTask(methodSymbol.ReturnType))
-            {
-                var diagnostic = Diagnostic.Create(
-                    ServerToClientReturnTypeRule,
-                    method.ReturnType.GetLocation(),
-                    method.Identifier.ValueText,
-                    interfaceSymbol.Name,
-                    methodSymbol.ReturnType.ToDisplayString());
+            if (!IsGenericTask(methodSymbol.ReturnType)) continue;
+            
+            var locationForDiagnostic = methodSymbol.Locations.First();
+            var declSyntax = methodSymbol.DeclaringSyntaxReferences.FirstOrDefault()
+                ?.GetSyntax(context.CancellationToken) as MethodDeclarationSyntax;
 
-                context.ReportDiagnostic(diagnostic);
-            }
+            var genericReturn = declSyntax?.ReturnType as GenericNameSyntax;
+            var typeArgList   = genericReturn?.TypeArgumentList;
+
+            if (typeArgList != null)
+                locationForDiagnostic = typeArgList.GetLocation(); 
+            
+            var diagnostic = Diagnostic.Create(
+                ServerToClientReturnTypeRule,
+                locationForDiagnostic,
+                methodSymbol.Name,
+                interfaceSymbol.Name,
+                methodSymbol.ReturnType.ToDisplayString());
+
+            context.ReportDiagnostic(diagnostic);
         }
     }
 
-    private static bool IsServerToClientInterface(INamedTypeSymbol interfaceSymbol, Compilation compilation)
+    private static bool IsServerToClientInterface(INamedTypeSymbol interfaceSymbol, Compilation compilation, CancellationToken ct = default)
     {
         // Find all types that reference this interface as a server type parameter
-        var allTypes = GetAllNamedTypes(compilation);
+        var allTypes = GetAllNamedTypes(compilation, ct);
 
         foreach (var type in allTypes)
         {
@@ -101,31 +103,36 @@ public class ServerToClientAnalyzer : DiagnosticAnalyzer
         return false;
     }
 
-    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(Compilation compilation)
+    private static IEnumerable<INamedTypeSymbol> GetAllNamedTypes(Compilation compilation, CancellationToken ct)
     {
-        var allTypes = new List<INamedTypeSymbol>();
+        var stack = new Stack<INamespaceOrTypeSymbol>();
+        stack.Push(compilation.GlobalNamespace);
 
-        foreach (var syntaxTree in compilation.SyntaxTrees)
+        while (stack.Count > 0)
         {
-            var semanticModel = compilation.GetSemanticModel(syntaxTree);
-            var root = syntaxTree.GetRoot();
+            ct.ThrowIfCancellationRequested();
 
-            var typeDeclarations = root.DescendantNodes().OfType<TypeDeclarationSyntax>();
-            foreach (var typeDecl in typeDeclarations)
+            var current = stack.Pop();
+
+            switch (current)
             {
-                if (semanticModel.GetDeclaredSymbol(typeDecl) is INamedTypeSymbol typeSymbol)
-                {
-                    allTypes.Add(typeSymbol);
-                }
+                case INamespaceSymbol ns:
+                    foreach (var member in ns.GetMembers())
+                        stack.Push(member);
+                    break;
+
+                case INamedTypeSymbol typeSymbol:
+                    yield return typeSymbol;
+
+                    foreach (var nested in typeSymbol.GetTypeMembers())
+                        stack.Push(nested);
+                    break;
             }
         }
-
-        return allTypes;
     }
 
     private static bool IsGenericTask(ITypeSymbol returnType)
     {
-        // Check if it's Task<T> (generic Task with type arguments)
         return returnType is INamedTypeSymbol namedType &&
                namedType.Name == "Task" &&
                namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks" &&
