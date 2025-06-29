@@ -5,88 +5,15 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis.Diagnostics;
+using SignalRGen.Analyzers;
 
-namespace SignalRGen.Generator.Analyzers;
-
-#region Analyzer
-
-[DiagnosticAnalyzer(LanguageNames.CSharp)]
-public class HubContractAnalyzer : DiagnosticAnalyzer
-{
-    public static readonly DiagnosticDescriptor MethodInHubInterfaceRule = new DiagnosticDescriptor(
-        id: "SRGN0001",
-        title: "Methods should not be declared in hub interfaces",
-        messageFormat:
-        "Method '{0}' should not be declared in interface '{1}' that inherits from a hub interface. Move methods to the appropriate client or server interface.",
-        category: "SignalRGen",
-        defaultSeverity: DiagnosticSeverity.Error,
-        isEnabledByDefault: true,
-        description:
-        "Hub interfaces that inherit from IBidirectionalHub, IServerToClientHub, or IClientToServerHub should not contain method declarations. Methods should be placed in the appropriate client or server interfaces.");
-
-    public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
-        [MethodInHubInterfaceRule];
-
-    public override void Initialize(AnalysisContext context)
-    {
-        context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
-        context.EnableConcurrentExecution();
-        context.RegisterSyntaxNodeAction(AnalyzeInterfaceDeclaration, SyntaxKind.InterfaceDeclaration);
-    }
-
-    private static void AnalyzeInterfaceDeclaration(SyntaxNodeAnalysisContext context)
-    {
-        var interfaceDeclaration = (InterfaceDeclarationSyntax)context.Node;
-        var semanticModel = context.SemanticModel;
-
-        if (ModelExtensions.GetDeclaredSymbol(semanticModel, interfaceDeclaration) is not INamedTypeSymbol
-            interfaceSymbol)
-            return;
-
-        if (!InheritsFromHubInterface(interfaceSymbol))
-            return;
-
-        var methods = interfaceDeclaration.Members.OfType<MethodDeclarationSyntax>();
-        foreach (var method in methods)
-        {
-            var diagnostic = Diagnostic.Create(
-                MethodInHubInterfaceRule,
-                method.GetLocation(),
-                method.Identifier.ValueText,
-                interfaceSymbol.Name);
-
-            context.ReportDiagnostic(diagnostic);
-        }
-    }
-
-    private static bool InheritsFromHubInterface(INamedTypeSymbol interfaceSymbol)
-    {
-        foreach (var baseInterface in interfaceSymbol.AllInterfaces)
-        {
-            var baseInterfaceName = baseInterface.Name;
-
-            if (baseInterfaceName == "IBidirectionalHub" ||
-                baseInterfaceName == "IServerToClientHub" ||
-                baseInterfaceName == "IClientToServerHub")
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-}
-
-#endregion
-
-#region CodeFix
+namespace SignalRGen.CodeFixes;
 
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(HubInterfaceMethodCodeFixProvider)), Shared]
 public class HubInterfaceMethodCodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds =>
-        [HubContractAnalyzer.MethodInHubInterfaceRule.Id];
+        [DiagnosticIds.SRG0001NoMethodsInHubContractAllowed];
 
     public sealed override FixAllProvider GetFixAllProvider() => WellKnownFixAllProviders.BatchFixer;
 
@@ -94,63 +21,57 @@ public class HubInterfaceMethodCodeFixProvider : CodeFixProvider
     {
         var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
         if (root is null) return;
-
-        // Group diagnostics by location to avoid duplicate fixes for the same method, but even this doesn't seem to work :(
-        var diagnosticsGrouped = context.Diagnostics
-            .Where(d => FixableDiagnosticIds.Contains(d.Id))
-            .GroupBy(d => d.Location.SourceSpan)
-            .ToList();
         
-        foreach (var diagnosticGroup in diagnosticsGrouped)
+        var diagnostic =  context.Diagnostics.FirstOrDefault(d => d.Id == DiagnosticIds.SRG0001NoMethodsInHubContractAllowed);
+        if (diagnostic is null) return;
+
+        var diagnosticSpan = diagnostic.Location.SourceSpan;
+        var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf()
+            .OfType<MethodDeclarationSyntax>().FirstOrDefault();
+
+        if (methodDeclaration is null) return;
+
+        var interfaceDeclaration =
+            methodDeclaration.Ancestors().OfType<InterfaceDeclarationSyntax>().FirstOrDefault();
+        if (interfaceDeclaration is null) return;
+
+        var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken)
+            .ConfigureAwait(false);
+        if (semanticModel is null) return;
+
+        var interfaceSymbol = ModelExtensions.GetDeclaredSymbol(semanticModel, interfaceDeclaration) as INamedTypeSymbol;
+        if (interfaceSymbol is null) return;
+
+        var hubInterface = FindHubInterface(interfaceSymbol);
+        if (hubInterface is null) return;
+
+        var (serverType, clientType) = ExtractGenericTypes(hubInterface);
+
+        var baseKey =
+            $"{interfaceSymbol.ToDisplayString()}_{methodDeclaration.Identifier.ValueText}_{methodDeclaration.Span.Start}";
+
+        if (serverType is not null)
         {
-            var diagnostic = diagnosticGroup.First();
+            var moveToServerAction = CodeAction.Create(
+                title: $"Move to server interface ({serverType.Name})",
+                createChangedSolution: c =>
+                    MoveMethodToInterface(context.Document, methodDeclaration, interfaceDeclaration, serverType, c),
+                equivalenceKey: nameof(HubInterfaceMethodCodeFixProvider) + "_" +
+                                $"{baseKey}_Server_{serverType.ToDisplayString()}");
 
-            var diagnosticSpan = diagnostic.Location.SourceSpan;
-            var methodDeclaration = root.FindToken(diagnosticSpan.Start).Parent?.AncestorsAndSelf()
-                .OfType<MethodDeclarationSyntax>().FirstOrDefault();
+            context.RegisterCodeFix(moveToServerAction, diagnostic);
+        }
 
-            if (methodDeclaration is null) continue;
+        if (clientType is not null)
+        {
+            var moveToClientAction = CodeAction.Create(
+                title: $"Move to client interface ({clientType.Name})",
+                createChangedSolution: c =>
+                    MoveMethodToInterface(context.Document, methodDeclaration, interfaceDeclaration, clientType, c),
+                equivalenceKey: nameof(HubInterfaceMethodCodeFixProvider) + "_" +
+                                $"{baseKey}_Client_{clientType.ToDisplayString()}");
 
-            var interfaceDeclaration =
-                methodDeclaration.Ancestors().OfType<InterfaceDeclarationSyntax>().FirstOrDefault();
-            if (interfaceDeclaration is null) continue;
-
-            var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken)
-                .ConfigureAwait(false);
-            if (semanticModel is null) continue;
-
-            var interfaceSymbol = semanticModel.GetDeclaredSymbol(interfaceDeclaration);
-            if (interfaceSymbol is null) continue;
-
-            var hubInterface = FindHubInterface(interfaceSymbol);
-            if (hubInterface is null) continue;
-
-            var (serverType, clientType) = ExtractGenericTypes(hubInterface);
-            
-            var baseKey =
-                $"{interfaceSymbol.ToDisplayString()}_{methodDeclaration.Identifier.ValueText}_{methodDeclaration.Span.Start}";
-
-            if (serverType is not null)
-            {
-                var moveToServerAction = CodeAction.Create(
-                    title: $"Move to server interface ({serverType.Name})",
-                    createChangedSolution: c =>
-                        MoveMethodToInterface(context.Document, methodDeclaration, interfaceDeclaration, serverType, c),
-                    equivalenceKey: $"{baseKey}_Server_{serverType.ToDisplayString()}");
-
-                context.RegisterCodeFix(moveToServerAction, diagnostic);
-            }
-
-            if (clientType is not null)
-            {
-                var moveToClientAction = CodeAction.Create(
-                    title: $"Move to client interface ({clientType.Name})",
-                    createChangedSolution: c =>
-                        MoveMethodToInterface(context.Document, methodDeclaration, interfaceDeclaration, clientType, c),
-                    equivalenceKey: $"{baseKey}_Client_{clientType.ToDisplayString()}");
-
-                context.RegisterCodeFix(moveToClientAction, diagnostic);
-            }
+            context.RegisterCodeFix(moveToClientAction, diagnostic);
         }
     }
 
@@ -340,5 +261,3 @@ public class HubInterfaceMethodCodeFixProvider : CodeFixProvider
         return null;
     }
 }
-
-#endregion
