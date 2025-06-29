@@ -27,7 +27,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
 
         var markedInterfaces = context.SyntaxProvider.ForAttributeWithMetadataName(
                 MarkerAttributeFullQualifiedName, static (syntaxNode, _) =>
-                    syntaxNode is InterfaceDeclarationSyntax { AttributeLists.Count: > 0 },
+                    syntaxNode is InterfaceDeclarationSyntax,
                 GetSemanticTargetForGeneration)
             .WithTrackingName(TrackingNames.InitialExtraction);
         var allHubClients = markedInterfaces.Collect().WithTrackingName(TrackingNames.Collect);
