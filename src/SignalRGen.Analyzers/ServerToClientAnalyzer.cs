@@ -44,26 +44,36 @@ public class ServerToClientAnalyzer : DiagnosticAnalyzer
         {
             if (method is not IMethodSymbol methodSymbol) continue;
 
-            if (!IsGenericTask(methodSymbol.ReturnType)) continue;
-            
-            var locationForDiagnostic = methodSymbol.Locations.First();
-            var declSyntax = methodSymbol.DeclaringSyntaxReferences.FirstOrDefault()
-                ?.GetSyntax(context.CancellationToken) as MethodDeclarationSyntax;
+            if (!IsValidReturnType(methodSymbol.ReturnType))
+            {
+                var locationForDiagnostic = methodSymbol.Locations.First();
+                var declSyntax = methodSymbol.DeclaringSyntaxReferences.FirstOrDefault()
+                    ?.GetSyntax(context.CancellationToken) as MethodDeclarationSyntax;
 
-            var genericReturn = declSyntax?.ReturnType as GenericNameSyntax;
-            var typeArgList   = genericReturn?.TypeArgumentList;
+                // For Task<T>, highlight the type argument list
+                if (IsTaskWithGenericArguments(methodSymbol.ReturnType))
+                {
+                    var genericReturn = declSyntax?.ReturnType as GenericNameSyntax;
+                    var typeArgList = genericReturn?.TypeArgumentList;
+                    if (typeArgList != null)
+                        locationForDiagnostic = typeArgList.GetLocation();
+                }
+                // For other return types, highlight the entire return type
+                else if (declSyntax?.ReturnType != null)
+                {
+                    locationForDiagnostic = declSyntax.ReturnType.GetLocation();
+                }
 
-            if (typeArgList != null)
-                locationForDiagnostic = typeArgList.GetLocation(); 
-            
-            var diagnostic = Diagnostic.Create(
-                ServerToClientReturnTypeRule,
-                locationForDiagnostic,
-                methodSymbol.Name,
-                interfaceSymbol.Name,
-                methodSymbol.ReturnType.ToDisplayString());
+                var diagnostic = Diagnostic.Create(
+                    ServerToClientReturnTypeRule,
+                    locationForDiagnostic,
+                    methodSymbol.Name,
+                    interfaceSymbol.Name,
+                    methodSymbol.ReturnType.ToDisplayString());
 
-            context.ReportDiagnostic(diagnostic);
+                context.ReportDiagnostic(diagnostic);
+            }
+
         }
     }
 
@@ -131,11 +141,20 @@ public class ServerToClientAnalyzer : DiagnosticAnalyzer
         }
     }
 
-    private static bool IsGenericTask(ITypeSymbol returnType)
+    private static bool IsValidReturnType(ITypeSymbol returnType)
+    {
+        return returnType is INamedTypeSymbol namedType &&
+               namedType.Name == "Task" &&
+               namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks" &&
+               namedType.TypeArguments.Length == 0; // Must be non-generic Task
+    }
+
+    private static bool IsTaskWithGenericArguments(ITypeSymbol returnType)
     {
         return returnType is INamedTypeSymbol namedType &&
                namedType.Name == "Task" &&
                namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks" &&
                namedType.TypeArguments.Length > 0;
     }
+
 }
