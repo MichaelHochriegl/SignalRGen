@@ -22,3 +22,15 @@ An interface used as a server-to-client communication contract can only have `Ta
 | Enabled  | True       |
 | Severity | Error      |
 | CodeFix  | True       |
+
+
+## SRG0003: Methods with non-Task or Task<T> return type are not allowed in client-to-server communication
+
+An interface used as a client-to-server communication contract can only have `Task` or `Task<T>` as a return type.
+
+| Item     | Value      |
+|----------|------------|
+| Category | SignalRGen |
+| Enabled  | True       |
+| Severity | Error      |
+| CodeFix  | True       |
