@@ -2,7 +2,7 @@
 
 ### New Rules
 
-| Rule ID | Category   | Severity | Notes                                             
-|---------|------------|----------|---------------------------------------------------
-| SRG0001 | SignalRGen | Error    | NoMethodsInHubContractAllowed                     
-| SRG0002 | SignalRGen | Error    | OnlyTaskMethodsAllowedInServerToClientHubContract 
+Rule ID | Category | Severity | Notes
+--------|----------|----------|-------
+SRG0001 | SignalRGen | Error | NoMethodsInHubContractAllowed
+SRG0002 | SignalRGen | Error | OnlyTaskMethodsAllowedInServerToClientHubContract
