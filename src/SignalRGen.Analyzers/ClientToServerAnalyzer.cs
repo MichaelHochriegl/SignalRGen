@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using SignalRGen.Analyzers.Extensions;
+using SignalRGen.Shared;
 
 namespace SignalRGen.Analyzers;
 
@@ -82,12 +83,12 @@ public class ClientToServerAnalyzer : DiagnosticAnalyzer
                     }
                 }
 
-                // Check if this type implements IServerToClientHub<TServer> where TServer is our interface
-                if (implementedInterface.Name == "IClientToServer" &&
+                // Check if this type implements IClientToServerHub<TClient> where TClient is our interface
+                if (implementedInterface.Name == "IClientToServerHub" &&
                     implementedInterface.TypeArguments.Length == 1)
                 {
-                    var serverType = implementedInterface.TypeArguments[0];
-                    if (SymbolEqualityComparer.Default.Equals(serverType, interfaceSymbol))
+                    var clientType = implementedInterface.TypeArguments[0];
+                    if (SymbolEqualityComparer.Default.Equals(clientType, interfaceSymbol))
                     {
                         return true;
                     }

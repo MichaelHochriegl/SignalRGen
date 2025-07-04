@@ -13,9 +13,10 @@
         <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" PrivateAssets="all" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" PrivateAssets="all" />
     </ItemGroup>
-    
+
     <ItemGroup>
-        <Compile Include="../SignalRGen.Analyzers/DiagnosticIds.cs" />
+      <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
     </ItemGroup>
+    
 
 </Project>

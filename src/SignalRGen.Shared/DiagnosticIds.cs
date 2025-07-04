@@ -1,5 +1,5 @@
 // ReSharper disable InconsistentNaming
-namespace SignalRGen.Analyzers;
+namespace SignalRGen.Shared;
 
 public static class DiagnosticIds
 {

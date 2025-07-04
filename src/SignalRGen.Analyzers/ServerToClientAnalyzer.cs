@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using SignalRGen.Analyzers.Extensions;
+using SignalRGen.Shared;
 
 namespace SignalRGen.Analyzers;
 

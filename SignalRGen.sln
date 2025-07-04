@@ -29,6 +29,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.CodeFixes", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Analyzers.Tests", "tests\SignalRGen.Analyzers.Tests\SignalRGen.Analyzers.Tests.csproj", "{53644BF7-0A08-4923-9996-678D621AAFE2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.CodeFixes.Tests", "tests\SignalRGen.CodeFixes.Tests\SignalRGen.CodeFixes.Tests.csproj", "{BAD25B70-315B-4CB0-8E49-52097052AE68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Shared", "src\SignalRGen.Shared\SignalRGen.Shared.csproj", "{B85F8F20-B969-4247-9779-9D2F52C9C075}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +48,8 @@ Global
 		{718D3F15-610F-4B78-A5D4-5A3188E50A01} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
 		{129F99E9-90B4-4C8A-B36A-0CCE427C1ED1} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
 		{53644BF7-0A08-4923-9996-678D621AAFE2} = {156E35FD-D926-4394-99BB-23CE485E357A}
+		{BAD25B70-315B-4CB0-8E49-52097052AE68} = {156E35FD-D926-4394-99BB-23CE485E357A}
+		{B85F8F20-B969-4247-9779-9D2F52C9C075} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0D84BF69-5C50-40A9-BD7C-9507E609637E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -82,5 +88,13 @@ Global
 		{53644BF7-0A08-4923-9996-678D621AAFE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53644BF7-0A08-4923-9996-678D621AAFE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53644BF7-0A08-4923-9996-678D621AAFE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAD25B70-315B-4CB0-8E49-52097052AE68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAD25B70-315B-4CB0-8E49-52097052AE68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAD25B70-315B-4CB0-8E49-52097052AE68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAD25B70-315B-4CB0-8E49-52097052AE68}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B85F8F20-B969-4247-9779-9D2F52C9C075}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B85F8F20-B969-4247-9779-9D2F52C9C075}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B85F8F20-B969-4247-9779-9D2F52C9C075}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B85F8F20-B969-4247-9779-9D2F52C9C075}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

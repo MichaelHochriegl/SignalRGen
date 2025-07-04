@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CodeFixes;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using SignalRGen.Analyzers;
+using SignalRGen.Shared;
 
 namespace SignalRGen.CodeFixes;
 
@@ -114,17 +114,24 @@ public class ClientToServerReturnTypeCodeFixProvider : CodeFixProvider
         var compilationUnit = root as CompilationUnitSyntax;
         var hasTaskUsing = compilationUnit?.Usings.Any(u =>
             u.Name?.ToString() == "System.Threading.Tasks") ?? false;
-        
+
         if (!hasTaskUsing && compilationUnit != null)
         {
             var usingDirective = SyntaxFactory.UsingDirective(
-                SyntaxFactory.IdentifierName("System.Threading.Tasks"));
-            newRoot = ((CompilationUnitSyntax)root).AddUsings(usingDirective);
+                SyntaxFactory.QualifiedName(
+                    SyntaxFactory.QualifiedName(
+                        SyntaxFactory.IdentifierName("System"),
+                        SyntaxFactory.IdentifierName("Threading")),
+                    SyntaxFactory.IdentifierName("Tasks")));
+            newRoot = compilationUnit.AddUsings(usingDirective);
+            return true;
         }
 
         newRoot = root;
-        return !hasTaskUsing;
+        return false;
     }
+
+
     
     private static bool IsTaskType(ITypeSymbol returnType)
     {
