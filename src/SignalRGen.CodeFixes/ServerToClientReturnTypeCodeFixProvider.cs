@@ -21,9 +21,11 @@ public class ServerToClientReturnTypeCodeFixProvider : CodeFixProvider
     {
         var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
         if (root is null) return;
+
+        var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken).ConfigureAwait(false);
+        if (semanticModel is null) return;
         
-        var diagnostic =  context.Diagnostics.FirstOrDefault(d => d.Id == DiagnosticIds.SRG0002OnlyTaskMethodsAllowedInServerToClientHubContract);
-        
+        var diagnostic = context.Diagnostics.FirstOrDefault(d => d.Id == DiagnosticIds.SRG0002OnlyTaskMethodsAllowedInServerToClientHubContract);
         if (diagnostic is null) return;
         
         var diagnosticSpan = diagnostic.Location.SourceSpan;
@@ -31,16 +33,21 @@ public class ServerToClientReturnTypeCodeFixProvider : CodeFixProvider
             
         var methodDeclaration = returnTypeNode.Ancestors().OfType<MethodDeclarationSyntax>().FirstOrDefault();
         if (methodDeclaration is null) return;
+        
+        var typeInfo = semanticModel.GetTypeInfo(methodDeclaration.ReturnType, context.CancellationToken);
+        var returnType = typeInfo.Type;
+        
+        if (returnType is null || IsValidTaskType(returnType)) return;
 
         var action = CodeAction.Create(
             title: "Change return type to Task",
-            createChangedDocument: c => ConvertTaskTToTask(context.Document, methodDeclaration, c),
+            createChangedDocument: c => ConvertToTask(context.Document, methodDeclaration, c),
             equivalenceKey: nameof(ServerToClientReturnTypeCodeFixProvider));
 
         context.RegisterCodeFix(action, diagnostic);
     }
 
-    private static async Task<Document> ConvertTaskTToTask(
+    private static async Task<Document> ConvertToTask(
         Document document,
         MethodDeclarationSyntax methodDeclaration,
         CancellationToken cancellationToken)
@@ -52,9 +59,40 @@ public class ServerToClientReturnTypeCodeFixProvider : CodeFixProvider
             .WithTriviaFrom(methodDeclaration.ReturnType);
         
         var newMethodDeclaration = methodDeclaration.WithReturnType(newReturnType);
-        
         var newRoot = root.ReplaceNode(methodDeclaration, newMethodDeclaration);
+        
+        var wasUpdated = TryAddTaskUsing(newRoot, out var updatedRoot);
 
-        return document.WithSyntaxRoot(newRoot);
+        return document.WithSyntaxRoot(wasUpdated ? updatedRoot : newRoot);
+    }
+
+    private static bool TryAddTaskUsing(SyntaxNode root, out SyntaxNode newRoot)
+    {
+        var compilationUnit = root as CompilationUnitSyntax;
+        var hasTaskUsing = compilationUnit?.Usings.Any(u =>
+            u.Name?.ToString() == "System.Threading.Tasks") ?? false;
+
+        if (!hasTaskUsing && compilationUnit != null)
+        {
+            var usingDirective = SyntaxFactory.UsingDirective(
+                SyntaxFactory.QualifiedName(
+                    SyntaxFactory.QualifiedName(
+                        SyntaxFactory.IdentifierName("System"),
+                        SyntaxFactory.IdentifierName("Threading")),
+                    SyntaxFactory.IdentifierName("Tasks")));
+            newRoot = compilationUnit.AddUsings(usingDirective);
+            return true;
+        }
+
+        newRoot = root;
+        return false;
+    }
+
+    private static bool IsValidTaskType(ITypeSymbol returnType)
+    {
+        return returnType is INamedTypeSymbol namedType &&
+               namedType.Name == "Task" &&
+               namedType.ContainingNamespace.ToDisplayString() == "System.Threading.Tasks" &&
+               namedType.TypeArguments.Length == 0;
     }
 }
