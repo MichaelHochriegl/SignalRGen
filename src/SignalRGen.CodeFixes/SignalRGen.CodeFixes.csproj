@@ -17,6 +17,9 @@
     <ItemGroup>
       <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
     </ItemGroup>
-    
+
+    <ItemGroup>
+        <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
+    </ItemGroup>
 
 </Project>

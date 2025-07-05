@@ -63,4 +63,8 @@
         <None Include="$(OutputPath)\SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
 
     </ItemGroup>
+    
+    <ItemGroup>
+        <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
+    </ItemGroup>
 </Project>
