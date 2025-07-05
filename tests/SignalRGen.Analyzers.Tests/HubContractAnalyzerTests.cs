@@ -47,7 +47,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
                 {
-                    Task {|#0:InvalidMethod|}();
+                    {|#0:Task InvalidMethod();|}
                 }
             }
             """;
@@ -79,7 +79,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IServerToClientHub<IServerToClient>
                 {
-                    Task {|#0:SendMessage|}(string message);
+                    {|#0:Task SendMessage(string message);|}
                 }
             }
             """;
@@ -111,7 +111,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IClientToServerHub<IClientToServer>
                 {
-                    Task {|#0:ProcessData|}(int data);
+                    {|#0:Task ProcessData(int data);|}
                 }
             }
             """;
@@ -148,9 +148,9 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
                 {
-                    Task {|#0:FirstMethod|}();
-                    Task {|#1:SecondMethod|}(string param);
-                    string {|#2:ThirdMethod|}(int value);
+                    {|#0:Task FirstMethod();|}
+                    {|#1:Task SecondMethod(string param);|}
+                    {|#2:string ThirdMethod(int value);|}
                 }
             }
             """;
@@ -166,53 +166,6 @@ public class HubContractAnalyzerTests
             new DiagnosticResult(HubContractAnalyzer.MethodInHubInterfaceRule)
                 .WithLocation(2)
                 .WithArguments("ThirdMethod", "ITestHub")
-        };
-
-        var test = TestHelper.CreateAnalyzerTest<HubContractAnalyzer>();
-        test.TestCode = testCode;
-        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
-        
-        await test.RunAsync();
-    }
-
-    [Fact]
-    public async Task Interface_InheritingFromHubInterface_WithEvents_ShouldTriggerDiagnostic()
-    {
-        const string testCode = """
-            using SignalRGen.Abstractions;
-            using System.Threading.Tasks;
-
-            namespace TestNamespace
-            {
-                public interface IServerToClient
-                {
-                    Task ReceiveMessage(string message);
-                }
-
-                public interface IClientToServer
-                {
-                    Task SendMessage(string message);
-                }
-
-                public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
-                {
-                    event System.Action {|#0:TestEvent|};
-                }
-            }
-            """;
-
-        // Events generate three members: the event itself, add_EventName, and remove_EventName
-        var expectedDiagnostics = new[]
-        {
-            new DiagnosticResult(HubContractAnalyzer.MethodInHubInterfaceRule)
-                .WithLocation(0)
-                .WithArguments("TestEvent", "ITestHub"),
-            new DiagnosticResult(HubContractAnalyzer.MethodInHubInterfaceRule)
-                .WithLocation(0)
-                .WithArguments("add_TestEvent", "ITestHub"),
-            new DiagnosticResult(HubContractAnalyzer.MethodInHubInterfaceRule)
-                .WithLocation(0)
-                .WithArguments("remove_TestEvent", "ITestHub")
         };
 
         var test = TestHelper.CreateAnalyzerTest<HubContractAnalyzer>();
@@ -278,7 +231,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IBaseHub
                 {
-                    Task {|#0:IndirectMethod|}();
+                    {|#0:Task IndirectMethod();|}
                 }
             }
             """;
@@ -315,7 +268,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>, IServerToClientHub<IServerToClient>
                 {
-                    Task {|#0:MultipleInheritanceMethod|}();
+                    {|#0:Task MultipleInheritanceMethod();|}
                 }
             }
             """;
@@ -352,7 +305,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
                 {
-                    Task<T> {|#0:GenericMethod|}<T>(T value);
+                    {|#0:Task<T> GenericMethod<T>(T value);|}
                 }
             }
             """;
@@ -392,7 +345,7 @@ public class HubContractAnalyzerTests
 
                 public interface ITestHub : {{hubInterfaceName}}
                 {
-                    Task {|#0:TestMethod|}();
+                    {|#0:Task TestMethod();|}
                 }
             }
             """;

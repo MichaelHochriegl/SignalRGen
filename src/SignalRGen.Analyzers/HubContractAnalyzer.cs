@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 using SignalRGen.Shared;
 
@@ -8,6 +9,9 @@ namespace SignalRGen.Analyzers;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class HubContractAnalyzer : DiagnosticAnalyzer
 {
+    private static readonly ImmutableHashSet<string> HubInterfaceNames = ImmutableHashSet.Create(
+        "IBidirectionalHub", "IServerToClientHub", "IClientToServerHub");
+
     public static readonly DiagnosticDescriptor MethodInHubInterfaceRule = new(
         id: DiagnosticIds.SRG0001NoMethodsInHubContractAllowed,
         title: "Methods should not be declared in hub interfaces",
@@ -38,13 +42,17 @@ public class HubContractAnalyzer : DiagnosticAnalyzer
 
         if (!InheritsFromHubInterface(interfaceSymbol))
             return;
-
-        var methods = interfaceSymbol.GetMembers();
+        
+        var methods = interfaceSymbol.GetMembers().OfType<IMethodSymbol>();
+        
         foreach (var method in methods)
         {
+            var location = GetMethodDeclarationLocation(method);
+            if (location is null) continue;
+            
             var diagnostic = Diagnostic.Create(
                 MethodInHubInterfaceRule,
-                method.Locations.FirstOrDefault(),
+                location,
                 method.Name,
                 interfaceSymbol.Name);
 
@@ -52,20 +60,25 @@ public class HubContractAnalyzer : DiagnosticAnalyzer
         }
     }
 
+    private static Location? GetMethodDeclarationLocation(IMethodSymbol method)
+    {
+        var location = method.Locations.FirstOrDefault();
+        if (location?.SourceTree is null)
+            return location;
+
+        var root = location.SourceTree.GetRoot();
+        var methodNode = root.FindNode(location.SourceSpan);
+        
+        var methodDeclaration = methodNode.AncestorsAndSelf()
+            .OfType<MethodDeclarationSyntax>()
+            .FirstOrDefault();
+        
+        return methodDeclaration?.GetLocation() ?? location;
+    }
+
     private static bool InheritsFromHubInterface(INamedTypeSymbol interfaceSymbol)
     {
-        foreach (var baseInterface in interfaceSymbol.AllInterfaces)
-        {
-            var baseInterfaceName = baseInterface.Name;
-
-            if (baseInterfaceName == "IBidirectionalHub" ||
-                baseInterfaceName == "IServerToClientHub" ||
-                baseInterfaceName == "IClientToServerHub")
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return interfaceSymbol.AllInterfaces.Any(baseInterface => 
+            HubInterfaceNames.Contains(baseInterface.Name));
     }
 }
