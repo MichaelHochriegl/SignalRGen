@@ -169,7 +169,7 @@ public class HubInterfaceMethodCodeFixProvider : CodeFixProvider
         var targetInterfaceDeclaration = FindTargetInterfaceDeclaration(root, semanticModel, targetInterface);
         if (targetInterfaceDeclaration is null) return document.Project.Solution;
 
-        var cleanMethodDeclaration = CreateCleanMethodDeclaration(methodDeclaration);
+        var cleanMethodDeclaration = CreateCleanMethodDeclaration(methodDeclaration, root);
         var newSourceInterface = sourceInterface.RemoveNode(methodDeclaration, SyntaxRemoveOptions.KeepNoTrivia);
         if (newSourceInterface is null) return document.Project.Solution;
 
@@ -235,7 +235,7 @@ public class HubInterfaceMethodCodeFixProvider : CodeFixProvider
         var targetInterfaceDeclaration = FindTargetInterfaceDeclaration(targetRoot, targetSemanticModel, targetInterface);
         if (targetInterfaceDeclaration is null) return solution;
 
-        var cleanMethodDeclaration = CreateCleanMethodDeclaration(methodDeclaration);
+        var cleanMethodDeclaration = CreateCleanMethodDeclaration(methodDeclaration, targetRoot);
         var newTargetInterface = targetInterfaceDeclaration.AddMembers(cleanMethodDeclaration);
         var newTargetRoot = targetRoot.ReplaceNode(targetInterfaceDeclaration, newTargetInterface);
 
@@ -256,12 +256,27 @@ public class HubInterfaceMethodCodeFixProvider : CodeFixProvider
             });
     }
 
-    private static MethodDeclarationSyntax CreateCleanMethodDeclaration(MethodDeclarationSyntax methodDeclaration)
+    private static MethodDeclarationSyntax CreateCleanMethodDeclaration(
+        MethodDeclarationSyntax methodDeclaration, 
+        SyntaxNode targetRoot)
     {
+        var lineEndingTrivia = GetLineEndingTrivia(targetRoot);
+    
         return methodDeclaration
             .WithLeadingTrivia(SyntaxFactory.TriviaList(SyntaxFactory.Whitespace("    ")))
-            .WithTrailingTrivia(SyntaxFactory.TriviaList(SyntaxFactory.LineFeed));
+            .WithTrailingTrivia(SyntaxFactory.TriviaList(lineEndingTrivia));
     }
+
+    private static SyntaxTrivia GetLineEndingTrivia(SyntaxNode root)
+    {
+        var existingLineEnding = root.DescendantTrivia()
+            .FirstOrDefault(t => t.IsKind(SyntaxKind.EndOfLineTrivia));
+    
+        return existingLineEnding.IsKind(SyntaxKind.None) 
+            ? SyntaxFactory.LineFeed 
+            : existingLineEnding;
+    }
+
 
     private static async Task<Document?> FindInterfaceDocumentAsync(
         Solution solution,
