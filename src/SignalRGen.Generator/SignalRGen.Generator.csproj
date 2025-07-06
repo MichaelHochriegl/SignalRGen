@@ -51,12 +51,20 @@
 
     <ItemGroup>
       <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" PrivateAssets="all" />
+      <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" PrivateAssets="all" />
+      <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" PrivateAssets="all" />
     </ItemGroup>
 
     <ItemGroup>
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         <None Include="$(OutputPath)\SignalRGen.Abstractions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="$(OutputPath)\SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="$(OutputPath)\SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         <None Include="$(OutputPath)\SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
 
+    </ItemGroup>
+    
+    <ItemGroup>
+        <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
     </ItemGroup>
 </Project>

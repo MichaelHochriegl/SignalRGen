@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>Latest</LangVersion>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsRoslynComponent>true</IsRoslynComponent>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" PrivateAssets="all" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
+    </ItemGroup>
+
+</Project>

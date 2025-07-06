@@ -14,4 +14,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="9.*" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
+    </ItemGroup>
+
 </Project>

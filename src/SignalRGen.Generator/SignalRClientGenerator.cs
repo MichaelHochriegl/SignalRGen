@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SignalRGen.Generator.Common;
@@ -15,8 +14,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        Debugger.Launch();
-        
         var msBuildOptions = context
             .AnalyzerConfigOptionsProvider
             .Select((c, _) =>
@@ -30,7 +27,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
 
         var markedInterfaces = context.SyntaxProvider.ForAttributeWithMetadataName(
                 MarkerAttributeFullQualifiedName, static (syntaxNode, _) =>
-                    syntaxNode is InterfaceDeclarationSyntax { AttributeLists.Count: > 0 },
+                    syntaxNode is InterfaceDeclarationSyntax,
                 GetSemanticTargetForGeneration)
             .WithTrackingName(TrackingNames.InitialExtraction);
         var allHubClients = markedInterfaces.Collect().WithTrackingName(TrackingNames.Collect);
@@ -74,8 +71,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             return null;
         }
 
-        // Get the interface symbol
-        if (context.SemanticModel.GetDeclaredSymbol(node) is not INamedTypeSymbol interfaceSymbol)
+        if (context.TargetSymbol is not INamedTypeSymbol interfaceSymbol)
         {
             return null;
         }
