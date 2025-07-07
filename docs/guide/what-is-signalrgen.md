@@ -112,14 +112,22 @@ With `SignalRGen`, you only need to define a simple interface, and everything el
 
 ```csharp
 // 1. Define your hub interface - that's it!
-[HubClient(HubUri = "chathub")]
-public interface IChatHub
+[HubClient(HubUri = "chat")]
+public interface IChatHubContract : IBidirectionalHub<IChatHubServerToClient, IChatHubClientToServer>
 {
-    // Server-to-client methods
-    Task ReceiveMessage(string user, string message);
-    
-    // Client-to-server methods
-    [ClientToServerMethod]
+    // As this is only the Contract interface, there are no methods allowed in this interface.
+    // You have to describe your Hub in the `TServer` and `TClient` interfaces instead.
+}
+
+// This interface describes the flow of data from the server to the client.
+public interface IChatHubServerToClient
+{
+    Task MessageReceived(string user, string message);
+}
+
+// This interface describes the flow of data from the client to the server.
+public interface IChatHubClientToServer
+{
     Task SendMessage(string message);
 }
 
@@ -138,7 +146,7 @@ public class ChatService
         _hub = hub;
         
         // Strongly-typed event subscription
-        _hub.OnReceiveMessage += (user, message) => {
+        _hub.OnMessageReceived += (user, message) => {
             Console.WriteLine($"{user}: {message}");
             return Task.CompletedTask;
         };
