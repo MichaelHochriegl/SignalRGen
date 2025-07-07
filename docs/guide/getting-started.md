@@ -44,14 +44,18 @@ using SignalRGen.Generator;
 namespace MySharedInterface;
 
 [HubClient(HubUri = "ping-pong")]
-public interface IPingPongHub
+public interface IPingPongHubContract : IBidirectionalHub<IPingPongServerToClient, IPingPongClientToServer>
 {
-    // Client-to-server method (client calls this)
-    [ClientToServerMethod]
-    Task Ping(string message);
+}
 
-    // Server-to-client method (server calls this)
+public interface IPingPongServerToClient
+{
     Task Pong(string answer);
+}
+
+public interface IPingPongClientToServer
+{
+    Task Ping(string message);
 }
 ```
 :::
@@ -64,7 +68,7 @@ Create a Hub class that inherits from both `Hub<IPingPongHub>` and `IPingPongHub
 
 ::: code-group
 ```csharp
-public class PongHub : Hub<IPingPongHub>, IPingPongHub
+public class PongHub : Hub<IPingPongServerToClient>, IPingPongClientToServer
 {
     private readonly ILogger<PongHub> _logger;
 
@@ -78,11 +82,6 @@ public class PongHub : Hub<IPingPongHub>, IPingPongHub
         _logger.LogInformation("Received Ping: {Message}", message);
         return Clients.All.Pong("Hey, here is the server talking!");
     }
-
-    public Task Pong(string answer)
-    {
-        throw new InvalidOperationException("This is a Server-to-Client method!");
-    }
 }
 ```
 :::
@@ -91,7 +90,7 @@ Remember to register your Hub in `Program.cs`:
 
 ::: code-group
 ```csharp
-app.MapHub<PingPongHub>($"/{PingPongHub.HubUri}");
+app.MapHub<PingPongHub>($"/{PingPongHubContractClient.HubUri}");
 ```
 :::
 
@@ -104,20 +103,20 @@ Configure the hub in your client's `Program.cs`:
 ::: code-group
 ```csharp
 builder.Services.AddSignalRHubs(c => c.HubBaseUri = new Uri("http://localhost:5160"))
-    .WithPingPongHub();
+    .WithPingPongHubContractClient();
 ```
 :::
 
 ### Use the Generated Client
 
-The generated `PingPongHub` class can now be injected into your services:
+The generated `PingPongHubContractClient` class can now be injected into your services:
 
 ::: code-group
 ```csharp
 public class Worker : IHostedService
 {
     private readonly ILogger<Worker> _logger;
-    private readonly PingPongHub _hub;  // Use the generated class, not the interface
+    private readonly PingPongHubContractClient _hub;  // Use the generated class, not the interface
 
     public Worker(ILogger<Worker> logger, PingPongHub hub)
     {
@@ -150,7 +149,7 @@ Invoke client-to-server methods like this:
 
 ::: code-group
 ```csharp
-app.MapGet("/ping", async ([FromServices] PingPongHub hub) =>
+app.MapGet("/ping", async ([FromServices] PingPongHubContractClient hub) =>
 {
     await hub.InvokePingAsync("Hello from the client!");
 });
@@ -159,11 +158,11 @@ app.MapGet("/ping", async ([FromServices] PingPongHub hub) =>
 
 ## Key Points to Remember
 
-- The interface (`IPingPongHub`) defines the contract between client and server
-- Methods without `[ClientToServerMethod]` are server-to-client callbacks
-- Methods with `[ClientToServerMethod]` are client-to-server calls
-- Use the generated class (`PingPongHub`) in your client code, not the interface
-- The server implements both the interface and inherits from `Hub<TInterface>`
+- The interface (`IPingPongHubContractClient`) defines the contract between client and server
+- Methods in the `TServer` interface are server-to-client callbacks
+- Methods in the `TClient` interface are client-to-server calls
+- Use the generated class (`PingPongHubContractClient`) in your client code, not the interface
+- The server implements a `Hub` by implementing the `TClient` interface and inherits from `Hub<TServer>`
 
 ## Complete Example
 
