@@ -207,7 +207,7 @@ Understanding the lifecycle of the generated hub client is important for proper 
 5. **Usage**: Call client-to-server methods and handle server-to-client events
 6. **Cleanup**: Unsubscribe from events and call `StopAsync()` when done or use the auto-dispose provided by the DI container
 
-By default, the hub client is registered as a `Singleton`, but you can change this using the [configuration options](../configuration/config-per-hub.md#hubclientlifetime).
+By default, the hub client is registered as a `Singleton`, but you can change this using the [configuration options](./configuration/config-per-hub.md#hubclientlifetime).
 
 ## Working with Complex Types
 
