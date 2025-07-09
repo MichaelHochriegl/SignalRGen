@@ -1,4 +1,4 @@
-# Generated Hub Clients
+# Generated Hub Client
 
 When you define a SignalR interface with the `[HubClient]` attribute, `SignalRGen` automatically generates a 
 strongly-typed client class for you. This page explains what gets generated and how to use the resulting client.
