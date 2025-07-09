@@ -1,6 +1,7 @@
-# Generated Hub Clients
+# Generated Hub Client
 
-When you define a SignalR interface with the `[HubClient]` attribute, `SignalRGen` automatically generates a strongly-typed client class for you. This page explains what gets generated and how to use the resulting client.
+When you define a SignalR interface with the `[HubClient]` attribute, `SignalRGen` automatically generates a 
+strongly-typed client class for you. This page explains what gets generated and how to use the resulting client.
 
 ## Interface to Client: The Transformation Process
 
@@ -12,29 +13,33 @@ Here's a typical SignalR interface definition:
 
 ::: code-group
 ```csharp
-using SignalRGen.Generator;
+using SignalRGen.Abstractions;
+using SignalRGen.Abstractions.Attributes;
 
 namespace SignalRGen.Example.Contracts;
 
-[HubClient(HubUri = "example")]
-public interface IExampleHubClient
+[HubClient(HubUri = "chat")]
+public interface IChatHubContract : IBidirectionalHub<IChatHubServerToClient, IChatHubClientToServer>
 {
-    // Server-to-client method (server calls this)
-    Task ReceiveExampleCountUpdate(int count);
+}
 
-    // Client-to-server methods (client calls these)
-    [ClientToServerMethod]
-    Task<string> SendExampleMessage(string myClientMessage);
+public interface IChatHubServerToClient
+{
+    Task UserJoined(string user);
+    Task UserLeft(string user);
+    Task MessageReceived(string user, string message);
+}
 
-    [ClientToServerMethod]
-    Task SendWithoutReturnType(string myClientMessage);
+public interface IChatHubClientToServer
+{
+    Task SendMessage(string message);
 }
 ```
 :::
 
 ### Generated Client Class
 
-From this interface, `SignalRGen` generates a class named `ExampleHubClient` (removing the "I" prefix from the interface name). This class provides:
+From this interface, `SignalRGen` generates a class named `ChatHubContractClient` (removing the "I" prefix from the interface name and suffix it with "Client"). This class provides:
 
 1. **Event-based pattern** for server-to-client methods
 2. **Strongly-typed methods** for client-to-server calls
@@ -64,50 +69,35 @@ ValueTask DisposeAsync();
 
 ### Server-to-Client Methods
 
-For each method in your interface without the `[ClientToServerMethod]` attribute or with the `[ServerToClientMethod]` attribute,
+For each method in your `TServer` interface (in the example above the `IChatHubServerToClient` interface)
 `SignalRGen` generates an event that you can subscribe to:
 
 ::: code-group
 ```csharp
 // For the interface method:
-// Task ReceiveExampleCountUpdate(int count);
+// Task UserJoined(string user);
 
 // SignalRGen generates:
-public event Func<int, Task>? OnReceiveExampleCountUpdate;
+public Func<string, Task>? OnUserJoined = default;
 ```
 :::
 
 The naming convention is to add the "On" prefix to the original method name.
 
-:::tip
-`SignalRGen` will treat every method in your interface as a server-to-client method by default, so the `[ServerToClientMethod]`
-attribute is optional, but can be used if you want to be explicit.
-:::
-
 ### Client-to-Server Methods
 
-For methods marked with `[ClientToServerMethod]`, `SignalRGen` generates methods that call the server:
+For each method in your `TClient` interface (in the example above the `IChatHubClientToServer` interface), `SignalRGen` generates a method that calls the server:
 
 ::: code-group
 ```csharp
 // For the interface method:
-// [ClientToServerMethod]
-// Task<string> SendExampleMessage(string myClientMessage);
+// Task SendMessage(string message);
 
 // SignalRGen generates:
-public Task<string> InvokeSendExampleMessageAsync(string myClientMessage, CancellationToken cancellationToken = default)
+public Task InvokeSendMessageAsync(string message, CancellationToken ct = default)
 {
-    // Implementation calls the hub method on the server
-}
-
-// For the interface method:
-// [ClientToServerMethod]
-// Task SendWithoutReturnType(string myClientMessage);
-
-// SignalRGen generates:
-public Task InvokeSendWithoutReturnTypeAsync(string myClientMessage, CancellationToken cancellationToken = default)
-{
-    // Implementation calls the hub method on the server
+    ValidateHubConnection();
+    return _hubConnection!.InvokeAsync("SendMessage", message, cancellationToken: ct);
 }
 ```
 :::
@@ -127,7 +117,7 @@ services.AddSignalRHubs(options =>
 {
     options.HubBaseUri = new Uri("https://your-api.example.com/hubs");
 })
-.WithExampleHubClient();  // Method name follows the pattern With[ClientName]
+.WithChatHubContractClient();  // Method name follows the pattern With[ClientName]
 ```
 :::
 
@@ -137,12 +127,12 @@ Here's how to use the generated client in your application:
 
 ::: code-group
 ```csharp
-public class ExampleService
+public class ChatService
 {
-    private readonly ExampleHubClient _hubClient;
-    private readonly ILogger<ExampleService> _logger;
+    private readonly ChatHubContractClient _hubClient;
+    private readonly ILogger<ChatService> _logger;
 
-    public ExampleService(ExampleHubClient hubClient, ILogger<ExampleService> logger)
+    public ExampleService(ChatHubContractClient hubClient, ILogger<ExampleService> logger)
     {
         _hubClient = hubClient;
         _logger = logger;
@@ -151,9 +141,9 @@ public class ExampleService
     public async Task Initialize()
     {
         // Subscribe to server-to-client events
-        _hubClient.OnReceiveExampleCountUpdate += count => 
+        _hubClient.OnUserJoined += user =>
         {
-            _logger.LogInformation("Received count update: {Count}", count);
+            _logger.LogInformation("User '{Username} joined", user);
             return Task.CompletedTask;
         };
 
@@ -163,18 +153,14 @@ public class ExampleService
 
     public async Task SendMessage(string message)
     {
-        // Call client-to-server method with return value
-        string response = await _hubClient.InvokeSendExampleMessageAsync(message);
-        _logger.LogInformation("Server responded: {Response}", response);
-
-        // Call client-to-server method without return value
-        await _hubClient.InvokeSendWithoutReturnTypeAsync(message);
+        // Call the method to send data to the server
+        await _hubClient.InvokeSendMessageAsync(_message);
     }
 
     public async Task Cleanup()
     {
         // Unsubscribe from events
-        _hubClient.OnReceiveExampleCountUpdate = null;
+        _hubClient.OnUserJoined = null;
 
         // Stop the connection
         await _hubClient.StopAsync();
@@ -190,19 +176,19 @@ The generated client also exposes events for connection state changes:
 ::: code-group
 ```csharp
 // Subscribe to connection events
-hubClient.Reconnecting += error => 
+_hubClient.Reconnecting += error => 
 {
     logger.LogWarning("Reconnecting due to: {Error}", error?.Message);
     return Task.CompletedTask;
 };
 
-hubClient.Reconnected += connectionId => 
+_hubClient.Reconnected += connectionId => 
 {
     logger.LogInformation("Reconnected with ID: {ConnectionId}", connectionId);
     return Task.CompletedTask;
 };
 
-hubClient.Closed += error => 
+_hubClient.Closed += error => 
 {
     logger.LogWarning("Connection closed due to: {Error}", error?.Message);
     return Task.CompletedTask;
@@ -214,14 +200,14 @@ hubClient.Closed += error =>
 
 Understanding the lifecycle of the generated hub client is important for proper usage:
 
-1. **Registration**: The hub client is registered with your DI container when you call `.WithExampleHubClient()`
+1. **Registration**: The hub client is registered with your DI container when you call `.WithChatHubContractClient()`
 2. **Injection**: The hub client is injected into your service
 3. **Event Setup**: Subscribe to server-to-client events before starting the connection
 4. **Connection**: Call `StartAsync()` to establish the connection
 5. **Usage**: Call client-to-server methods and handle server-to-client events
 6. **Cleanup**: Unsubscribe from events and call `StopAsync()` when done or use the auto-dispose provided by the DI container
 
-By default, the hub client is registered as a `Singleton`, but you can change this using the [configuration options](../configuration/config-per-hub.md#hubclientlifetime).
+By default, the hub client is registered as a `Singleton`, but you can change this using the [configuration options](./configuration/config-per-hub.md#hubclientlifetime).
 
 ## Working with Complex Types
 
@@ -230,13 +216,19 @@ By default, the hub client is registered as a `Singleton`, but you can change th
 ::: code-group
 ```csharp
 [HubClient(HubUri = "complex-example")]
-public interface IComplexTypeHubClient
+public interface IComplexTypeHubContract : IBidirectionalHub<IComplexTypeHubServerToClient, IComplexTypeHubClientToServer>
+{
+}
+
+public interface IComplexTypeHubServerToClient
 {
     // Server-to-client with complex type
     Task ReceiveComplexData(MyCustomType data);
+}
 
+public interface IComplexTypeHubClientToServer
+{
     // Client-to-server with complex type
-    [ClientToServerMethod]
     Task<MyCustomType> SendComplexData(MyCustomType data);
 }
 
@@ -298,7 +290,7 @@ For more detailed diagnostic information, enable SignalR logging:
 
 ::: code-group
 ```csharp
-.WithExampleHubClient(options => 
+.WithChatHubContractClient(options => 
 {
     options.HubConnectionBuilderConfiguration = builder => 
     {
