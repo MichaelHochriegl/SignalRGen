@@ -40,6 +40,12 @@ export default defineConfig({
                     },
                 ]
             },
+            {
+                text: 'Server-Side Usage',
+                items: [
+                    {text: 'Server Hub Implementation', link: '/server-side-usage/server-hub-implementation'},
+                ]
+            },
         ],
 
         socialLinks: [
