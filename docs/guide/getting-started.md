@@ -27,7 +27,7 @@ dotnet add package SignalRGen
 Then modify your package reference in the .csproj file:
 
 ```xml
-<PackageReference Include="SignalRGen" Version="1.0.0">
+<PackageReference Include="SignalRGen" Version="2.0.0">
     <PrivateAssets>all</PrivateAssets>
     <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 </PackageReference>
