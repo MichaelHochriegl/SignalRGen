@@ -262,7 +262,7 @@ The generated client handles serialization and deserialization of these types au
 The generated client:
 
 - Uses Microsoft's `HubConnection` under the hood
-- Implements automatic reconnection with configurable retry policies (see [default retry settings](../configuration/config-per-hub.md#default-behavior))
+- Implements automatic reconnection with configurable retry policies (see [default retry settings](./configuration/config-per-hub.md#default-behavior))
 - Provides thread-safe event invocation
 - Handles connection lifecycle and state management
 - Uses asynchronous patterns throughout for non-blocking operation
