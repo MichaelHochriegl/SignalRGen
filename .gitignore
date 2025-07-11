@@ -3,6 +3,8 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+# JetBrains Rider/ReSharper user-specific files
+*.DotSettings.user
 
 **/*.g.received.*
 
