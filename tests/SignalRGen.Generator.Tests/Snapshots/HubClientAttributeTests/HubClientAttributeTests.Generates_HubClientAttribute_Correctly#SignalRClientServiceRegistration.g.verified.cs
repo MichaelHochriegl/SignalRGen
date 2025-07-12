@@ -23,13 +23,13 @@ public static class SignalRClientServiceRegistration
     /// </summary>
     /// <param name = "services">The services available in the application.</param>
     /// <param name = "generalConfiguration">An action used to configure the provided options.</param>
-    /// <returns>The <see cref = "SignalRHubServiceCollection"/> to register the specified Hub.</returns>
-    public static SignalRHubServiceCollection AddSignalRHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
+    /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register the specified Hub.</returns>
+    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> AddSignalRHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
     {
         ArgumentNullException.ThrowIfNull(generalConfiguration);
         var config = new SignalROptions();
         generalConfiguration.Invoke(config);
-        return new SignalRHubServiceCollection(services, config);
+        return new SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase>(services, config);
     }
 
 
