@@ -1,4 +1,4 @@
-using SignalRGen.Generator.Client.Extensions.DependencyInjection;
+using SignalRGen.Example.Contracts.Client.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
@@ -9,7 +9,7 @@ builder.Services.AddServerSideBlazor();
 // Notice that we can chain the generated Client configurations as done with the `ExampleHubClient`
 // and the `ChatHubContractClient`.
 builder.Services
-    .AddSignalRHubs(c => c.HubBaseUri = new Uri("http://localhost:5155"))
+    .AddExampleHubs(c => c.HubBaseUri = new Uri("http://localhost:5155"))
     .WithExampleHubClient()
     .WithChatHubContractClient(config =>
     {

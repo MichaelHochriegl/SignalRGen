@@ -5,7 +5,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <SignalRModuleName>Example</SignalRModuleName>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <CompilerVisibleProperty Include="SignalRModuleName" />
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" />
