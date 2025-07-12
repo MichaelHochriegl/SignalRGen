@@ -8,4 +8,6 @@ namespace SignalRGen.Abstractions.Configuration;
 /// <remarks>
 /// This record encapsulates both the dependency injection service collection and general SignalR configuration options.
 /// </remarks>
-public record SignalRHubServiceCollection(IServiceCollection Services, SignalROptions GeneralConfiguration);
+public record SignalRHubServiceCollection<T>(
+    IServiceCollection Services,
+    SignalROptions GeneralConfiguration) where T : class;
