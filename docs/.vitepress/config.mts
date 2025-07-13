@@ -46,6 +46,13 @@ export default defineConfig({
                     {text: 'Server Hub Implementation', link: '/server-side-usage/server-hub-implementation'},
                 ]
             },
+            {
+                text: 'Advanced Usage',
+                items: [
+                    {text: 'Multi-Project Support', link: '/advanced/multi-project-support'},
+                ]
+            },
+
         ],
 
         socialLinks: [
