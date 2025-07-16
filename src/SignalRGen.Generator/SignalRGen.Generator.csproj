@@ -50,7 +50,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" PrivateAssets="all" />
+      <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" />
       <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" PrivateAssets="all" />
       <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" PrivateAssets="all" />
     </ItemGroup>
