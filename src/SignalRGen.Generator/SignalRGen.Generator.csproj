@@ -33,10 +33,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
+        <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
     </ItemGroup>
-    
+
     <ItemGroup>
         <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
             <_Parameter1>SignalRGen.Generator.Tests</_Parameter1>
@@ -50,20 +50,19 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" />
-      <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" PrivateAssets="all" />
-      <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
     <ItemGroup>
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="$(OutputPath)\SignalRGen.Abstractions.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="$(OutputPath)\SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="$(OutputPath)\SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="$(OutputPath)\SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
-
+        <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="../SignalRGen.Abstractions/bin/$(Configuration)/netstandard2.0/SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="false" />
     </ItemGroup>
-    
+
+
     <ItemGroup>
         <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
     </ItemGroup>
