@@ -17,9 +17,12 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         var msBuildOptions = context
             .AnalyzerConfigOptionsProvider
             .Select((c, _) =>
-                c.GlobalOptions.TryGetValue("build_property.RootNamespace", out var rootNamespace)
-                    ? new MsBuildOptions(rootNamespace)
-                    : null);
+            {
+                c.GlobalOptions.TryGetValue("build_property.RootNamespace", out var rootNamespace);
+                c.GlobalOptions.TryGetValue("build_property.SignalRModuleName", out var moduleName);
+
+                return new MsBuildOptions(rootNamespace ?? "SignalRGen.Generator", moduleName ?? "SignalR");
+            });
         
         context.RegisterSourceOutput(msBuildOptions, (ctx, options) => 
             ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(options))
@@ -30,7 +33,7 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
                     syntaxNode is InterfaceDeclarationSyntax,
                 GetSemanticTargetForGeneration)
             .WithTrackingName(TrackingNames.InitialExtraction);
-        var allHubClients = markedInterfaces.Collect().WithTrackingName(TrackingNames.Collect);
+        var allHubClients = markedInterfaces.Collect().Combine(msBuildOptions).WithTrackingName(TrackingNames.Collect);
 
         context.RegisterSourceOutput(markedInterfaces, GenerateHubClient!);
         context.RegisterSourceOutput(allHubClients, GenerateHubClientRegistration!);
@@ -42,10 +45,10 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
     }
 
     private static void GenerateHubClientRegistration(SourceProductionContext context,
-        ImmutableArray<HubClientToGenerate> hubClients)
+        (ImmutableArray<HubClientToGenerate> HubClients, MsBuildOptions Options) provider)
     {
         context.AddSource("SignalRClientServiceRegistration.g.cs",
-            SignalRClientServiceRegistrationSource.GetSource(hubClients));
+            SignalRClientServiceRegistrationSource.GetSource(provider.HubClients, provider.Options));
     }
 
     private static HubClientToGenerate? GetSemanticTargetForGeneration(
