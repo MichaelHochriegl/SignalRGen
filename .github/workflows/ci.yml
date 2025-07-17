@@ -11,7 +11,7 @@ env:
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   # Project name to pack and publish
-  PROJECT_NAME: SignalRGen.Generator
+  PROJECT_NAME: SignalRGen
   # NUGET_TEST_PROJECT: ./test/SignalRGen.Nuget.Tests.Integration
   # GitHub Packages Feed settings
   GITHUB_FEED: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json

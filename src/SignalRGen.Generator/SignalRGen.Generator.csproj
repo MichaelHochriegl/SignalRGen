@@ -9,28 +9,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
     </PropertyGroup>
-
-    <PropertyGroup>
-        <!-- NuGet settings -->
-        <PackageId>SignalRGen</PackageId>
-        <Title>SignalRGen</Title>
-        <PackageSummary>A C# source generator that automatically creates strongly-typed client proxies for SignalR hubs, eliminating boilerplate code and improving developer productivity.</PackageSummary>
-        <PackageTags>SignalRGen;ASP.NET Core;Source Generator;SignalR</PackageTags>
-        <Authors>Michael Hochriegl</Authors>
-        <PackageProjectUrl>https://signalrgen.net</PackageProjectUrl>
-        <PackageIcon>logo_128x128.png</PackageIcon>
-        <RepositoryType>git</RepositoryType>
-        <RepositoryUrl>https://github.com/MichaelHochriegl/SignalRGen</RepositoryUrl>
-        <PublishRepositoryUrl>true</PublishRepositoryUrl>
-        <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <Copyright>Copyright © $([System.DateTime]::Now.Year) Michael Hochriegl</Copyright>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <Description>SignalRGen simplifies the process of creating client-side code for interacting with SignalR hubs, providing a seamless experience for developers.</Description>
-        <IncludeContentInPack>true</IncludeContentInPack>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-        <DevelopmentDependency>true</DevelopmentDependency>
-    </PropertyGroup>
+    
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
@@ -42,27 +21,7 @@
             <_Parameter1>SignalRGen.Generator.Tests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
-
-    <ItemGroup>
-        <None Include="../../LICENSE" Pack="true" PackagePath="\" />
-        <None Include="../../README.md" Pack="true" PackagePath="\" />
-        <None Include="../../assets/logo_128x128.png" Pack="true" PackagePath="\" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false" />
-        <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="../SignalRGen.Abstractions/bin/$(Configuration)/netstandard2.0/SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="false" />
-    </ItemGroup>
-
-
+    
     <ItemGroup>
         <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
     </ItemGroup>
