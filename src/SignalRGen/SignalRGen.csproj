@@ -37,7 +37,7 @@
 
     <!-- Properly store dlls in the NuGet Package   -->
     <ItemGroup>
-        <None Include="$../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+        <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
         <None Include="../SignalRGen.Abstractions/bin/$(Configuration)/netstandard2.0/SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib/netstandard2.0" Visible="true" />
