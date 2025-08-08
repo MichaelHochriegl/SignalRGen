@@ -8,6 +8,8 @@
         <IncludeBuildOutput>false</IncludeBuildOutput>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <IsPackable>false</IsPackable>
+        <DevelopmentDependency>true</DevelopmentDependency>
     </PropertyGroup>
     
 

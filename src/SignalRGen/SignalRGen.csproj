@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>netstandard2.0</TargetFramework>
         <IsPackable>true</IsPackable>
         <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
@@ -27,6 +27,11 @@
         <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     </PropertyGroup>
 
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.*" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.*" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="9.*" />
+    </ItemGroup>
     
     <!-- Add Metadata to the NuGet Package -->
     <ItemGroup>
@@ -37,12 +42,14 @@
 
     <!-- Properly store dlls in the NuGet Package   -->
     <ItemGroup>
-        <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
-        <None Include="../SignalRGen.Abstractions/bin/$(Configuration)/netstandard2.0/SignalRGen.Abstractions.dll" Pack="true" PackagePath="lib/netstandard2.0" Visible="true" />
-        <None Include="../SignalRGen.Abstractions/bin/$(Configuration)/netstandard2.0/SignalRGen.Abstractions.dll" Pack="true" PackagePath="ref/netstandard2.0" Visible="true" />
+        <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+        <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+        <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
 
+        <TfmSpecificPackageFile
+                Include="../SignalRGen.Abstractions/bin/$(Configuration)/$(TargetFramework)/SignalRGen.Abstractions.dll"
+                Pack="true"
+                PackagePath="lib/$(TargetFramework)" />
     </ItemGroup>
 
     <!-- Project References   -->
