@@ -4,6 +4,42 @@ namespace SignalRGen.Generator.Tests;
 public class HubClientTests
 {
     [Fact]
+    public Task Generates_WithNoHubClient_Nothing()
+    {
+      // Arrange
+      const string source = """
+                            using System.Threading.Tasks;
+                            using SignalRGen.Abstractions;
+                            using SignalRGen.Abstractions.Attributes;
+                            using SignalRGen.Generator.Tests.TestData;
+
+                            namespace SignalRGen.Clients;
+
+                            public interface ITestHubServerToClient
+                            {
+                              Task ReceiveCustomTypeUpdate(IEnumerable<CustomTypeDto> customTypes);
+                              Task ReceiveFooUpdate(string bar, int bass);
+                              Task ReceiveNormalTypeWithSpecificAttributeApplied(string bazz, int buzz);
+                              Task ReceiveWithArbitraryAttribute(int blub);
+                            }
+
+                            public interface ITestHubClientToServer
+                            {
+                              Task SendClientToServerNoReturnType(string rick, int age);
+                              Task<string> SendClientToServerWithReturnType(string morty, bool partOfMission);
+                            }
+
+                            // No HubClient attribute
+                            public interface ITestHub: IBidirectionalHub<ITestHubServerToClient, ITestHubClientToServer>
+                            {
+                            }
+                            """;
+
+
+      return TestHelper.Verify(source);
+    }
+  
+    [Fact]
     public Task Generates_HubClient_Correctly()
     {
         // Arrange
