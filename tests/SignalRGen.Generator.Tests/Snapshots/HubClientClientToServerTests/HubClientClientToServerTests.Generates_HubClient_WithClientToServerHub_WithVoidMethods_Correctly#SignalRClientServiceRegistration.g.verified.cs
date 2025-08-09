@@ -24,13 +24,13 @@ public static class SignalRClientServiceRegistration
     /// </summary>
     /// <param name = "services">The services available in the application.</param>
     /// <param name = "generalConfiguration">An action used to configure the provided options.</param>
-    /// <returns>The <see cref = "SignalRHubServiceCollection"/> to register the specified Hub.</returns>
-    public static SignalRHubServiceCollection AddSignalRHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
+    /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register the specified Hub.</returns>
+    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> AddSignalRHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
     {
         ArgumentNullException.ThrowIfNull(generalConfiguration);
         var config = new SignalROptions();
         generalConfiguration.Invoke(config);
-        return new SignalRHubServiceCollection(services, config);
+        return new SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase>(services, config);
     }
 
     /// <summary>
@@ -53,10 +53,10 @@ public static class SignalRClientServiceRegistration
     ///     </item>
     /// </list>
     /// </remarks>
-    /// <param name = "services">The <see cref = "SignalRHubServiceCollection"/> to register the Hub.</param>
+    /// <param name = "services">The <see cref = "SignalRHubServiceCollection{T}"/> to register the Hub.</param>
     /// <param name = "configuration">An action used to configure the provided options.</param>
-    /// <returns>The <see cref = "SignalRHubServiceCollection"/> to register additional Hubs.</returns>
-    public static SignalRHubServiceCollection WithVoidCommandHubClient(this SignalRHubServiceCollection services, Action<HubClientOptions>? configuration = null)
+    /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register additional Hubs.</returns>
+    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> WithVoidCommandHubClient(this SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> services, Action<HubClientOptions>? configuration = null)
     {
         ArgumentNullException.ThrowIfNull(services);
         var config = new HubClientOptions();

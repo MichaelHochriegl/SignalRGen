@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Diagnostics;
 using SignalRGen.Abstractions.Attributes;
 using SignalRGen.Generator.Common;
 
@@ -11,10 +13,12 @@ namespace SignalRGen.Generator.Tests;
 
 // This Helper is basically a straight-up copy from the awesome blog from Andrew Lock:
 // https://andrewlock.net/creating-a-source-generator-part-10-testing-your-incremental-generator-pipeline-outputs-are-cacheable/
-public static class TestHelper
+internal static class TestHelper
 {
-    public static Task Verify(string source, bool assertCacheability = true)
+    internal static Task Verify(string source, bool assertCacheability = true, DictionaryAnalyzerConfigOptions? analyzerOptions = null)
     {
+        var optionsProvider = new OptionsProvider(analyzerOptions ?? DictionaryAnalyzerConfigOptions.Empty);
+        
         // get all the const string fields on the TrackingName type
         var trackingNames = typeof(TrackingNames)
             .GetFields()
@@ -53,7 +57,7 @@ public static class TestHelper
             trackIncrementalGeneratorSteps: true);
 
         // The GeneratorDriver is used to run our generator against a compilation
-        GeneratorDriver driver = CSharpGeneratorDriver.Create([generator], driverOptions: opts);
+        GeneratorDriver driver = CSharpGeneratorDriver.Create([generator], driverOptions: opts, optionsProvider: optionsProvider);
 
         // Run the source generator!
         driver = driver.RunGenerators(compilation);
@@ -205,5 +209,22 @@ public static class TestHelper
                 Visit(fieldValue);
             }
         }
+    }
+    
+    internal sealed class DictionaryAnalyzerConfigOptions(Dictionary<string, string> properties) : AnalyzerConfigOptions
+    {
+        public static DictionaryAnalyzerConfigOptions Empty { get; } = new(new Dictionary<string, string>());
+        
+        public override bool TryGetValue(string key, [NotNullWhen(true)] out string? value) =>
+            properties.TryGetValue(key, out value);
+    }
+    
+    private class OptionsProvider(AnalyzerConfigOptions options) : AnalyzerConfigOptionsProvider
+    {
+        public override AnalyzerConfigOptions GetOptions(SyntaxTree tree) => options;
+
+        public override AnalyzerConfigOptions GetOptions(AdditionalText textFile) => options;
+
+        public override AnalyzerConfigOptions GlobalOptions => options;
     }
 }

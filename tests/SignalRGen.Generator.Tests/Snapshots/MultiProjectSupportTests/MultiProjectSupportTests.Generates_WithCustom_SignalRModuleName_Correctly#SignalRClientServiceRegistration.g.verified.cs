@@ -8,14 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Clients;
+using MyCompany.App.Clients;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.DependencyInjection;
 using SignalRGen.Abstractions.Configuration;
 
 #nullable enable
 
-namespace SignalRGen.Generator.Client.Extensions.DependencyInjection;
+namespace MyCompany.App.Client.Extensions.DependencyInjection;
 
 public static class SignalRClientServiceRegistration
 {
@@ -25,20 +25,20 @@ public static class SignalRClientServiceRegistration
     /// <param name = "services">The services available in the application.</param>
     /// <param name = "generalConfiguration">An action used to configure the provided options.</param>
     /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register the specified Hub.</returns>
-    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> AddSignalRHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
+    public static SignalRHubServiceCollection<MyCompany.App.HubClientBase> AddPaymentsHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
     {
         ArgumentNullException.ThrowIfNull(generalConfiguration);
         var config = new SignalROptions();
         generalConfiguration.Invoke(config);
-        return new SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase>(services, config);
+        return new SignalRHubServiceCollection<MyCompany.App.HubClientBase>(services, config);
     }
 
     /// <summary>
-    /// Registers the <see cref = "ParameterlessCommandHubClient"/> in the <see cref = "ServiceCollection"/>.
+    /// Registers the <see cref = "PingHubClient"/> in the <see cref = "ServiceCollection"/>.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// By default the <see cref = "ParameterlessCommandHubClient"/> is registered with <see cref = "ServiceLifetime"/> singleton.
+    /// By default the <see cref = "PingHubClient"/> is registered with <see cref = "ServiceLifetime"/> singleton.
     /// </para>
     /// If no <see cref = "IRetryPolicy"/> is configured for the <see cref = "HubConnectionBuilder"/> a default retry policy will be used.
     /// <list type="bullet">
@@ -56,15 +56,15 @@ public static class SignalRClientServiceRegistration
     /// <param name = "services">The <see cref = "SignalRHubServiceCollection{T}"/> to register the Hub.</param>
     /// <param name = "configuration">An action used to configure the provided options.</param>
     /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register additional Hubs.</returns>
-    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> WithParameterlessCommandHubClient(this SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> services, Action<HubClientOptions>? configuration = null)
+    public static SignalRHubServiceCollection<MyCompany.App.HubClientBase> WithPingHubClient(this SignalRHubServiceCollection<MyCompany.App.HubClientBase> services, Action<HubClientOptions>? configuration = null)
     {
         ArgumentNullException.ThrowIfNull(services);
         var config = new HubClientOptions();
         configuration?.Invoke(config);
-        services.Services.Add(new ServiceDescriptor(typeof(ParameterlessCommandHubClient), factory: _ =>
+        services.Services.Add(new ServiceDescriptor(typeof(PingHubClient), factory: _ =>
         {
-            return new ParameterlessCommandHubClient(config.HubConnectionBuilderConfiguration,
-            new Uri(services.GeneralConfiguration.HubBaseUri, ParameterlessCommandHubClient.HubUri),
+            return new PingHubClient(config.HubConnectionBuilderConfiguration,
+            new Uri(services.GeneralConfiguration.HubBaseUri, PingHubClient.HubUri),
             config.HttpConnectionOptionsConfiguration!);
         }, config.HubClientLifetime));
         return services;
