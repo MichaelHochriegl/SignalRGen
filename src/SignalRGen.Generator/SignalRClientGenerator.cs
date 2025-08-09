@@ -34,9 +34,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         context.RegisterSourceOutput(markedInterfaces, GenerateHubClient!);
         
         context.RegisterSourceOutput(allHubClients, GenerateHubClientRegistration!);
-        context.RegisterSourceOutput(msBuildOptions, (ctx, options) => 
-            ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(options))
-        );
     }
 
     private static void GenerateHubClient(SourceProductionContext context, HubClientToGenerate hubClientToGenerate)
@@ -47,13 +44,12 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
     private static void GenerateHubClientRegistration(SourceProductionContext context,
         (ImmutableArray<HubClientToGenerate> HubClients, MsBuildOptions Options) provider)
     {
-        if (hubClients.Length <= 0)
+        if (provider.HubClients.Length <= 0)
         {
             return;
         }
         
-        // TODO: Move `HubClientBase` generation to here. This should be done after the merge of the multi-project support,
-        // as this will properly add the `MsBuildOptions` to this step here.
+        context.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(provider.Options));
         
         context.AddSource("SignalRClientServiceRegistration.g.cs",
             SignalRClientServiceRegistrationSource.GetSource(provider.HubClients, provider.Options));
