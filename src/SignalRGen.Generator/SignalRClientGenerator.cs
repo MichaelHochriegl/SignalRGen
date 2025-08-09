@@ -24,10 +24,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
                 return new MsBuildOptions(rootNamespace ?? "SignalRGen.Generator", moduleName ?? "SignalR");
             });
         
-        context.RegisterSourceOutput(msBuildOptions, (ctx, options) => 
-            ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(options))
-            );
-
         var markedInterfaces = context.SyntaxProvider.ForAttributeWithMetadataName(
                 MarkerAttributeFullQualifiedName, static (syntaxNode, _) =>
                     syntaxNode is InterfaceDeclarationSyntax,
@@ -36,7 +32,11 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
         var allHubClients = markedInterfaces.Collect().Combine(msBuildOptions).WithTrackingName(TrackingNames.Collect);
 
         context.RegisterSourceOutput(markedInterfaces, GenerateHubClient!);
+        
         context.RegisterSourceOutput(allHubClients, GenerateHubClientRegistration!);
+        context.RegisterSourceOutput(msBuildOptions, (ctx, options) => 
+            ctx.AddSource("HubClientBase.g.cs", HubClientBaseSource.GetSource(options))
+        );
     }
 
     private static void GenerateHubClient(SourceProductionContext context, HubClientToGenerate hubClientToGenerate)
@@ -47,6 +47,14 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
     private static void GenerateHubClientRegistration(SourceProductionContext context,
         (ImmutableArray<HubClientToGenerate> HubClients, MsBuildOptions Options) provider)
     {
+        if (hubClients.Length <= 0)
+        {
+            return;
+        }
+        
+        // TODO: Move `HubClientBase` generation to here. This should be done after the merge of the multi-project support,
+        // as this will properly add the `MsBuildOptions` to this step here.
+        
         context.AddSource("SignalRClientServiceRegistration.g.cs",
             SignalRClientServiceRegistrationSource.GetSource(provider.HubClients, provider.Options));
     }
