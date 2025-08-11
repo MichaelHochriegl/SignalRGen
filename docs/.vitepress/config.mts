@@ -23,7 +23,15 @@ export default defineConfig({
             {
                 text: 'Hub Contracts',
                 items: [
-                    {text: 'Hub Interface Definition', link: '/hub-contracts/hub-interface-definition'},
+                    {text: 'Hub Contract Definition', link: '/hub-contracts/hub-contract-definition'},
+                    {
+                        text: 'Advanced',
+                        collapsed: true,
+                        items: [
+                            {text: 'Hub Contract Inheritance', link: '/hub-contracts/advanced/hub-contract-inheritance'},
+                        ]
+                    },
+
                 ]
             },
             {
