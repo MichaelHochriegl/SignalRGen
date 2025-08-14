@@ -1,4 +1,4 @@
-# Hub Interface Definition
+# Hub Contract Definition
 
 `SignalRGen` uses interfaces to define the contract between your client and server. This page explains how to create these interfaces and the attributes you'll use to control the generation process.
 
