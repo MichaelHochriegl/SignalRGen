@@ -1,6 +1,6 @@
 # Hub Contract Interface Inheritance
 
-`SignalRGen` supports composing your server-to-client (TServer) and client-to-server (TClient) contracts 
+`SignalRGen` supports composing your server-to-client (`TServer`) and client-to-server (`TClient`) contracts 
 using C# interface inheritance. This lets you split large contracts into smaller, 
 reusable pieces and assemble them per hub.
 
