@@ -121,6 +121,29 @@ services.AddSignalRHubs(options =>
 ```
 :::
 
+:::tip 💡 Changing `AddSignalRHubs` naming
+You can change the naming of the `AddSignalRHubs` method by supplying a `SignalRModuleName` in your `csproj`:
+
+```csharp
+    <Project Sdk="Microsoft.NET.Sdk">
+      <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <SignalRModuleName>Chat</SignalRModuleName>
+      </PropertyGroup>
+
+      // This here is important to expose the property to the source generator
+      <ItemGroup>
+        <CompilerVisibleProperty Include="SignalRModuleName" />
+      </ItemGroup>
+      
+      <!-- Your SignalRGen package references -->
+    </Project>
+```
+
+This also allows you to use the `AddSignalRHubs` method in multiple projects.
+See [Multi-Project Support](../advanced/multi-project-support) for more information.
+:::
+
 ### Basic Usage
 
 Here's how to use the generated client in your application:

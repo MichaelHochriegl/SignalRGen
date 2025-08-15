@@ -48,15 +48,6 @@ dotnet add package SignalRGen
 ```
 :::
 
-Then modify the package reference in your `MySharedInterface.csproj` file:
-
-```xml
-<PackageReference Include="SignalRGen" Version="2.0.0">
-    <PrivateAssets>all</PrivateAssets>
-    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-</PackageReference>
-```
-
 ### Add Project References
 
 Make the shared interface available to both client and server:

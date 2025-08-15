@@ -24,15 +24,6 @@ dotnet add package SignalRGen
 ```
 :::
 
-Then modify your package reference in the .csproj file:
-
-```xml
-<PackageReference Include="SignalRGen" Version="2.0.0">
-    <PrivateAssets>all</PrivateAssets>
-    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-</PackageReference>
-```
-
 ## Define Your SignalR Interface
 
 Create an interface that describes your Hub's communication:
@@ -64,7 +55,7 @@ That's it! `SignalRGen` will automatically generate the client implementation.
 
 ## Server-Side Implementation
 
-Create a Hub class that inherits from both `Hub<IPingPongHub>` and `IPingPongHub`:
+Create a Hub class that inherits from both `Hub<IPingPongHub>` and `IPingPongClientToServer`:
 
 ::: code-group
 ```csharp
