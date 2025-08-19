@@ -1,0 +1,58 @@
+name: Feature request
+description: Suggest an idea or improvement.
+title: "[Feature]: "
+labels:
+  - enhancement
+  - triage needed
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question or need help? Please use [Discussions](https://github.com/MichaelHochriegl/SignalRGen/discussions) instead.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I’ve searched existing issues to avoid duplicates.
+          required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Related problem
+      description: Is your feature request related to a problem? Please describe.
+      placeholder: I’m frustrated when...
+    validations:
+      required: false
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: What would you like to see? Be as specific as possible.
+      placeholder: Add an option to...
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      placeholder: I also considered...
+    validations:
+      required: false
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      description: What does this request affect?
+      options:
+        - label: Library
+        - label: Docs / Examples
+        - label: Repo
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Links, screenshots, or prototypes
+    validations:
+      required: false
