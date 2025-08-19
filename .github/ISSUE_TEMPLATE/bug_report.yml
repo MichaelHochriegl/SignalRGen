@@ -1,0 +1,81 @@
+name: Bug report
+description: Report a reproducible problem or regression.
+title: "[Bug]: "
+labels:
+  - bug
+  - triage needed
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have a question or need help? Please use [Discussions](https://github.com/MichaelHochriegl/SignalRGen/discussions) instead.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      description: Please confirm the following before filing.
+      options:
+        - label: I’ve searched existing issues to avoid duplicates.
+          required: true
+        - label: I’m using the latest version (or I’ve included the version info below).
+          required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: A clear and concise description of the bug.
+      placeholder: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Provide a minimal, step-by-step way to reproduce the issue.
+      placeholder: |
+        1. Go to ...
+        2. Click on ...
+        3. See error ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: What did you expect to happen?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: What actually happened?
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version(s)
+      description: App/library version(s) affected.
+      placeholder: e.g., v1.2.3
+    validations:
+      required: false
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Low
+        - Medium
+        - High
+        - Critical (blocks releases)
+    validations:
+      required: false
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Anything else we should know?
+    validations:
+      required: false
