@@ -38,7 +38,7 @@ You can change the naming of the `AddSignalRHubs` method by supplying a `SignalR
 ```
 
 This also allows you to use the `AddSignalRHubs` method in multiple projects.
-See [Multi-Project Support](../advanced/multi-project-support) for more information.
+See [Multi-Project Support](../../advanced/multi-project-support) for more information.
 :::
 
 
