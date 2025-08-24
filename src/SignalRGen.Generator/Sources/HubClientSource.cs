@@ -68,7 +68,7 @@ internal static class HubClientSource
             public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, CancellationToken ct = default)
             {
                 ValidateHubConnection();
-                return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", {~{parameters}~}, cancellationToken: ct);
+                return InvokeCoreAsync{~{genericReturnType}~}("{~{identifier}~}", new object?[] { {~{parameters}~} }, cancellationToken: ct);
             }
         """;
     
@@ -81,7 +81,7 @@ internal static class HubClientSource
             public {~{returnType}~} Invoke{~{identifier}~}Async(CancellationToken ct = default)
             {
                 ValidateHubConnection();
-                return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", cancellationToken: ct);
+                return InvokeCoreAsync{~{genericReturnType}~}("{~{identifier}~}", cancellationToken: ct);
             }
         """;
     

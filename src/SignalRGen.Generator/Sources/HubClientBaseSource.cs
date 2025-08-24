@@ -106,6 +106,47 @@ internal static class HubClientBaseSource
                                       {
                                           return Reconnected is not null ? Reconnected.Invoke() : Task.CompletedTask;
                                       }
+                                      
+                                      /// <summary>
+                                      /// Hook for generated client-to-server Invoke methods.
+                                      /// The default implementation invokes the underlying HubConnection.
+                                      /// Test fakes override this to short-circuit network calls.
+                                      /// </summary>
+                                      /// <param name="methodName">Hub method name.</param>
+                                      /// <param name="args">Arguments serialized by SignalR.</param>
+                                      /// <param name="cancellationToken">Cancellation token.</param>
+                                      /// <exception cref="InvalidOperationException">When the hub connection was not started.</exception>
+                                      protected virtual Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+                                      {
+                                          if (_hubConnection is null)
+                                          {
+                                              throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+                                          }
+                                      
+                                          // Use InvokeCoreAsync to avoid overload churn.
+                                          return _hubConnection.InvokeCoreAsync(methodName, args, cancellationToken);
+                                      }
+                                  
+                                      /// <summary>
+                                      /// Hook for generated client-to-server Invoke methods that return a value.
+                                      /// The default implementation invokes the underlying HubConnection and returns the result.
+                                      /// Test fakes override this to short-circuit network calls and return arranged results.
+                                      /// </summary>
+                                      /// <typeparam name="TResult">The result type returned by the Hub method.</typeparam>
+                                      /// <param name="methodName">Hub method name.</param>
+                                      /// <param name="args">Arguments serialized by SignalR.</param>
+                                      /// <param name="cancellationToken">Cancellation token.</param>
+                                      /// <exception cref="InvalidOperationException">When the hub connection was not started.</exception>
+                                      protected virtual Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+                                      {
+                                          if (_hubConnection is null)
+                                          {
+                                              throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+                                          }
+                                          return _hubConnection.InvokeCoreAsync<TResult>(methodName, args, cancellationToken);
+                                      }
+                                  
+                                  
 
                                       /// <summary>
                                       /// Releases resources for the underlying <see cref = "HubConnection"/>.
