@@ -35,6 +35,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Shared", "src\Si
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen", "src\SignalRGen\SignalRGen.csproj", "{5075C86D-DBB7-4BFF-80B9-0BD6221CE322}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRGen.Example.Client.BlazorServer.Tests", "example\SignalRGen.Example.Client.BlazorServer.Tests\SignalRGen.Example.Client.BlazorServer.Tests.csproj", "{B32302C3-E47C-42A5-91A6-47985A912F01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,7 @@ Global
 		{BAD25B70-315B-4CB0-8E49-52097052AE68} = {156E35FD-D926-4394-99BB-23CE485E357A}
 		{B85F8F20-B969-4247-9779-9D2F52C9C075} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
 		{5075C86D-DBB7-4BFF-80B9-0BD6221CE322} = {05C2839E-9804-4C02-8829-2E825E4D15CA}
+		{B32302C3-E47C-42A5-91A6-47985A912F01} = {80DBF0E6-9611-4221-B4D5-7DBB90DB033B}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0D84BF69-5C50-40A9-BD7C-9507E609637E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -103,5 +106,9 @@ Global
 		{5075C86D-DBB7-4BFF-80B9-0BD6221CE322}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5075C86D-DBB7-4BFF-80B9-0BD6221CE322}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5075C86D-DBB7-4BFF-80B9-0BD6221CE322}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B32302C3-E47C-42A5-91A6-47985A912F01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B32302C3-E47C-42A5-91A6-47985A912F01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B32302C3-E47C-42A5-91A6-47985A912F01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B32302C3-E47C-42A5-91A6-47985A912F01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
