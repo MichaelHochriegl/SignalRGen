@@ -17,7 +17,6 @@ internal class InterfaceMethodExtractor
 
     private readonly List<CacheableMethodDeclaration> _serverToClientMethods = [];
     private readonly List<CacheableMethodDeclaration> _clientToServerMethods = [];
-    private readonly HashSet<string> _usings = [];
     private readonly HashSet<string> _methodSignatures = [];
 
     public InterfaceMethodExtractor(
@@ -37,32 +36,12 @@ internal class InterfaceMethodExtractor
     /// </summary>
     public ExtractedInterfaceData Extract()
     {
-        // First, collect usings from the current interface
-        CollectUsingsFromCurrentInterface();
-
-        // Process methods from base interfaces
         ProcessBaseInterfaces();
 
         return new ExtractedInterfaceData(
             serverToClientMethods: _serverToClientMethods.ToImmutableArray(),
-            clientToServerMethods: _clientToServerMethods.ToImmutableArray(),
-            usings: _usings.Select(u => new CacheableUsingDeclaration(u))
-                .ToImmutableArray()
-                .AsEquatableArray()
+            clientToServerMethods: _clientToServerMethods.ToImmutableArray()
         );
-    }
-
-    private void CollectUsingsFromCurrentInterface()
-    {
-        // Find the compilation unit that contains the interface
-        var compilationUnit = _interfaceSyntax.Ancestors().OfType<CompilationUnitSyntax>().FirstOrDefault();
-        if (compilationUnit != null)
-        {
-            foreach (var usingDirective in compilationUnit.Usings)
-            {
-                _usings.Add(usingDirective.ToString());
-            }
-        }
     }
 
     private void ProcessBaseInterfaces()
@@ -114,13 +93,14 @@ internal class InterfaceMethodExtractor
             if (member is IMethodSymbol method && method.MethodKind == MethodKind.Ordinary)
             {
                 _cancellationToken.ThrowIfCancellationRequested();
-
                 var methodDeclaration = new CacheableMethodDeclaration(
                     method.Name,
                     method.Parameters
-                        .Select(p => new Parameter(p.Type.ToDisplayString(), p.Name))
+                        .Select(p =>
+                            new Parameter(p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat), p.Name))
                         .ToImmutableArray(),
-                    method.ReturnType.ToDisplayString());
+                    method.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat),
+                    GetAwaitableResultType(method.ReturnType)?.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat));
 
                 // Check if we've already processed a method with this signature
                 var signature = GetMethodSignature(methodDeclaration);
@@ -137,9 +117,6 @@ internal class InterfaceMethodExtractor
                 {
                     _clientToServerMethods.Add(methodDeclaration);
                 }
-
-                // Add namespace usings
-                AddNamespaceUsings(method);
             }
         }
 
@@ -155,29 +132,30 @@ internal class InterfaceMethodExtractor
         var parameterTypes = string.Join(",", method.Parameters.Select(p => p.Type));
         return $"{method.Identifier}({parameterTypes}):{method.ReturnType}";
     }
-
-    private void AddNamespaceUsings(IMethodSymbol method)
-    {
-        // Add using for return type
-        if (!method.ReturnType.ContainingNamespace.IsGlobalNamespace)
-        {
-            _usings.Add($"using {method.ReturnType.ContainingNamespace.ToDisplayString()};");
-        }
-
-        // Add usings for parameter types
-        foreach (var parameter in method.Parameters)
-        {
-            if (parameter.Type.ContainingNamespace is not null && !parameter.Type.ContainingNamespace.IsGlobalNamespace)
-            {
-                _usings.Add($"using {parameter.Type.ContainingNamespace.ToDisplayString()};");
-            }
-        }
-    }
     
     private bool IsMarkerInterface(INamedTypeSymbol interfaceSymbol, string interfaceName)
     {
         return interfaceSymbol.Name == interfaceName && 
                interfaceSymbol.ContainingNamespace.ToDisplayString() == "SignalRGen.Abstractions";
+    }
+
+    private ITypeSymbol? GetAwaitableResultType(ITypeSymbol type)
+    {
+        if (type is INamedTypeSymbol named && named.IsGenericType)
+        {
+            var compilation = _semanticModel.Compilation;
+
+            var taskOfT = compilation.GetTypeByMetadataName("System.Threading.Tasks.Task`1");
+            var valueTaskOfT = compilation.GetTypeByMetadataName("System.Threading.Tasks.ValueTask`1");
+
+            if ((taskOfT is not null && SymbolEqualityComparer.Default.Equals(named.ConstructedFrom, taskOfT)) ||
+                (valueTaskOfT is not null && SymbolEqualityComparer.Default.Equals(named.ConstructedFrom, valueTaskOfT)))
+            {
+                return named.TypeArguments[0];
+            }
+        }
+
+        return null;
     }
 
 }
@@ -187,10 +165,8 @@ internal class InterfaceMethodExtractor
 /// </summary>
 internal class ExtractedInterfaceData(
     ImmutableArray<CacheableMethodDeclaration> serverToClientMethods,
-    ImmutableArray<CacheableMethodDeclaration> clientToServerMethods,
-    EquatableArray<CacheableUsingDeclaration> usings)
+    ImmutableArray<CacheableMethodDeclaration> clientToServerMethods)
 {
     public ImmutableArray<CacheableMethodDeclaration> ServerToClientMethods { get; } = serverToClientMethods;
     public ImmutableArray<CacheableMethodDeclaration> ClientToServerMethods { get; } = clientToServerMethods;
-    public EquatableArray<CacheableUsingDeclaration> Usings { get; } = usings;
 }

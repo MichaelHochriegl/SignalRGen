@@ -1,6 +1,5 @@
 using System.Text;
 using Microsoft.CodeAnalysis.Text;
-using SignalRGen.Generator.Common;
 
 namespace SignalRGen.Generator.Sources;
 
@@ -8,8 +7,6 @@ internal static class HubClientSource
 {
     private const string HubClientTemplate = """
                                              {~{autoGeneratedHint}~}
-
-                                             {~{usings}~}
 
                                              #nullable enable
 
@@ -21,7 +18,11 @@ internal static class HubClientSource
                                              public class {~{hubName}~} : HubClientBase
                                              {
                                                  public static string HubUri { get; } = "{~{hubUri}~}";
-                                                 public {~{hubName}~}(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+                                                 public {~{hubName}~}(
+                                                     global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+                                                     global::System.Uri baseHubUri,
+                                                     global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+                                                     : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
                                                  {
                                                  }
                                                  
@@ -32,6 +33,10 @@ internal static class HubClientSource
                                                  
                                                  protected override void RegisterHubMethods()
                                                  {
+                                                     if (_hubConnection is null)
+                                                     {
+                                                         return;
+                                                     }
                                                  {~{onMethods}~}
                                                  }
                                                  
@@ -39,23 +44,23 @@ internal static class HubClientSource
                                                  {
                                                      if (_hubConnection is null)
                                                      {
-                                                         throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+                                                         throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
                                                      }
                                                  }
                                              }
                                              """;
     
-    private const string FuncWithParams = "public Func<{~{parameterTypes}~}, Task>? On{~{identifier}~} = default;";
-    private const string FuncNoParams = "public Func<Task>? On{~{identifier}~} = default;";
+    private const string FuncWithParams = "public global::System.Func<{~{parameterTypes}~}, global::System.Threading.Tasks.Task>? On{~{identifier}~} = default;";
+    private const string FuncNoParams = "public global::System.Func<global::System.Threading.Tasks.Task>? On{~{identifier}~} = default;";
     
     private const string ServerToClientMethodTemplate = """
                                                             /// <summary>
                                                             /// Is invoked whenever the client method {~{identifier}~} of the <see cref = "{~{hubClientInterface}~}"/> gets invoked.
                                                             /// </summary>
                                                             {~{func}~}
-                                                            private Task {~{identifier}~}Handler({~{parameterList}~})
+                                                            private global::System.Threading.Tasks.Task {~{identifier}~}Handler({~{parameterList}~})
                                                             {
-                                                                return On{~{identifier}~}?.Invoke({~{parameters}~}) ?? Task.CompletedTask;
+                                                                return On{~{identifier}~}?.Invoke({~{parameters}~}) ?? global::System.Threading.Tasks.Task.CompletedTask;
                                                             }
                                                         """;
 
@@ -64,11 +69,11 @@ internal static class HubClientSource
             /// <summary>
             /// Can be invoked to trigger the {~{identifier}~} on the <see cref = "{~{hubClientInterface}~}"/>.
             /// </summary>
-            /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="{~{hubName}~}.StartAsync"/></exception>
-            public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, CancellationToken ct = default)
+            /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="{~{hubName}~}.StartAsync"/></exception>
+            public {~{returnType}~} Invoke{~{identifier}~}Async({~{parameterList}~}, global::System.Threading.CancellationToken ct = default)
             {
                 ValidateHubConnection();
-                return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", {~{parameters}~}, cancellationToken: ct);
+                return InvokeCoreAsync{~{genericReturnType}~}("{~{identifier}~}", new object?[] { {~{parameters}~} }, cancellationToken: ct);
             }
         """;
     
@@ -77,29 +82,26 @@ internal static class HubClientSource
             /// <summary>
             /// Can be invoked to trigger the {~{identifier}~} on the <see cref = "{~{hubClientInterface}~}"/>.
             /// </summary>
-            /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="{~{hubName}~}.StartAsync"/></exception>
-            public {~{returnType}~} Invoke{~{identifier}~}Async(CancellationToken ct = default)
+            /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="{~{hubName}~}.StartAsync"/></exception>
+            public {~{returnType}~} Invoke{~{identifier}~}Async(global::System.Threading.CancellationToken ct = default)
             {
                 ValidateHubConnection();
-                return _hubConnection!.InvokeAsync{~{genericReturnType}~}("{~{identifier}~}", cancellationToken: ct);
+                return InvokeCoreAsync{~{genericReturnType}~}("{~{identifier}~}", cancellationToken: ct);
             }
         """;
     
     private const string OnMethodWithParamsTemplate = """
-                                                          _hubConnection?.On<{~{parameterTypes}~}>("{~{identifier}~}", {~{identifier}~}Handler);
+                                                          global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<{~{parameterTypes}~}>(_hubConnection, "{~{identifier}~}", {~{identifier}~}Handler);
                                                       """;
     private const string OnMethodNoParamsTemplate = """
-                                                        _hubConnection?.On("{~{identifier}~}", {~{identifier}~}Handler);
+                                                        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "{~{identifier}~}", {~{identifier}~}Handler);
                                                     """;
+
 
     internal static SourceText GetSourceText(HubClientToGenerate hubClientToGenerate)
     {
-        var allUsings =
-            hubClientToGenerate.Usings
-                .Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.SignalR.Client;"))
-                .Append(new CacheableUsingDeclaration("using Microsoft.AspNetCore.Http.Connections.Client;"));
-        var usings = string.Join("\n", allUsings.Select(u => u.UsingNamespace));
-
+        var fullInterfaceName = $"global::{hubClientToGenerate.InterfaceNamespace}.{hubClientToGenerate.InterfaceName}";
+        
         var serverToClientMethods = hubClientToGenerate.ServerToClientMethods.Select(method =>
             {
                 var parameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type));
@@ -108,7 +110,7 @@ internal static class HubClientSource
 
                 return ServerToClientMethodTemplate
                     .Replace("{~{func}~}", parameterTypes.Length > 0 ? FuncWithParams : FuncNoParams)
-                    .Replace("{~{hubClientInterface}~}", hubClientToGenerate.InterfaceName)
+                    .Replace("{~{hubClientInterface}~}", fullInterfaceName)
                     .Replace("{~{identifier}~}", method.Identifier)
                     // These are ugly hacks right now -.-
                     .Replace("{~{parameterTypes}~}", parameterTypes.Replace("*", ""))
@@ -135,8 +137,8 @@ internal static class HubClientSource
                 .Replace("{~{parameterList}~}", parameterList)
                 .Replace("{~{parameters}~}", parameters)
                 // These two are ugly hacks right now -.-
-                .Replace("{~{returnType}~}", method.ReturnType.Replace("System.Threading.Tasks.", "").Replace("*", ""))
-                .Replace("{~{genericReturnType}~}", method.ReturnType.Replace("System.Threading.Tasks.Task", "").Replace("*", ""));
+                .Replace("{~{returnType}~}", method.ReturnType)
+                .Replace("{~{genericReturnType}~}", method.AwaitableReturnType is not null ? $"<{method.AwaitableReturnType}>" : string.Empty);
 
             return template;
         });
@@ -161,7 +163,7 @@ internal static class HubClientSource
 
         var template = HubClientTemplate
             .Replace("{~{autoGeneratedHint}~}", AutoGeneratedHintSource.AutoGeneratedHintTemplate)
-            .Replace("{~{usings}~}", usings)
+            // .Replace("{~{usings}~}", usings)
             .Replace("{~{namespaceName}~}", hubClientToGenerate.InterfaceNamespace)
             .Replace("{~{hubName}~}", hubClientToGenerate.HubName)
             .Replace("{~{hubUri}~}", hubClientToGenerate.HubUri)
