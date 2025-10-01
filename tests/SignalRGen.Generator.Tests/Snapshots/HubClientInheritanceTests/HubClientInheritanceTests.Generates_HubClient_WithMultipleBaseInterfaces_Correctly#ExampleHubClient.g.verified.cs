@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Example.Contracts;
@@ -25,49 +18,57 @@ namespace SignalRGen.Example.Contracts;
 public class ExampleHubClient : HubClientBase
 {
     public static string HubUri { get; } = "example";
-    public ExampleHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ExampleHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "IExampleHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public Func<int, Task>? OnReceiveExampleCountUpdate = default;
-    private Task ReceiveExampleCountUpdateHandler(int count)
+    public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveExampleCountUpdate = default;
+    private global::System.Threading.Tasks.Task ReceiveExampleCountUpdateHandler(int count)
     {
-        return OnReceiveExampleCountUpdate?.Invoke(count) ?? Task.CompletedTask;
+        return OnReceiveExampleCountUpdate?.Invoke(count) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveBase1Message of the <see cref = "IExampleHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveBase1Message of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public Func<string, Task>? OnReceiveBase1Message = default;
-    private Task ReceiveBase1MessageHandler(string message)
+    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveBase1Message = default;
+    private global::System.Threading.Tasks.Task ReceiveBase1MessageHandler(string message)
     {
-        return OnReceiveBase1Message?.Invoke(message) ?? Task.CompletedTask;
+        return OnReceiveBase1Message?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendBase2Message on the <see cref = "IExampleHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ExampleHubClient.StartAsync"/></exception>
-    public Task<int> InvokeSendBase2MessageAsync(int value, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ExampleHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<int> InvokeSendBase2MessageAsync(int value, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<int>("SendBase2Message", value, cancellationToken: ct);
+        return InvokeCoreAsync<int>("SendBase2Message", new object?[] { value }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<int>("ReceiveExampleCountUpdate", ReceiveExampleCountUpdateHandler);
-	    _hubConnection?.On<string>("ReceiveBase1Message", ReceiveBase1MessageHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveExampleCountUpdate", ReceiveExampleCountUpdateHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBase1Message", ReceiveBase1MessageHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

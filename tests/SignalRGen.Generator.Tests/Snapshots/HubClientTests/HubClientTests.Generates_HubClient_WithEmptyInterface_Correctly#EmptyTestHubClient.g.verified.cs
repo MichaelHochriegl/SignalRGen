@@ -8,12 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -24,7 +18,11 @@ namespace SignalRGen.Clients;
 public class EmptyTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "empty";
-    public EmptyTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public EmptyTestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
@@ -35,6 +33,10 @@ public class EmptyTestHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
+        if (_hubConnection is null)
+        {
+            return;
+        }
     
     }
     
@@ -42,7 +44,7 @@ public class EmptyTestHubClient : HubClientBase
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

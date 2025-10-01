@@ -8,12 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -24,25 +18,29 @@ namespace SignalRGen.Clients;
 public class ParameterlessNotificationHubClient : HubClientBase
 {
     public static string HubUri { get; } = "parameterless-notifications";
-    public ParameterlessNotificationHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ParameterlessNotificationHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveHeartbeat of the <see cref = "IParameterlessNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveHeartbeat of the <see cref = "global::SignalRGen.Clients.IParameterlessNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnReceiveHeartbeat = default;
-    private Task ReceiveHeartbeatHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnReceiveHeartbeat = default;
+    private global::System.Threading.Tasks.Task ReceiveHeartbeatHandler()
     {
-        return OnReceiveHeartbeat?.Invoke() ?? Task.CompletedTask;
+        return OnReceiveHeartbeat?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveRefreshSignal of the <see cref = "IParameterlessNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveRefreshSignal of the <see cref = "global::SignalRGen.Clients.IParameterlessNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnReceiveRefreshSignal = default;
-    private Task ReceiveRefreshSignalHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnReceiveRefreshSignal = default;
+    private global::System.Threading.Tasks.Task ReceiveRefreshSignalHandler()
     {
-        return OnReceiveRefreshSignal?.Invoke() ?? Task.CompletedTask;
+        return OnReceiveRefreshSignal?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
 
@@ -50,15 +48,19 @@ public class ParameterlessNotificationHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On("ReceiveHeartbeat", ReceiveHeartbeatHandler);
-	    _hubConnection?.On("ReceiveRefreshSignal", ReceiveRefreshSignalHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "ReceiveHeartbeat", ReceiveHeartbeatHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "ReceiveRefreshSignal", ReceiveRefreshSignalHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

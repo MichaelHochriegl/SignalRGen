@@ -8,12 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -24,76 +18,84 @@ namespace SignalRGen.Clients;
 public class TestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "examples";
-    public TestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public TestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method NotifyNoAttributeApplied of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method NotifyNoAttributeApplied of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnNotifyNoAttributeApplied = default;
-    private Task NotifyNoAttributeAppliedHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyNoAttributeApplied = default;
+    private global::System.Threading.Tasks.Task NotifyNoAttributeAppliedHandler()
     {
-        return OnNotifyNoAttributeApplied?.Invoke() ?? Task.CompletedTask;
+        return OnNotifyNoAttributeApplied?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyServerToClient of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method NotifyServerToClient of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnNotifyServerToClient = default;
-    private Task NotifyServerToClientHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyServerToClient = default;
+    private global::System.Threading.Tasks.Task NotifyServerToClientHandler()
     {
-        return OnNotifyServerToClient?.Invoke() ?? Task.CompletedTask;
+        return OnNotifyServerToClient?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyWithReturnNoAttributeApplied of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method NotifyWithReturnNoAttributeApplied of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnNotifyWithReturnNoAttributeApplied = default;
-    private Task NotifyWithReturnNoAttributeAppliedHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyWithReturnNoAttributeApplied = default;
+    private global::System.Threading.Tasks.Task NotifyWithReturnNoAttributeAppliedHandler()
     {
-        return OnNotifyWithReturnNoAttributeApplied?.Invoke() ?? Task.CompletedTask;
+        return OnNotifyWithReturnNoAttributeApplied?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyWithReturnServerToClient of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method NotifyWithReturnServerToClient of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnNotifyWithReturnServerToClient = default;
-    private Task NotifyWithReturnServerToClientHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyWithReturnServerToClient = default;
+    private global::System.Threading.Tasks.Task NotifyWithReturnServerToClientHandler()
     {
-        return OnNotifyWithReturnServerToClient?.Invoke() ?? Task.CompletedTask;
+        return OnNotifyWithReturnServerToClient?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the NotifyClientToServer on the <see cref = "ITestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
-    public Task InvokeNotifyClientToServerAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeNotifyClientToServerAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("NotifyClientToServer", cancellationToken: ct);
+        return InvokeCoreAsync("NotifyClientToServer", cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the NotifyWithReturnClientToServer on the <see cref = "ITestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
-    public Task<string> InvokeNotifyWithReturnClientToServerAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string> InvokeNotifyWithReturnClientToServerAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string>("NotifyWithReturnClientToServer", cancellationToken: ct);
+        return InvokeCoreAsync<string>("NotifyWithReturnClientToServer", cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On("NotifyNoAttributeApplied", NotifyNoAttributeAppliedHandler);
-	    _hubConnection?.On("NotifyServerToClient", NotifyServerToClientHandler);
-	    _hubConnection?.On("NotifyWithReturnNoAttributeApplied", NotifyWithReturnNoAttributeAppliedHandler);
-	    _hubConnection?.On("NotifyWithReturnServerToClient", NotifyWithReturnServerToClientHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyNoAttributeApplied", NotifyNoAttributeAppliedHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyServerToClient", NotifyServerToClientHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyWithReturnNoAttributeApplied", NotifyWithReturnNoAttributeAppliedHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyWithReturnServerToClient", NotifyWithReturnServerToClientHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

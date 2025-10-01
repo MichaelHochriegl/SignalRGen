@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -25,67 +18,75 @@ namespace SignalRGen.Clients;
 public class GenericTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "generics";
-    public GenericTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public GenericTestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveGenericList of the <see cref = "IGenericTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveGenericList of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnReceiveGenericList = default;
-    private Task ReceiveGenericListHandler(List<SignalRGen.Generator.Tests.TestData.CustomTypeDto> items)
+    public global::System.Func<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveGenericList = default;
+    private global::System.Threading.Tasks.Task ReceiveGenericListHandler(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> items)
     {
-        return OnReceiveGenericList?.Invoke(items) ?? Task.CompletedTask;
+        return OnReceiveGenericList?.Invoke(items) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveDictionary of the <see cref = "IGenericTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveDictionary of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<Dictionary<string, int>, Task>? OnReceiveDictionary = default;
-    private Task ReceiveDictionaryHandler(Dictionary<string, int> keyValuePairs)
+    public global::System.Func<Dictionary<string, int>, global::System.Threading.Tasks.Task>? OnReceiveDictionary = default;
+    private global::System.Threading.Tasks.Task ReceiveDictionaryHandler(Dictionary<string, int> keyValuePairs)
     {
-        return OnReceiveDictionary?.Invoke(keyValuePairs) ?? Task.CompletedTask;
+        return OnReceiveDictionary?.Invoke(keyValuePairs) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNestedGeneric of the <see cref = "IGenericTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNestedGeneric of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<Dictionary<string, List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>, Task>? OnReceiveNestedGeneric = default;
-    private Task ReceiveNestedGenericHandler(Dictionary<string, List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>> complexData)
+    public global::System.Func<Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>, global::System.Threading.Tasks.Task>? OnReceiveNestedGeneric = default;
+    private global::System.Threading.Tasks.Task ReceiveNestedGenericHandler(Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> complexData)
     {
-        return OnReceiveNestedGeneric?.Invoke(complexData) ?? Task.CompletedTask;
+        return OnReceiveNestedGeneric?.Invoke(complexData) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method SendAndReceiveGeneric of the <see cref = "IGenericTestHub"/> gets invoked.
+    /// Is invoked whenever the client method SendAndReceiveGeneric of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public Func<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnSendAndReceiveGeneric = default;
-    private Task SendAndReceiveGenericHandler(List<SignalRGen.Generator.Tests.TestData.CustomTypeDto> input)
+    public global::System.Func<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnSendAndReceiveGeneric = default;
+    private global::System.Threading.Tasks.Task SendAndReceiveGenericHandler(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> input)
     {
-        return OnSendAndReceiveGeneric?.Invoke(input) ?? Task.CompletedTask;
+        return OnSendAndReceiveGeneric?.Invoke(input) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendNestedTask on the <see cref = "IGenericTestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="GenericTestHubClient.StartAsync"/></exception>
-    public Task<Task<string>> InvokeSendNestedTaskAsync(System.Threading.Tasks.Task<int> nestedTask, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="GenericTestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<global::System.Threading.Tasks.Task<string>> InvokeSendNestedTaskAsync(global::System.Threading.Tasks.Task<int> nestedTask, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<<string>>("SendNestedTask", nestedTask, cancellationToken: ct);
+        return InvokeCoreAsync<global::System.Threading.Tasks.Task<string>>("SendNestedTask", new object?[] { nestedTask }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("ReceiveGenericList", ReceiveGenericListHandler);
-	    _hubConnection?.On<Dictionary<string, int>>("ReceiveDictionary", ReceiveDictionaryHandler);
-	    _hubConnection?.On<Dictionary<string, List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>>("ReceiveNestedGeneric", ReceiveNestedGenericHandler);
-	    _hubConnection?.On<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("SendAndReceiveGeneric", SendAndReceiveGenericHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "ReceiveGenericList", ReceiveGenericListHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, int>>(_hubConnection, "ReceiveDictionary", ReceiveDictionaryHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>>(_hubConnection, "ReceiveNestedGeneric", ReceiveNestedGenericHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "SendAndReceiveGeneric", SendAndReceiveGenericHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

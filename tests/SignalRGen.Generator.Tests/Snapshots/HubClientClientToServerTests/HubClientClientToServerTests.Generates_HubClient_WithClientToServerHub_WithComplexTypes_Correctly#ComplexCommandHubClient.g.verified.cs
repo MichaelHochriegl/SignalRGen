@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,7 +18,11 @@ namespace SignalRGen.Clients;
 public class ComplexCommandHubClient : HubClientBase
 {
     public static string HubUri { get; } = "complex-commands";
-    public ComplexCommandHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ComplexCommandHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
@@ -35,52 +31,56 @@ public class ComplexCommandHubClient : HubClientBase
     /// <summary>
     /// Can be invoked to trigger the SendUserData on the <see cref = "IComplexCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
-    public Task InvokeSendUserDataAsync(List<SignalRGen.Generator.Tests.TestData.CustomTypeDto> users, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeSendUserDataAsync(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> users, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("SendUserData", users, cancellationToken: ct);
+        return InvokeCoreAsync("SendUserData", new object?[] { users }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the GetMetrics on the <see cref = "IComplexCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
-    public Task<Dictionary<string, int>> InvokeGetMetricsAsync(string filter, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<Dictionary<string, int>> InvokeGetMetricsAsync(string filter, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<Dictionary<string, int>>("GetMetrics", filter, cancellationToken: ct);
+        return InvokeCoreAsync<Dictionary<string, int>>("GetMetrics", new object?[] { filter }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the RequestStringArray on the <see cref = "IComplexCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
-    public Task<string[]> InvokeRequestStringArrayAsync(int count, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string[]> InvokeRequestStringArrayAsync(int count, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string[]>("RequestStringArray", count, cancellationToken: ct);
+        return InvokeCoreAsync<string[]>("RequestStringArray", new object?[] { count }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the ProcessTupleData on the <see cref = "IComplexCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
-    public Task<(bool success, string message)> InvokeProcessTupleDataAsync((int id, string data) input, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<(bool success, string message)> InvokeProcessTupleDataAsync((int id, string data) input, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<(bool success, string message)>("ProcessTupleData", input, cancellationToken: ct);
+        return InvokeCoreAsync<(bool success, string message)>("ProcessTupleData", new object?[] { input }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the SendNullableData on the <see cref = "IComplexCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
-    public Task InvokeSendNullableDataAsync(string? nullableMessage, int? nullableCount, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ComplexCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeSendNullableDataAsync(string nullableMessage, int? nullableCount, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("SendNullableData", nullableMessage, nullableCount, cancellationToken: ct);
+        return InvokeCoreAsync("SendNullableData", new object?[] { nullableMessage, nullableCount }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
+        if (_hubConnection is null)
+        {
+            return;
+        }
     
     }
     
@@ -88,7 +88,7 @@ public class ComplexCommandHubClient : HubClientBase
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

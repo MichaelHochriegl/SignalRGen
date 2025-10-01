@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,49 +18,53 @@ namespace SignalRGen.Clients;
 public class ComplexNotificationHubClient : HubClientBase
 {
     public static string HubUri { get; } = "complex-notifications";
-    public ComplexNotificationHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ComplexNotificationHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveUserList of the <see cref = "IComplexNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveUserList of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnReceiveUserList = default;
-    private Task ReceiveUserListHandler(List<SignalRGen.Generator.Tests.TestData.CustomTypeDto> users)
+    public global::System.Func<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveUserList = default;
+    private global::System.Threading.Tasks.Task ReceiveUserListHandler(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> users)
     {
-        return OnReceiveUserList?.Invoke(users) ?? Task.CompletedTask;
+        return OnReceiveUserList?.Invoke(users) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveDataUpdate of the <see cref = "IComplexNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveDataUpdate of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<Dictionary<string, int>, Task>? OnReceiveDataUpdate = default;
-    private Task ReceiveDataUpdateHandler(Dictionary<string, int> metrics)
+    public global::System.Func<Dictionary<string, int>, global::System.Threading.Tasks.Task>? OnReceiveDataUpdate = default;
+    private global::System.Threading.Tasks.Task ReceiveDataUpdateHandler(Dictionary<string, int> metrics)
     {
-        return OnReceiveDataUpdate?.Invoke(metrics) ?? Task.CompletedTask;
+        return OnReceiveDataUpdate?.Invoke(metrics) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNullableData of the <see cref = "IComplexNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNullableData of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string?, int?, Task>? OnReceiveNullableData = default;
-    private Task ReceiveNullableDataHandler(string? nullableMessage, int? nullableCount)
+    public global::System.Func<string, int?, global::System.Threading.Tasks.Task>? OnReceiveNullableData = default;
+    private global::System.Threading.Tasks.Task ReceiveNullableDataHandler(string nullableMessage, int? nullableCount)
     {
-        return OnReceiveNullableData?.Invoke(nullableMessage, nullableCount) ?? Task.CompletedTask;
+        return OnReceiveNullableData?.Invoke(nullableMessage, nullableCount) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveArrayData of the <see cref = "IComplexNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveArrayData of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string[], SignalRGen.Generator.Tests.TestData.CustomTypeDto[], Task>? OnReceiveArrayData = default;
-    private Task ReceiveArrayDataHandler(string[] messages, SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
+    public global::System.Func<string[], global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[], global::System.Threading.Tasks.Task>? OnReceiveArrayData = default;
+    private global::System.Threading.Tasks.Task ReceiveArrayDataHandler(string[] messages, global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
     {
-        return OnReceiveArrayData?.Invoke(messages, dtos) ?? Task.CompletedTask;
+        return OnReceiveArrayData?.Invoke(messages, dtos) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveTupleData of the <see cref = "IComplexNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveTupleData of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<(string name, int value), Task>? OnReceiveTupleData = default;
-    private Task ReceiveTupleDataHandler((string name, int value) tupleData)
+    public global::System.Func<(string name, int value), global::System.Threading.Tasks.Task>? OnReceiveTupleData = default;
+    private global::System.Threading.Tasks.Task ReceiveTupleDataHandler((string name, int value) tupleData)
     {
-        return OnReceiveTupleData?.Invoke(tupleData) ?? Task.CompletedTask;
+        return OnReceiveTupleData?.Invoke(tupleData) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
 
@@ -76,18 +72,22 @@ public class ComplexNotificationHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<List<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("ReceiveUserList", ReceiveUserListHandler);
-	    _hubConnection?.On<Dictionary<string, int>>("ReceiveDataUpdate", ReceiveDataUpdateHandler);
-	    _hubConnection?.On<string?, int?>("ReceiveNullableData", ReceiveNullableDataHandler);
-	    _hubConnection?.On<string[], SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>("ReceiveArrayData", ReceiveArrayDataHandler);
-	    _hubConnection?.On<(string name, int value)>("ReceiveTupleData", ReceiveTupleDataHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "ReceiveUserList", ReceiveUserListHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, int>>(_hubConnection, "ReceiveDataUpdate", ReceiveDataUpdateHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int?>(_hubConnection, "ReceiveNullableData", ReceiveNullableDataHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[], global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>(_hubConnection, "ReceiveArrayData", ReceiveArrayDataHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string name, int value)>(_hubConnection, "ReceiveTupleData", ReceiveTupleDataHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }
