@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -25,76 +18,84 @@ namespace SignalRGen.Clients;
 public class ArrayTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "arrays";
-    public ArrayTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ArrayTestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveStringArray of the <see cref = "IArrayTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveStringArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public Func<string[], Task>? OnReceiveStringArray = default;
-    private Task ReceiveStringArrayHandler(string[] messages)
+    public global::System.Func<string[], global::System.Threading.Tasks.Task>? OnReceiveStringArray = default;
+    private global::System.Threading.Tasks.Task ReceiveStringArrayHandler(string[] messages)
     {
-        return OnReceiveStringArray?.Invoke(messages) ?? Task.CompletedTask;
+        return OnReceiveStringArray?.Invoke(messages) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveIntArray of the <see cref = "IArrayTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveIntArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public Func<int[], Task>? OnReceiveIntArray = default;
-    private Task ReceiveIntArrayHandler(int[] numbers)
+    public global::System.Func<int[], global::System.Threading.Tasks.Task>? OnReceiveIntArray = default;
+    private global::System.Threading.Tasks.Task ReceiveIntArrayHandler(int[] numbers)
     {
-        return OnReceiveIntArray?.Invoke(numbers) ?? Task.CompletedTask;
+        return OnReceiveIntArray?.Invoke(numbers) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCustomTypeArray of the <see cref = "IArrayTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCustomTypeArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public Func<SignalRGen.Generator.Tests.TestData.CustomTypeDto[], Task>? OnReceiveCustomTypeArray = default;
-    private Task ReceiveCustomTypeArrayHandler(SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
+    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[], global::System.Threading.Tasks.Task>? OnReceiveCustomTypeArray = default;
+    private global::System.Threading.Tasks.Task ReceiveCustomTypeArrayHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
     {
-        return OnReceiveCustomTypeArray?.Invoke(dtos) ?? Task.CompletedTask;
+        return OnReceiveCustomTypeArray?.Invoke(dtos) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveMultidimensionalArray of the <see cref = "IArrayTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveMultidimensionalArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public Func<int[,], Task>? OnReceiveMultidimensionalArray = default;
-    private Task ReceiveMultidimensionalArrayHandler(int[,] matrix)
+    public global::System.Func<int[,], global::System.Threading.Tasks.Task>? OnReceiveMultidimensionalArray = default;
+    private global::System.Threading.Tasks.Task ReceiveMultidimensionalArrayHandler(int[,] matrix)
     {
-        return OnReceiveMultidimensionalArray?.Invoke(matrix) ?? Task.CompletedTask;
+        return OnReceiveMultidimensionalArray?.Invoke(matrix) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveJaggedArray of the <see cref = "IArrayTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveJaggedArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public Func<string[][], Task>? OnReceiveJaggedArray = default;
-    private Task ReceiveJaggedArrayHandler(string[][] jaggedArray)
+    public global::System.Func<string[][], global::System.Threading.Tasks.Task>? OnReceiveJaggedArray = default;
+    private global::System.Threading.Tasks.Task ReceiveJaggedArrayHandler(string[][] jaggedArray)
     {
-        return OnReceiveJaggedArray?.Invoke(jaggedArray) ?? Task.CompletedTask;
+        return OnReceiveJaggedArray?.Invoke(jaggedArray) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendAndReceiveArray on the <see cref = "IArrayTestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ArrayTestHubClient.StartAsync"/></exception>
-    public Task<string[]> InvokeSendAndReceiveArrayAsync(int[] input, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ArrayTestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string[]> InvokeSendAndReceiveArrayAsync(int[] input, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string[]>("SendAndReceiveArray", input, cancellationToken: ct);
+        return InvokeCoreAsync<string[]>("SendAndReceiveArray", new object?[] { input }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string[]>("ReceiveStringArray", ReceiveStringArrayHandler);
-	    _hubConnection?.On<int[]>("ReceiveIntArray", ReceiveIntArrayHandler);
-	    _hubConnection?.On<SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>("ReceiveCustomTypeArray", ReceiveCustomTypeArrayHandler);
-	    _hubConnection?.On<int[,]>("ReceiveMultidimensionalArray", ReceiveMultidimensionalArrayHandler);
-	    _hubConnection?.On<string[][]>("ReceiveJaggedArray", ReceiveJaggedArrayHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[]>(_hubConnection, "ReceiveStringArray", ReceiveStringArrayHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int[]>(_hubConnection, "ReceiveIntArray", ReceiveIntArrayHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>(_hubConnection, "ReceiveCustomTypeArray", ReceiveCustomTypeArrayHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int[,]>(_hubConnection, "ReceiveMultidimensionalArray", ReceiveMultidimensionalArrayHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[][]>(_hubConnection, "ReceiveJaggedArray", ReceiveJaggedArrayHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

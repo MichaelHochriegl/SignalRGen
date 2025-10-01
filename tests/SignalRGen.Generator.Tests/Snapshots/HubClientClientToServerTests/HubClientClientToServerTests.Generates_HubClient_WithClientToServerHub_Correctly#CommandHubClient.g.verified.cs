@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,7 +18,11 @@ namespace SignalRGen.Clients;
 public class CommandHubClient : HubClientBase
 {
     public static string HubUri { get; } = "commands";
-    public CommandHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public CommandHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
@@ -35,34 +31,38 @@ public class CommandHubClient : HubClientBase
     /// <summary>
     /// Can be invoked to trigger the SendCommand on the <see cref = "ICommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="CommandHubClient.StartAsync"/></exception>
-    public Task InvokeSendCommandAsync(string command, string payload, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="CommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeSendCommandAsync(string command, string payload, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("SendCommand", command, payload, cancellationToken: ct);
+        return InvokeCoreAsync("SendCommand", new object?[] { command, payload }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the RequestData on the <see cref = "ICommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="CommandHubClient.StartAsync"/></exception>
-    public Task<string> InvokeRequestDataAsync(int id, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="CommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string> InvokeRequestDataAsync(int id, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string>("RequestData", id, cancellationToken: ct);
+        return InvokeCoreAsync<string>("RequestData", new object?[] { id }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the GetCustomData on the <see cref = "ICommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="CommandHubClient.StartAsync"/></exception>
-    public Task<SignalRGen.Generator.Tests.TestData.CustomTypeDto> InvokeGetCustomDataAsync(string filter, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="CommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> InvokeGetCustomDataAsync(string filter, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<SignalRGen.Generator.Tests.TestData.CustomTypeDto>("GetCustomData", filter, cancellationToken: ct);
+        return InvokeCoreAsync<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>("GetCustomData", new object?[] { filter }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
+        if (_hubConnection is null)
+        {
+            return;
+        }
     
     }
     
@@ -70,7 +70,7 @@ public class CommandHubClient : HubClientBase
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

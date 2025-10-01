@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -25,7 +18,11 @@ namespace SignalRGen.Clients;
 public class ParameterlessCommandHubClient : HubClientBase
 {
     public static string HubUri { get; } = "parameterless-commands";
-    public ParameterlessCommandHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ParameterlessCommandHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
@@ -34,52 +31,56 @@ public class ParameterlessCommandHubClient : HubClientBase
     /// <summary>
     /// Can be invoked to trigger the Ping on the <see cref = "IParameterlessCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
-    public Task InvokePingAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokePingAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("Ping", cancellationToken: ct);
+        return InvokeCoreAsync("Ping", cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the Disconnect on the <see cref = "IParameterlessCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
-    public Task InvokeDisconnectAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeDisconnectAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("Disconnect", cancellationToken: ct);
+        return InvokeCoreAsync("Disconnect", cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the GetServerTime on the <see cref = "IParameterlessCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
-    public Task<string> InvokeGetServerTimeAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string> InvokeGetServerTimeAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string>("GetServerTime", cancellationToken: ct);
+        return InvokeCoreAsync<string>("GetServerTime", cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the GetServerStatus on the <see cref = "IParameterlessCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
-    public Task<SignalRGen.Generator.Tests.TestData.CustomTypeDto> InvokeGetServerStatusAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> InvokeGetServerStatusAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<SignalRGen.Generator.Tests.TestData.CustomTypeDto>("GetServerStatus", cancellationToken: ct);
+        return InvokeCoreAsync<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>("GetServerStatus", cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the IsAlive on the <see cref = "IParameterlessCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
-    public Task<bool> InvokeIsAliveAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ParameterlessCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<bool> InvokeIsAliveAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<bool>("IsAlive", cancellationToken: ct);
+        return InvokeCoreAsync<bool>("IsAlive", cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
+        if (_hubConnection is null)
+        {
+            return;
+        }
     
     }
     
@@ -87,7 +88,7 @@ public class ParameterlessCommandHubClient : HubClientBase
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

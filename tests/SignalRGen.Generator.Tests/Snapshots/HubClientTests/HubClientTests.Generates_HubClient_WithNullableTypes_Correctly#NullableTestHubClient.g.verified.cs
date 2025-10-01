@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,67 +18,75 @@ namespace SignalRGen.Clients;
 public class NullableTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "nullables";
-    public NullableTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public NullableTestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNullableString of the <see cref = "INullableTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNullableString of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public Func<string?, Task>? OnReceiveNullableString = default;
-    private Task ReceiveNullableStringHandler(string? nullableMessage)
+    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveNullableString = default;
+    private global::System.Threading.Tasks.Task ReceiveNullableStringHandler(string nullableMessage)
     {
-        return OnReceiveNullableString?.Invoke(nullableMessage) ?? Task.CompletedTask;
+        return OnReceiveNullableString?.Invoke(nullableMessage) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNullableInt of the <see cref = "INullableTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNullableInt of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public Func<int?, Task>? OnReceiveNullableInt = default;
-    private Task ReceiveNullableIntHandler(int? nullableNumber)
+    public global::System.Func<int?, global::System.Threading.Tasks.Task>? OnReceiveNullableInt = default;
+    private global::System.Threading.Tasks.Task ReceiveNullableIntHandler(int? nullableNumber)
     {
-        return OnReceiveNullableInt?.Invoke(nullableNumber) ?? Task.CompletedTask;
+        return OnReceiveNullableInt?.Invoke(nullableNumber) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNullableCustomType of the <see cref = "INullableTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNullableCustomType of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public Func<SignalRGen.Generator.Tests.TestData.CustomTypeDto?, Task>? OnReceiveNullableCustomType = default;
-    private Task ReceiveNullableCustomTypeHandler(SignalRGen.Generator.Tests.TestData.CustomTypeDto? nullableDto)
+    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveNullableCustomType = default;
+    private global::System.Threading.Tasks.Task ReceiveNullableCustomTypeHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto nullableDto)
     {
-        return OnReceiveNullableCustomType?.Invoke(nullableDto) ?? Task.CompletedTask;
+        return OnReceiveNullableCustomType?.Invoke(nullableDto) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method NotifyWithNullableArray of the <see cref = "INullableTestHub"/> gets invoked.
+    /// Is invoked whenever the client method NotifyWithNullableArray of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public Func<string[]?, Task>? OnNotifyWithNullableArray = default;
-    private Task NotifyWithNullableArrayHandler(string[]? nullableArray)
+    public global::System.Func<string[], global::System.Threading.Tasks.Task>? OnNotifyWithNullableArray = default;
+    private global::System.Threading.Tasks.Task NotifyWithNullableArrayHandler(string[] nullableArray)
     {
-        return OnNotifyWithNullableArray?.Invoke(nullableArray) ?? Task.CompletedTask;
+        return OnNotifyWithNullableArray?.Invoke(nullableArray) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendAndReceiveNullable on the <see cref = "INullableTestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="NullableTestHubClient.StartAsync"/></exception>
-    public Task<string?> InvokeSendAndReceiveNullableAsync(int? input, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="NullableTestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string> InvokeSendAndReceiveNullableAsync(int? input, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string?>("SendAndReceiveNullable", input, cancellationToken: ct);
+        return InvokeCoreAsync<string>("SendAndReceiveNullable", new object?[] { input }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string?>("ReceiveNullableString", ReceiveNullableStringHandler);
-	    _hubConnection?.On<int?>("ReceiveNullableInt", ReceiveNullableIntHandler);
-	    _hubConnection?.On<SignalRGen.Generator.Tests.TestData.CustomTypeDto?>("ReceiveNullableCustomType", ReceiveNullableCustomTypeHandler);
-	    _hubConnection?.On<string[]?>("NotifyWithNullableArray", NotifyWithNullableArrayHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveNullableString", ReceiveNullableStringHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int?>(_hubConnection, "ReceiveNullableInt", ReceiveNullableIntHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveNullableCustomType", ReceiveNullableCustomTypeHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[]>(_hubConnection, "NotifyWithNullableArray", NotifyWithNullableArrayHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

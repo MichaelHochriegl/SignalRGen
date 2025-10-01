@@ -8,11 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using SignalRGen.Clients;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.Extensions.DependencyInjection;
-using SignalRGen.Abstractions.Configuration;
-
 #nullable enable
 
 namespace SignalRGen.Generator.Client.Extensions.DependencyInjection;
@@ -24,23 +19,23 @@ public static class SignalRClientServiceRegistration
     /// </summary>
     /// <param name = "services">The services available in the application.</param>
     /// <param name = "generalConfiguration">An action used to configure the provided options.</param>
-    /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register the specified Hub.</returns>
-    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> AddSignalRHubs(this IServiceCollection services, Action<SignalROptions> generalConfiguration)
+    /// <returns>The <see cref = "global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection{T}"/> to register the specified Hub.</returns>
+    public static global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> AddSignalRHubs(this global::Microsoft.Extensions.DependencyInjection.IServiceCollection services, Action<global::SignalRGen.Abstractions.Configuration.SignalROptions> generalConfiguration)
     {
         ArgumentNullException.ThrowIfNull(generalConfiguration);
-        var config = new SignalROptions();
+        var config = new global::SignalRGen.Abstractions.Configuration.SignalROptions();
         generalConfiguration.Invoke(config);
-        return new SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase>(services, config);
+        return new global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase>(services, config);
     }
 
     /// <summary>
-    /// Registers the <see cref = "ExtendedCommandHubClient"/> in the <see cref = "ServiceCollection"/>.
+    /// Registers the <see cref = "ExtendedCommandHubClient"/> in the <see cref = "global::Microsoft.Extensions.DependencyInjection.ServiceCollection"/>.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// By default the <see cref = "ExtendedCommandHubClient"/> is registered with <see cref = "ServiceLifetime"/> singleton.
+    /// By default the <see cref = "ExtendedCommandHubClient"/> is registered with <see cref = "global::Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> singleton.
     /// </para>
-    /// If no <see cref = "IRetryPolicy"/> is configured for the <see cref = "HubConnectionBuilder"/> a default retry policy will be used.
+    /// If no <see cref = "global::Microsoft.AspNetCore.SignalR.Client.IRetryPolicy"/> is configured for the <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder"/> a default retry policy will be used.
     /// <list type="bullet">
     ///     <item>
     ///         Every second - 10 attempts
@@ -53,15 +48,15 @@ public static class SignalRClientServiceRegistration
     ///     </item>
     /// </list>
     /// </remarks>
-    /// <param name = "services">The <see cref = "SignalRHubServiceCollection{T}"/> to register the Hub.</param>
+    /// <param name = "services">The <see cref = "global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection{T}"/> to register the Hub.</param>
     /// <param name = "configuration">An action used to configure the provided options.</param>
-    /// <returns>The <see cref = "SignalRHubServiceCollection{T}"/> to register additional Hubs.</returns>
-    public static SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> WithExtendedCommandHubClient(this SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> services, Action<HubClientOptions>? configuration = null)
+    /// <returns>The <see cref = "global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection{T}"/> to register additional Hubs.</returns>
+    public static global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> WithExtendedCommandHubClient(this global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<SignalRGen.Generator.HubClientBase> services, Action<global::SignalRGen.Abstractions.Configuration.HubClientOptions>? configuration = null)
     {
         ArgumentNullException.ThrowIfNull(services);
-        var config = new HubClientOptions();
+        var config = new global::SignalRGen.Abstractions.Configuration.HubClientOptions();
         configuration?.Invoke(config);
-        services.Services.Add(new ServiceDescriptor(typeof(ExtendedCommandHubClient), factory: _ =>
+        services.Services.Add(new global::Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof(ExtendedCommandHubClient), factory: _ =>
         {
             return new ExtendedCommandHubClient(config.HubConnectionBuilderConfiguration,
             new Uri(services.GeneralConfiguration.HubBaseUri, ExtendedCommandHubClient.HubUri),

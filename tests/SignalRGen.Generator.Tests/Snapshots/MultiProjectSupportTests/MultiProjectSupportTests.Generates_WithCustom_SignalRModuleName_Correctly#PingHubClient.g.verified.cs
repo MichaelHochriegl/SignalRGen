@@ -8,12 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace MyCompany.App.Clients;
@@ -24,40 +18,48 @@ namespace MyCompany.App.Clients;
 public class PingHubClient : HubClientBase
 {
     public static string HubUri { get; } = "ping";
-    public PingHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public PingHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method Ping of the <see cref = "IPingHub"/> gets invoked.
+    /// Is invoked whenever the client method Ping of the <see cref = "global::MyCompany.App.Clients.IPingHub"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnPing = default;
-    private Task PingHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnPing = default;
+    private global::System.Threading.Tasks.Task PingHandler()
     {
-        return OnPing?.Invoke() ?? Task.CompletedTask;
+        return OnPing?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the Pong on the <see cref = "IPingHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="PingHubClient.StartAsync"/></exception>
-    public Task InvokePongAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="PingHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokePongAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("Pong", cancellationToken: ct);
+        return InvokeCoreAsync("Pong", cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On("Ping", PingHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "Ping", PingHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

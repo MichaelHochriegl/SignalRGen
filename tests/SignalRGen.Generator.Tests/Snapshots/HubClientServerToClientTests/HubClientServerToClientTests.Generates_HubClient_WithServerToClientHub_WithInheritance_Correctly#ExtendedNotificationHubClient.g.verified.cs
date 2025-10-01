@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,33 +18,37 @@ namespace SignalRGen.Clients;
 public class ExtendedNotificationHubClient : HubClientBase
 {
     public static string HubUri { get; } = "extended-notifications";
-    public ExtendedNotificationHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ExtendedNotificationHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveExtendedNotification of the <see cref = "IExtendedNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveExtendedNotification of the <see cref = "global::SignalRGen.Clients.IExtendedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string, int, Task>? OnReceiveExtendedNotification = default;
-    private Task ReceiveExtendedNotificationHandler(string message, int priority)
+    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveExtendedNotification = default;
+    private global::System.Threading.Tasks.Task ReceiveExtendedNotificationHandler(string message, int priority)
     {
-        return OnReceiveExtendedNotification?.Invoke(message, priority) ?? Task.CompletedTask;
+        return OnReceiveExtendedNotification?.Invoke(message, priority) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCustomTypeNotification of the <see cref = "IExtendedNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCustomTypeNotification of the <see cref = "global::SignalRGen.Clients.IExtendedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<SignalRGen.Generator.Tests.TestData.CustomTypeDto, Task>? OnReceiveCustomTypeNotification = default;
-    private Task ReceiveCustomTypeNotificationHandler(SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
+    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeNotification = default;
+    private global::System.Threading.Tasks.Task ReceiveCustomTypeNotificationHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
-        return OnReceiveCustomTypeNotification?.Invoke(dto) ?? Task.CompletedTask;
+        return OnReceiveCustomTypeNotification?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveBaseNotification of the <see cref = "IExtendedNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveBaseNotification of the <see cref = "global::SignalRGen.Clients.IExtendedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string, Task>? OnReceiveBaseNotification = default;
-    private Task ReceiveBaseNotificationHandler(string message)
+    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveBaseNotification = default;
+    private global::System.Threading.Tasks.Task ReceiveBaseNotificationHandler(string message)
     {
-        return OnReceiveBaseNotification?.Invoke(message) ?? Task.CompletedTask;
+        return OnReceiveBaseNotification?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
 
@@ -60,16 +56,20 @@ public class ExtendedNotificationHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string, int>("ReceiveExtendedNotification", ReceiveExtendedNotificationHandler);
-	    _hubConnection?.On<SignalRGen.Generator.Tests.TestData.CustomTypeDto>("ReceiveCustomTypeNotification", ReceiveCustomTypeNotificationHandler);
-	    _hubConnection?.On<string>("ReceiveBaseNotification", ReceiveBaseNotificationHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveExtendedNotification", ReceiveExtendedNotificationHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveCustomTypeNotification", ReceiveCustomTypeNotificationHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBaseNotification", ReceiveBaseNotificationHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

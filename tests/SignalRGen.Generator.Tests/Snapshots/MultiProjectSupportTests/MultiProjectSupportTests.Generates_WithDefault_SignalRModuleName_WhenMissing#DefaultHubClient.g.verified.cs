@@ -8,12 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace MyCompany.App.Clients;
@@ -24,40 +18,48 @@ namespace MyCompany.App.Clients;
 public class DefaultHubClient : HubClientBase
 {
     public static string HubUri { get; } = "default";
-    public DefaultHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public DefaultHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method Notify of the <see cref = "IDefaultHub"/> gets invoked.
+    /// Is invoked whenever the client method Notify of the <see cref = "global::MyCompany.App.Clients.IDefaultHub"/> gets invoked.
     /// </summary>
-    public Func<Task>? OnNotify = default;
-    private Task NotifyHandler()
+    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotify = default;
+    private global::System.Threading.Tasks.Task NotifyHandler()
     {
-        return OnNotify?.Invoke() ?? Task.CompletedTask;
+        return OnNotify?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the Ack on the <see cref = "IDefaultHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="DefaultHubClient.StartAsync"/></exception>
-    public Task InvokeAckAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="DefaultHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeAckAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("Ack", cancellationToken: ct);
+        return InvokeCoreAsync("Ack", cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On("Notify", NotifyHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "Notify", NotifyHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

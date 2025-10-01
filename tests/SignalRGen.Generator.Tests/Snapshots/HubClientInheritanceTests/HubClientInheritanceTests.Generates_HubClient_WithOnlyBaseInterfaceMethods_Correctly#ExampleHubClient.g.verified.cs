@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Example.Contracts;
@@ -25,40 +18,48 @@ namespace SignalRGen.Example.Contracts;
 public class ExampleHubClient : HubClientBase
 {
     public static string HubUri { get; } = "example";
-    public ExampleHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ExampleHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveBaseMessage of the <see cref = "IExampleHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveBaseMessage of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public Func<string, Task>? OnReceiveBaseMessage = default;
-    private Task ReceiveBaseMessageHandler(string message)
+    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveBaseMessage = default;
+    private global::System.Threading.Tasks.Task ReceiveBaseMessageHandler(string message)
     {
-        return OnReceiveBaseMessage?.Invoke(message) ?? Task.CompletedTask;
+        return OnReceiveBaseMessage?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendBaseMessage on the <see cref = "IExampleHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ExampleHubClient.StartAsync"/></exception>
-    public Task<int> InvokeSendBaseMessageAsync(string message, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ExampleHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<int> InvokeSendBaseMessageAsync(string message, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<int>("SendBaseMessage", message, cancellationToken: ct);
+        return InvokeCoreAsync<int>("SendBaseMessage", new object?[] { message }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string>("ReceiveBaseMessage", ReceiveBaseMessageHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBaseMessage", ReceiveBaseMessageHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

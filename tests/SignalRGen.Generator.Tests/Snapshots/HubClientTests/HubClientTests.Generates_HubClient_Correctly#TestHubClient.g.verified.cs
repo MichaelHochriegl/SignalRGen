@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,76 +18,84 @@ namespace SignalRGen.Clients;
 public class TestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "examples";
-    public TestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public TestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<IEnumerable<SignalRGen.Generator.Tests.TestData.CustomTypeDto>, Task>? OnReceiveCustomTypeUpdate = default;
-    private Task ReceiveCustomTypeUpdateHandler(IEnumerable<SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes)
+    public global::System.Func<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeUpdate = default;
+    private global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateHandler(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes)
     {
-        return OnReceiveCustomTypeUpdate?.Invoke(customTypes) ?? Task.CompletedTask;
+        return OnReceiveCustomTypeUpdate?.Invoke(customTypes) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveFooUpdate of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveFooUpdate of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<string, int, Task>? OnReceiveFooUpdate = default;
-    private Task ReceiveFooUpdateHandler(string bar, int bass)
+    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveFooUpdate = default;
+    private global::System.Threading.Tasks.Task ReceiveFooUpdateHandler(string bar, int bass)
     {
-        return OnReceiveFooUpdate?.Invoke(bar, bass) ?? Task.CompletedTask;
+        return OnReceiveFooUpdate?.Invoke(bar, bass) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<string, int, Task>? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
-    private Task ReceiveNormalTypeWithSpecificAttributeAppliedHandler(string bazz, int buzz)
+    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
+    private global::System.Threading.Tasks.Task ReceiveNormalTypeWithSpecificAttributeAppliedHandler(string bazz, int buzz)
     {
-        return OnReceiveNormalTypeWithSpecificAttributeApplied?.Invoke(bazz, buzz) ?? Task.CompletedTask;
+        return OnReceiveNormalTypeWithSpecificAttributeApplied?.Invoke(bazz, buzz) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "ITestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public Func<int, Task>? OnReceiveWithArbitraryAttribute = default;
-    private Task ReceiveWithArbitraryAttributeHandler(int blub)
+    public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveWithArbitraryAttribute = default;
+    private global::System.Threading.Tasks.Task ReceiveWithArbitraryAttributeHandler(int blub)
     {
-        return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? Task.CompletedTask;
+        return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendClientToServerNoReturnType on the <see cref = "ITestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
-    public Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeSendClientToServerNoReturnTypeAsync(string rick, int age, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("SendClientToServerNoReturnType", rick, age, cancellationToken: ct);
+        return InvokeCoreAsync("SendClientToServerNoReturnType", new object?[] { rick, age }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the SendClientToServerWithReturnType on the <see cref = "ITestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
-    public Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="TestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string> InvokeSendClientToServerWithReturnTypeAsync(string morty, bool partOfMission, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string>("SendClientToServerWithReturnType", morty, partOfMission, cancellationToken: ct);
+        return InvokeCoreAsync<string>("SendClientToServerWithReturnType", new object?[] { morty, partOfMission }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<IEnumerable<SignalRGen.Generator.Tests.TestData.CustomTypeDto>>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
-	    _hubConnection?.On<string, int>("ReceiveFooUpdate", ReceiveFooUpdateHandler);
-	    _hubConnection?.On<string, int>("ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
-	    _hubConnection?.On<int>("ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveFooUpdate", ReceiveFooUpdateHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

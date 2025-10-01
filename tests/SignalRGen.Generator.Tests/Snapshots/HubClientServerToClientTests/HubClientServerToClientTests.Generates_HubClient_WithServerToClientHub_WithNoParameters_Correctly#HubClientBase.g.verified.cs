@@ -8,9 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 namespace SignalRGen.Generator;
 
@@ -23,60 +20,62 @@ namespace SignalRGen.Generator;
 /// </remarks>
 public abstract partial class HubClientBase : IAsyncDisposable
 {
-    protected HubConnection? _hubConnection;
+    protected global::Microsoft.AspNetCore.SignalR.Client.HubConnection? _hubConnection;
 
-    private readonly Action<IHubConnectionBuilder>?
+    private readonly Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>?
         _hubConnectionBuilderConfiguration;
         
-    private Action<HttpConnectionOptions>?
+    private Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>?
         _httpConnectionOptions;
     
     private readonly Uri _baseHubUri;
     private bool _isRegistered;
-    private readonly HubConnectionBuilder _hubConnectionBuilder;
+    private readonly global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder _hubConnectionBuilder;
     
     /// <summary>
-    /// Gets invoked each time the Closed event from the underlying <see cref = "HubConnection"/> occurs.
+    /// Gets invoked each time the Closed event from the underlying <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/> occurs.
     /// </summary>
     public Func<Exception?, Task>? Closed;
     
     /// <summary>
-    /// Gets invoked each time the Reconnecting event from the underlying <see cref = "HubConnection"/> occurs.
+    /// Gets invoked each time the Reconnecting event from the underlying <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/> occurs.
     /// </summary>
     public Func<Exception?, Task>? Reconnecting;
     
     /// <summary>
-    /// Gets invoked each time the reconnected event from the underlying <see cref = "HubConnection"/> occurs.
+    /// Gets invoked each time the reconnected event from the underlying <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/> occurs.
     /// </summary>
     public Func<Task>? Reconnected;
     
     protected HubClientBase(
-      Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+      Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
       Uri baseHubUri,
-      Action<HttpConnectionOptions>? httpConnectionOptions)
+      Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptions)
     {
         _hubConnectionBuilderConfiguration = hubConnectionBuilderConfiguration;
         _baseHubUri = baseHubUri;
         _httpConnectionOptions = httpConnectionOptions;
-        _hubConnectionBuilder = new HubConnectionBuilder();
+        _hubConnectionBuilder = new global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
     }
 
     /// <summary>
-    /// Asynchronously starts the underlying <see cref = "HubConnection"/> and registers the event callbacks for the SignalR client methods.
+    /// Asynchronously starts the underlying <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/> and registers the event callbacks for the SignalR client methods.
     /// </summary>
     /// <param name="queryStrings">A dictionary of query string parameters to be added to the connection URL.</param>
     /// <param name="headers">A dictionary of headers to be included in the SignalR client's HTTP requests.</param>
-    /// <param name = "cancellationToken">A <see cref = "CancellationToken"/> to cancel the start of the <see cref = "HubConnection"/>.</param>
+    /// <param name = "cancellationToken">A <see cref = "CancellationToken"/> to cancel the start of the <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/>.</param>
     public virtual Task StartAsync(
       Dictionary<string, string>? queryStrings = null,
       Dictionary<string, string>? headers = null,
       CancellationToken cancellationToken = default)
     {
         AddHeaders(headers);      
-    
-        _hubConnectionBuilder
-            .WithUrl(AddParametersToUri(queryStrings, _baseHubUri), _httpConnectionOptions!)
-            .WithAutomaticReconnect(DefaultRetrySteps.ToArray());
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilderHttpExtensions
+              .WithUrl(_hubConnectionBuilder, AddParametersToUri(queryStrings, _baseHubUri), _httpConnectionOptions!);
+        
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilderExtensions
+              .WithAutomaticReconnect(_hubConnectionBuilder, DefaultRetrySteps.ToArray());
+        
         _hubConnectionBuilderConfiguration?.Invoke(_hubConnectionBuilder);
         _hubConnection ??= _hubConnectionBuilder.Build();
         if (!_isRegistered)
@@ -88,13 +87,13 @@ public abstract partial class HubClientBase : IAsyncDisposable
             _isRegistered = true;
         }
 
-        return _hubConnection.State == HubConnectionState.Disconnected ? _hubConnection.StartAsync(cancellationToken) : Task.CompletedTask;
+        return _hubConnection.State == global::Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Disconnected ? _hubConnection.StartAsync(cancellationToken) : Task.CompletedTask;
     }
 
     /// <summary>
-    /// Asynchronously stops the underlying <see cref = "HubConnection"/>.
+    /// Asynchronously stops the underlying <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/>.
     /// </summary>
-    /// <param name = "cancellationToken">A <see cref = "CancellationToken"/> to cancel the stop of the <see cref = "HubConnection"/>.</param>
+    /// <param name = "cancellationToken">A <see cref = "CancellationToken"/> to cancel the stop of the <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/>.</param>
     public virtual Task StopAsync(CancellationToken cancellationToken = default)
     {
         return _hubConnection is null ? Task.CompletedTask : _hubConnection.StopAsync(cancellationToken);
@@ -105,9 +104,47 @@ public abstract partial class HubClientBase : IAsyncDisposable
     {
         return Reconnected is not null ? Reconnected.Invoke() : Task.CompletedTask;
     }
+    
+    /// <summary>
+    /// Hook for generated client-to-server Invoke methods.
+    /// The default implementation invokes the underlying HubConnection.
+    /// Test fakes override this to short-circuit network calls.
+    /// </summary>
+    /// <param name="methodName">Hub method name.</param>
+    /// <param name="args">Arguments serialized by SignalR.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <exception cref="InvalidOperationException">When the hub connection was not started.</exception>
+    protected virtual Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+    {
+        if (_hubConnection is null)
+        {
+            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+        }
+    
+        return _hubConnection.InvokeCoreAsync(methodName: methodName, returnType: typeof(object), args: args, cancellationToken: cancellationToken);
+    }
+    
+    /// <summary>
+    /// Hook for generated client-to-server Invoke methods that return a value.
+    /// The default implementation invokes the underlying HubConnection and returns the result.
+    /// Test fakes override this to short-circuit network calls and return arranged results.
+    /// </summary>
+    /// <typeparam name="TResult">The result type returned by the Hub method.</typeparam>
+    /// <param name="methodName">Hub method name.</param>
+    /// <param name="args">Arguments serialized by SignalR.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <exception cref="InvalidOperationException">When the hub connection was not started.</exception>
+    protected virtual async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+    {
+        if (_hubConnection is null)
+        {
+            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+        }
+        return (TResult)(await _hubConnection.InvokeCoreAsync(methodName: methodName, returnType: typeof(TResult), args: args, cancellationToken: cancellationToken))!;
+    }
 
     /// <summary>
-    /// Releases resources for the underlying <see cref = "HubConnection"/>.
+    /// Releases resources for the underlying <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnection"/>.
     /// </summary>
     /// <returns>A <see cref = "ValueTask"/> that completes when resources have been released.</returns>
     public ValueTask DisposeAsync()
@@ -120,7 +157,12 @@ public abstract partial class HubClientBase : IAsyncDisposable
         _hubConnection.Closed -= Closed;
         _hubConnection.Reconnected -= OnReconnected;
         _hubConnection.Reconnecting -= Reconnecting;
-        return _hubConnection.DisposeAsync();
+        
+        var disposeTask = _hubConnection.DisposeAsync();
+        _hubConnection = null;
+        _isRegistered = false;
+        
+        return disposeTask;
     }
     
     private void AddHeaders(Dictionary<string, string>? headers)
@@ -158,7 +200,7 @@ public abstract partial class HubClientBase : IAsyncDisposable
         }
     
         var uriBuilder = new UriBuilder(uri);
-        var query = System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
+        var query = global::System.Web.HttpUtility.ParseQueryString(uriBuilder.Query);
     
         foreach (var parameter in parameters)
         {

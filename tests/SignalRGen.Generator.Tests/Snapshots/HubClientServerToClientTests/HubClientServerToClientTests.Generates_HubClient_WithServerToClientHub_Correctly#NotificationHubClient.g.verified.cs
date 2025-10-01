@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,33 +18,37 @@ namespace SignalRGen.Clients;
 public class NotificationHubClient : HubClientBase
 {
     public static string HubUri { get; } = "notifications";
-    public NotificationHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public NotificationHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNotification of the <see cref = "INotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNotification of the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string, string, Task>? OnReceiveNotification = default;
-    private Task ReceiveNotificationHandler(string message, string type)
+    public global::System.Func<string, string, global::System.Threading.Tasks.Task>? OnReceiveNotification = default;
+    private global::System.Threading.Tasks.Task ReceiveNotificationHandler(string message, string type)
     {
-        return OnReceiveNotification?.Invoke(message, type) ?? Task.CompletedTask;
+        return OnReceiveNotification?.Invoke(message, type) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveAlert of the <see cref = "INotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveAlert of the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string, int, Task>? OnReceiveAlert = default;
-    private Task ReceiveAlertHandler(string alertMessage, int severity)
+    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveAlert = default;
+    private global::System.Threading.Tasks.Task ReceiveAlertHandler(string alertMessage, int severity)
     {
-        return OnReceiveAlert?.Invoke(alertMessage, severity) ?? Task.CompletedTask;
+        return OnReceiveAlert?.Invoke(alertMessage, severity) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "INotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<SignalRGen.Generator.Tests.TestData.CustomTypeDto, Task>? OnReceiveCustomTypeUpdate = default;
-    private Task ReceiveCustomTypeUpdateHandler(SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
+    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeUpdate = default;
+    private global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
-        return OnReceiveCustomTypeUpdate?.Invoke(dto) ?? Task.CompletedTask;
+        return OnReceiveCustomTypeUpdate?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
 
@@ -60,16 +56,20 @@ public class NotificationHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string, string>("ReceiveNotification", ReceiveNotificationHandler);
-	    _hubConnection?.On<string, int>("ReceiveAlert", ReceiveAlertHandler);
-	    _hubConnection?.On<SignalRGen.Generator.Tests.TestData.CustomTypeDto>("ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, string>(_hubConnection, "ReceiveNotification", ReceiveNotificationHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveAlert", ReceiveAlertHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

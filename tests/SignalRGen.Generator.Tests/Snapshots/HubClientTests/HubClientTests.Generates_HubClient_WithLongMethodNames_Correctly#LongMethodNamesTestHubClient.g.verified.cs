@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -25,49 +18,57 @@ namespace SignalRGen.Clients;
 public class LongMethodNamesTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "longmethods";
-    public LongMethodNamesTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public LongMethodNamesTestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming of the <see cref = "ILongMethodNamesTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming of the <see cref = "global::SignalRGen.Clients.ILongMethodNamesTestHub"/> gets invoked.
     /// </summary>
-    public Func<string, Task>? OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming = default;
-    private Task ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingHandler(string message)
+    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming = default;
+    private global::System.Threading.Tasks.Task ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingHandler(string message)
     {
-        return OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming?.Invoke(message) ?? Task.CompletedTask;
+        return OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignature on the <see cref = "ILongMethodNamesTestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="LongMethodNamesTestHubClient.StartAsync"/></exception>
-    public Task InvokeSendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignatureAsync(string firstParam, int secondParam, bool thirdParam, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="LongMethodNamesTestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeSendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignatureAsync(string firstParam, int secondParam, bool thirdParam, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("SendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignature", firstParam, secondParam, thirdParam, cancellationToken: ct);
+        return InvokeCoreAsync("SendAnotherVeryLongMethodNameWithMultipleParametersAndComplexSignature", new object?[] { firstParam, secondParam, thirdParam }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the RequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParameters on the <see cref = "ILongMethodNamesTestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="LongMethodNamesTestHubClient.StartAsync"/></exception>
-    public Task<string> InvokeRequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParametersAsync(Dictionary<string, List<int>> complexParam, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="LongMethodNamesTestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<string> InvokeRequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParametersAsync(Dictionary<string, List<int>> complexParam, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<string>("RequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParameters", complexParam, cancellationToken: ct);
+        return InvokeCoreAsync<string>("RequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParameters", new object?[] { complexParam }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string>("ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming", ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming", ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

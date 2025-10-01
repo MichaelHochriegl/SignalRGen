@@ -8,13 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -25,58 +18,66 @@ namespace SignalRGen.Clients;
 public class ValueTupleTestHubClient : HubClientBase
 {
     public static string HubUri { get; } = "valuetuples";
-    public ValueTupleTestHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public ValueTupleTestHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveTuple of the <see cref = "IValueTupleTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveTuple of the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> gets invoked.
     /// </summary>
-    public Func<(string name, int age), Task>? OnReceiveTuple = default;
-    private Task ReceiveTupleHandler((string name, int age) person)
+    public global::System.Func<(string name, int age), global::System.Threading.Tasks.Task>? OnReceiveTuple = default;
+    private global::System.Threading.Tasks.Task ReceiveTupleHandler((string name, int age) person)
     {
-        return OnReceiveTuple?.Invoke(person) ?? Task.CompletedTask;
+        return OnReceiveTuple?.Invoke(person) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNestedTuple of the <see cref = "IValueTupleTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNestedTuple of the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> gets invoked.
     /// </summary>
-    public Func<(string, (int, bool)), Task>? OnReceiveNestedTuple = default;
-    private Task ReceiveNestedTupleHandler((string, (int, bool)) complexTuple)
+    public global::System.Func<(string, (int, bool)), global::System.Threading.Tasks.Task>? OnReceiveNestedTuple = default;
+    private global::System.Threading.Tasks.Task ReceiveNestedTupleHandler((string, (int, bool)) complexTuple)
     {
-        return OnReceiveNestedTuple?.Invoke(complexTuple) ?? Task.CompletedTask;
+        return OnReceiveNestedTuple?.Invoke(complexTuple) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNamedTuple of the <see cref = "IValueTupleTestHub"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNamedTuple of the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> gets invoked.
     /// </summary>
-    public Func<(string FirstName, string LastName, int Age), Task>? OnReceiveNamedTuple = default;
-    private Task ReceiveNamedTupleHandler((string FirstName, string LastName, int Age) person)
+    public global::System.Func<(string FirstName, string LastName, int Age), global::System.Threading.Tasks.Task>? OnReceiveNamedTuple = default;
+    private global::System.Threading.Tasks.Task ReceiveNamedTupleHandler((string FirstName, string LastName, int Age) person)
     {
-        return OnReceiveNamedTuple?.Invoke(person) ?? Task.CompletedTask;
+        return OnReceiveNamedTuple?.Invoke(person) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
     /// <summary>
     /// Can be invoked to trigger the SendAndReceiveTuple on the <see cref = "IValueTupleTestHub"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ValueTupleTestHubClient.StartAsync"/></exception>
-    public Task<(bool success, string message)> InvokeSendAndReceiveTupleAsync((int id, string data) input, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="ValueTupleTestHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task<(bool success, string message)> InvokeSendAndReceiveTupleAsync((int id, string data) input, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync<(bool success, string message)>("SendAndReceiveTuple", input, cancellationToken: ct);
+        return InvokeCoreAsync<(bool success, string message)>("SendAndReceiveTuple", new object?[] { input }, cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<(string name, int age)>("ReceiveTuple", ReceiveTupleHandler);
-	    _hubConnection?.On<(string, (int, bool))>("ReceiveNestedTuple", ReceiveNestedTupleHandler);
-	    _hubConnection?.On<(string FirstName, string LastName, int Age)>("ReceiveNamedTuple", ReceiveNamedTupleHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string name, int age)>(_hubConnection, "ReceiveTuple", ReceiveTupleHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string, (int, bool))>(_hubConnection, "ReceiveNestedTuple", ReceiveNestedTupleHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string FirstName, string LastName, int Age)>(_hubConnection, "ReceiveNamedTuple", ReceiveNamedTupleHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

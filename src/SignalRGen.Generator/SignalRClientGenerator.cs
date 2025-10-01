@@ -97,7 +97,6 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
             HubName: GetHubNameOrDefaultConvention(hubClientAttribute, node),
             HubUri: GetHubUri(hubClientAttribute),
             InterfaceNamespace: GetInterfaceNamespace(context.TargetSymbol),
-            Usings: extractedData.Usings,
             ServerToClientMethods: extractedData.ServerToClientMethods,
             ClientToServerMethods: extractedData.ClientToServerMethods);
     }

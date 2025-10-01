@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients.Nested;
@@ -26,25 +18,29 @@ namespace SignalRGen.Clients.Nested;
 public class NestedNotificationHubClient : HubClientBase
 {
     public static string HubUri { get; } = "nested-notifications";
-    public NestedNotificationHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public NestedNotificationHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNestedNotification of the <see cref = "INestedNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNestedNotification of the <see cref = "global::SignalRGen.Clients.Nested.INestedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<string, Task>? OnReceiveNestedNotification = default;
-    private Task ReceiveNestedNotificationHandler(string message)
+    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveNestedNotification = default;
+    private global::System.Threading.Tasks.Task ReceiveNestedNotificationHandler(string message)
     {
-        return OnReceiveNestedNotification?.Invoke(message) ?? Task.CompletedTask;
+        return OnReceiveNestedNotification?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
     /// <summary>
-    /// Is invoked whenever the client method ReceiveNestedData of the <see cref = "INestedNotificationHubClient"/> gets invoked.
+    /// Is invoked whenever the client method ReceiveNestedData of the <see cref = "global::SignalRGen.Clients.Nested.INestedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public Func<SignalRGen.Generator.Tests.TestData.CustomTypeDto, Task>? OnReceiveNestedData = default;
-    private Task ReceiveNestedDataHandler(SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
+    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveNestedData = default;
+    private global::System.Threading.Tasks.Task ReceiveNestedDataHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
-        return OnReceiveNestedData?.Invoke(dto) ?? Task.CompletedTask;
+        return OnReceiveNestedData?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
 
@@ -52,15 +48,19 @@ public class NestedNotificationHubClient : HubClientBase
     
     protected override void RegisterHubMethods()
     {
-        _hubConnection?.On<string>("ReceiveNestedNotification", ReceiveNestedNotificationHandler);
-	    _hubConnection?.On<SignalRGen.Generator.Tests.TestData.CustomTypeDto>("ReceiveNestedData", ReceiveNestedDataHandler);
+        if (_hubConnection is null)
+        {
+            return;
+        }
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveNestedNotification", ReceiveNestedNotificationHandler);
+	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveNestedData", ReceiveNestedDataHandler);
     }
     
     private void ValidateHubConnection()
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }

@@ -8,14 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.Threading.Tasks;
-using SignalRGen.Abstractions;
-using SignalRGen.Abstractions.Attributes;
-using SignalRGen.Generator.Tests.TestData;
-using System;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-
 #nullable enable
 
 namespace SignalRGen.Clients;
@@ -26,7 +18,11 @@ namespace SignalRGen.Clients;
 public class VoidCommandHubClient : HubClientBase
 {
     public static string HubUri { get; } = "void-commands";
-    public VoidCommandHubClient(Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration, Uri baseHubUri, Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration) : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
+    public VoidCommandHubClient(
+        global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration,
+        global::System.Uri baseHubUri,
+        global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration)
+        : base(hubConnectionBuilderConfiguration, baseHubUri, httpConnectionOptionsConfiguration)
     {
     }
     
@@ -35,43 +31,47 @@ public class VoidCommandHubClient : HubClientBase
     /// <summary>
     /// Can be invoked to trigger the SendNotification on the <see cref = "IVoidCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
-    public Task InvokeSendNotificationAsync(string message, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeSendNotificationAsync(string message, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("SendNotification", message, cancellationToken: ct);
+        return InvokeCoreAsync("SendNotification", new object?[] { message }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the UpdateStatus on the <see cref = "IVoidCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
-    public Task InvokeUpdateStatusAsync(bool isOnline, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeUpdateStatusAsync(bool isOnline, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("UpdateStatus", isOnline, cancellationToken: ct);
+        return InvokeCoreAsync("UpdateStatus", new object?[] { isOnline }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the LogActivity on the <see cref = "IVoidCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
-    public Task InvokeLogActivityAsync(string activity, SignalRGen.Generator.Tests.TestData.CustomTypeDto context, CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeLogActivityAsync(string activity, global::SignalRGen.Generator.Tests.TestData.CustomTypeDto context, global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("LogActivity", activity, context, cancellationToken: ct);
+        return InvokeCoreAsync("LogActivity", new object?[] { activity, context }, cancellationToken: ct);
     }
     /// <summary>
     /// Can be invoked to trigger the ClearCache on the <see cref = "IVoidCommandHubClient"/>.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
-    public Task InvokeClearCacheAsync(CancellationToken ct = default)
+    /// <exception cref="global::System.InvalidOperationException">Thrown, when the Hub was not yet started by calling <see cref="VoidCommandHubClient.StartAsync"/></exception>
+    public global::System.Threading.Tasks.Task InvokeClearCacheAsync(global::System.Threading.CancellationToken ct = default)
     {
         ValidateHubConnection();
-        return _hubConnection!.InvokeAsync("ClearCache", cancellationToken: ct);
+        return InvokeCoreAsync("ClearCache", cancellationToken: ct);
     }
 
     
     protected override void RegisterHubMethods()
     {
+        if (_hubConnection is null)
+        {
+            return;
+        }
     
     }
     
@@ -79,7 +79,7 @@ public class VoidCommandHubClient : HubClientBase
     {
         if (_hubConnection is null)
         {
-            throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
+            throw new global::System.InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     }
 }
