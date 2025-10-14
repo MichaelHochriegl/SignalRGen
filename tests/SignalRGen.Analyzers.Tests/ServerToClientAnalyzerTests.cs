@@ -761,4 +761,237 @@ public class ServerToClientAnalyzerTests
 
         await test.RunAsync();
     }
+    
+        [Fact]
+    public async Task ServerToClientInterface_WithInheritedInvalidReturnType_ShouldTriggerDiagnostic()
+    {
+        const string testCode = """
+                                using SignalRGen.Abstractions;
+                                using System.Threading.Tasks;
+
+                                namespace TestNamespace
+                                {
+                                    public interface IClientToServer
+                                    {
+                                        Task SendMessage(string message);
+                                    }
+
+                                    public interface IBaseServerToClient<T>
+                                    {
+                                        Task SendDataAsync(T data); // Valid
+                                        {|#0:void|} SendDataSync(T data); // Invalid
+                                    }
+
+                                    public interface IServerToClient : IBaseServerToClient<string>
+                                    {
+                                        Task ReceiveMessage(string message); // Valid
+                                    }
+
+                                    public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
+                                    {
+                                    }
+                                }
+                                """;
+
+        var expectedDiagnostic = new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+            .WithLocation(0)
+            .WithArguments("SendDataSync", "IServerToClient", "void");
+
+        var test = TestHelper.CreateAnalyzerTest<ServerToClientAnalyzer>();
+        test.TestCode = testCode;
+        test.ExpectedDiagnostics.Add(expectedDiagnostic);
+
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task ServerToClientInterface_WithMultipleLevelsOfInheritance_ShouldTriggerDiagnostic()
+    {
+        const string testCode = """
+                                using SignalRGen.Abstractions;
+                                using System.Threading.Tasks;
+
+                                namespace TestNamespace
+                                {
+                                    public interface IClientToServer
+                                    {
+                                        Task SendMessage(string message);
+                                    }
+
+                                    public interface IBaseBase
+                                    {
+                                        Task{|#0:<string>|} GetBaseValue(); // Invalid
+                                    }
+
+                                    public interface IBase : IBaseBase
+                                    {
+                                        Task SendValidMessage(string message); // Valid
+                                        {|#1:int|} GetIntValue(); // Invalid
+                                    }
+
+                                    public interface IServerToClient : IBase
+                                    {
+                                        Task ReceiveMessage(string message); // Valid
+                                    }
+
+                                    public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
+                                    {
+                                    }
+                                }
+                                """;
+
+        var expectedDiagnostics = new[]
+        {
+            new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+                .WithLocation(0)
+                .WithArguments("GetBaseValue", "IServerToClient", "System.Threading.Tasks.Task<string>"),
+            new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+                .WithLocation(1)
+                .WithArguments("GetIntValue", "IServerToClient", "int")
+        };
+
+        var test = TestHelper.CreateAnalyzerTest<ServerToClientAnalyzer>();
+        test.TestCode = testCode;
+        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task ServerToClientInterface_WithMultipleBaseInterfacesWithInvalidMethods_ShouldTriggerDiagnostic()
+    {
+        const string testCode = """
+                                using SignalRGen.Abstractions;
+                                using System.Threading.Tasks;
+
+                                namespace TestNamespace
+                                {
+                                    public interface IClientToServer
+                                    {
+                                        Task SendMessage(string message);
+                                    }
+
+                                    public interface IBase1
+                                    {
+                                        Task{|#0:<string>|} GetStringValue(); // Invalid
+                                    }
+
+                                    public interface IBase2
+                                    {
+                                        {|#1:int|} GetIntValue(); // Invalid
+                                    }
+
+                                    public interface IServerToClient : IBase1, IBase2
+                                    {
+                                        Task ReceiveMessage(string message); // Valid
+                                    }
+
+                                    public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
+                                    {
+                                    }
+                                }
+                                """;
+
+        var expectedDiagnostics = new[]
+        {
+            new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+                .WithLocation(0)
+                .WithArguments("GetStringValue", "IServerToClient", "System.Threading.Tasks.Task<string>"),
+            new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+                .WithLocation(1)
+                .WithArguments("GetIntValue", "IServerToClient", "int")
+        };
+
+        var test = TestHelper.CreateAnalyzerTest<ServerToClientAnalyzer>();
+        test.TestCode = testCode;
+        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task ServerToClientInterface_EmptyInheritedInterface_WithBaseInvalidMethods_ShouldTriggerDiagnostic()
+    {
+        const string testCode = """
+                                using SignalRGen.Abstractions;
+                                using System.Threading.Tasks;
+
+                                namespace TestNamespace
+                                {
+                                    public interface IClientToServer
+                                    {
+                                        Task SendMessage(string message);
+                                    }
+
+                                    public interface IBaseServerToClient<T>
+                                    {
+                                        Task SendDataAsync(T data); // Valid
+                                        Task{|#0:<T>|} GetDataAsync(); // Invalid
+                                        {|#1:void|} ProcessDataSync(T data); // Invalid
+                                    }
+
+                                    // Empty interface that only inherits
+                                    public interface IServerToClient : IBaseServerToClient<string>
+                                    {
+                                    }
+
+                                    public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
+                                    {
+                                    }
+                                }
+                                """;
+
+        var expectedDiagnostics = new[]
+        {
+            new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+                .WithLocation(0)
+                .WithArguments("GetDataAsync", "IServerToClient", "System.Threading.Tasks.Task<string>"),
+            new DiagnosticResult(ServerToClientAnalyzer.ServerToClientReturnTypeRule)
+                .WithLocation(1)
+                .WithArguments("ProcessDataSync", "IServerToClient", "void")
+        };
+
+        var test = TestHelper.CreateAnalyzerTest<ServerToClientAnalyzer>();
+        test.TestCode = testCode;
+        test.ExpectedDiagnostics.AddRange(expectedDiagnostics);
+
+        await test.RunAsync();
+    }
+
+    [Fact]
+    public async Task ServerToClientInterface_WithValidInheritedMethods_ShouldNotTriggerDiagnostic()
+    {
+        const string testCode = """
+                                using SignalRGen.Abstractions;
+                                using System.Threading.Tasks;
+
+                                namespace TestNamespace
+                                {
+                                    public interface IClientToServer
+                                    {
+                                        Task SendMessage(string message);
+                                    }
+
+                                    public interface IBaseServerToClient<T>
+                                    {
+                                        Task SendDataAsync(T data);
+                                        Task ProcessDataAsync(T data);
+                                    }
+
+                                    public interface IServerToClient : IBaseServerToClient<string>
+                                    {
+                                        Task ReceiveMessage(string message);
+                                    }
+
+                                    public interface ITestHub : IBidirectionalHub<IServerToClient, IClientToServer>
+                                    {
+                                    }
+                                }
+                                """;
+
+        var test = TestHelper.CreateAnalyzerTest<ServerToClientAnalyzer>();
+        test.TestCode = testCode;
+
+        await test.RunAsync();
+    }
 }

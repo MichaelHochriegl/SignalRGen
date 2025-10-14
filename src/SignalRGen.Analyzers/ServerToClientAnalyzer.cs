@@ -41,7 +41,7 @@ public class ServerToClientAnalyzer : DiagnosticAnalyzer
         if (!IsServerToClientInterface(interfaceSymbol, context.Compilation, context.CancellationToken))
             return;
         
-        var methods = interfaceSymbol.GetMembers();
+        var methods = interfaceSymbol.GetInterfaceMethodsRecursively();
         foreach (var method in methods)
         {
             if (method is not IMethodSymbol methodSymbol) continue;
