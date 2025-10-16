@@ -16,6 +16,12 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
+        <PackageReference Include="Scriban" Version="6.4.0" PrivateAssets="all" GeneratePathProperty="true" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove="Sources/*.sbntxt" />
+        <EmbeddedResource Include="Sources/*.sbntxt" />
     </ItemGroup>
 
     <ItemGroup>
@@ -23,8 +29,18 @@
             <_Parameter1>SignalRGen.Generator.Tests</_Parameter1>
         </AssemblyAttribute>
     </ItemGroup>
+
+    <PropertyGroup>
+        <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+    </PropertyGroup>
     
     <ItemGroup>
         <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
     </ItemGroup>
+
+    <Target Name="GetDependencyTargetPaths">
+        <ItemGroup>
+            <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" IncludeRuntimeDependency="false" />
+        </ItemGroup>
+    </Target>
 </Project>
