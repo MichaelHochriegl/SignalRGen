@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IEmptyCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IEmptyCommandHubClient"/> interface.
 /// </summary>
 public class EmptyCommandHubClient : HubClientBase
 {
@@ -27,9 +27,6 @@ public class EmptyCommandHubClient : HubClientBase
     }
     
 
-
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -37,7 +34,6 @@ public class EmptyCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

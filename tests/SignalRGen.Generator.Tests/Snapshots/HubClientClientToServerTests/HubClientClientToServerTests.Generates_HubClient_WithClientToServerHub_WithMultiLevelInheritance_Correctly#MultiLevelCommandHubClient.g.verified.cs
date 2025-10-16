@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IMultiLevelCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IMultiLevelCommandHubClient"/> interface.
 /// </summary>
 public class MultiLevelCommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class MultiLevelCommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the GetTopData on the <see cref = "IMultiLevelCommandHubClient"/>.
@@ -55,7 +54,6 @@ public class MultiLevelCommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string>("GetBaseData", new object?[] { id }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -63,7 +61,6 @@ public class MultiLevelCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

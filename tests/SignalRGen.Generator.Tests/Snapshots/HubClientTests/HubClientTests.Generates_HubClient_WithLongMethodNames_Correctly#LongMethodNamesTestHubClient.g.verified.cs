@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ILongMethodNamesTestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.ILongMethodNamesTestHub"/> interface.
 /// </summary>
 public class LongMethodNamesTestHubClient : HubClientBase
 {
@@ -53,7 +53,6 @@ public class LongMethodNamesTestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string>("RequestVeryLongMethodNameWithReturnTypeAndMultipleComplexParameters", new object?[] { complexParam }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {

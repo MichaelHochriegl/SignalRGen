@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ICommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.ICommandHubClient"/> interface.
 /// </summary>
 public class CommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class CommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the SendCommand on the <see cref = "ICommandHubClient"/>.
@@ -55,7 +54,6 @@ public class CommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>("GetCustomData", new object?[] { filter }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -63,7 +61,6 @@ public class CommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

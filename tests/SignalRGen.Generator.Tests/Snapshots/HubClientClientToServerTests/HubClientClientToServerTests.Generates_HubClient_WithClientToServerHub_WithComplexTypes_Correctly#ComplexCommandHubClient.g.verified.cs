@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IComplexCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IComplexCommandHubClient"/> interface.
 /// </summary>
 public class ComplexCommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class ComplexCommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the SendUserData on the <see cref = "IComplexCommandHubClient"/>.
@@ -73,7 +72,6 @@ public class ComplexCommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync("SendNullableData", new object?[] { nullableMessage, nullableCount }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -81,7 +79,6 @@ public class ComplexCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

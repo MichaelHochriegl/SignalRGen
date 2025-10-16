@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients.Nested;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "INestedCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.Nested.INestedCommandHubClient"/> interface.
 /// </summary>
 public class NestedCommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class NestedCommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the SendNestedCommand on the <see cref = "INestedCommandHubClient"/>.
@@ -46,7 +45,6 @@ public class NestedCommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>("GetNestedData", new object?[] { id }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -54,7 +52,6 @@ public class NestedCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

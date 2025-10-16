@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ITestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.ITestHub"/> interface.
 /// </summary>
 public class TestHubClient : HubClientBase
 {
@@ -77,7 +77,6 @@ public class TestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string>("NotifyWithReturnClientToServer", cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -86,9 +85,9 @@ public class TestHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyNoAttributeApplied", NotifyNoAttributeAppliedHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyServerToClient", NotifyServerToClientHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyWithReturnNoAttributeApplied", NotifyWithReturnNoAttributeAppliedHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyWithReturnServerToClient", NotifyWithReturnServerToClientHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyServerToClient", NotifyServerToClientHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyWithReturnNoAttributeApplied", NotifyWithReturnNoAttributeAppliedHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "NotifyWithReturnServerToClient", NotifyWithReturnServerToClientHandler);
     }
     
     private void ValidateHubConnection()

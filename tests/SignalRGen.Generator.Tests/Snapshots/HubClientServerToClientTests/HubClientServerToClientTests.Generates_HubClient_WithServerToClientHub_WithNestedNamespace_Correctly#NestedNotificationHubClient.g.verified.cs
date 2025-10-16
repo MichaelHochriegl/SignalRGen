@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients.Nested;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "INestedNotificationHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.Nested.INestedNotificationHubClient"/> interface.
 /// </summary>
 public class NestedNotificationHubClient : HubClientBase
 {
@@ -43,8 +43,6 @@ public class NestedNotificationHubClient : HubClientBase
         return OnReceiveNestedData?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -53,7 +51,7 @@ public class NestedNotificationHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveNestedNotification", ReceiveNestedNotificationHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveNestedData", ReceiveNestedDataHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveNestedData", ReceiveNestedDataHandler);
     }
     
     private void ValidateHubConnection()

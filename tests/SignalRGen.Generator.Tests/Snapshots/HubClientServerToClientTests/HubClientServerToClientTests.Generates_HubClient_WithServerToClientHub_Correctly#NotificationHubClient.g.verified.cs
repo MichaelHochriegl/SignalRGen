@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "INotificationHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> interface.
 /// </summary>
 public class NotificationHubClient : HubClientBase
 {
@@ -51,8 +51,6 @@ public class NotificationHubClient : HubClientBase
         return OnReceiveCustomTypeUpdate?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -61,8 +59,8 @@ public class NotificationHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, string>(_hubConnection, "ReceiveNotification", ReceiveNotificationHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveAlert", ReceiveAlertHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveAlert", ReceiveAlertHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
     }
     
     private void ValidateHubConnection()

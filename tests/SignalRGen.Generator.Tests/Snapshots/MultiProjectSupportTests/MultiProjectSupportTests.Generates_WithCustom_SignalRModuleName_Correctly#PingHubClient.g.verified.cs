@@ -13,7 +13,7 @@
 namespace MyCompany.App.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IPingHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::MyCompany.App.Clients.IPingHub"/> interface.
 /// </summary>
 public class PingHubClient : HubClientBase
 {
@@ -44,7 +44,6 @@ public class PingHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync("Pong", cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {

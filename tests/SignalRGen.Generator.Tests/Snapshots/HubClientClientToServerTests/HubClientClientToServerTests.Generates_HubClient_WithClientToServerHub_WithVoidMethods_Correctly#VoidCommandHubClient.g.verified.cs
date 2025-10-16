@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IVoidCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IVoidCommandHubClient"/> interface.
 /// </summary>
 public class VoidCommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class VoidCommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the SendNotification on the <see cref = "IVoidCommandHubClient"/>.
@@ -64,7 +63,6 @@ public class VoidCommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync("ClearCache", cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -72,7 +70,6 @@ public class VoidCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

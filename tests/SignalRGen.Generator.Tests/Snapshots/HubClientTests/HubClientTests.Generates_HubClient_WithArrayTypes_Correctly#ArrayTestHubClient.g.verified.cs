@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IArrayTestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> interface.
 /// </summary>
 public class ArrayTestHubClient : HubClientBase
 {
@@ -76,7 +76,6 @@ public class ArrayTestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string[]>("SendAndReceiveArray", new object?[] { input }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -85,10 +84,10 @@ public class ArrayTestHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[]>(_hubConnection, "ReceiveStringArray", ReceiveStringArrayHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int[]>(_hubConnection, "ReceiveIntArray", ReceiveIntArrayHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>(_hubConnection, "ReceiveCustomTypeArray", ReceiveCustomTypeArrayHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int[,]>(_hubConnection, "ReceiveMultidimensionalArray", ReceiveMultidimensionalArrayHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[][]>(_hubConnection, "ReceiveJaggedArray", ReceiveJaggedArrayHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int[]>(_hubConnection, "ReceiveIntArray", ReceiveIntArrayHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>(_hubConnection, "ReceiveCustomTypeArray", ReceiveCustomTypeArrayHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int[,]>(_hubConnection, "ReceiveMultidimensionalArray", ReceiveMultidimensionalArrayHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[][]>(_hubConnection, "ReceiveJaggedArray", ReceiveJaggedArrayHandler);
     }
     
     private void ValidateHubConnection()

@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IComplexNotificationHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> interface.
 /// </summary>
 public class ComplexNotificationHubClient : HubClientBase
 {
@@ -67,8 +67,6 @@ public class ComplexNotificationHubClient : HubClientBase
         return OnReceiveTupleData?.Invoke(tupleData) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -77,10 +75,10 @@ public class ComplexNotificationHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "ReceiveUserList", ReceiveUserListHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, int>>(_hubConnection, "ReceiveDataUpdate", ReceiveDataUpdateHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int?>(_hubConnection, "ReceiveNullableData", ReceiveNullableDataHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[], global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>(_hubConnection, "ReceiveArrayData", ReceiveArrayDataHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string name, int value)>(_hubConnection, "ReceiveTupleData", ReceiveTupleDataHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, int>>(_hubConnection, "ReceiveDataUpdate", ReceiveDataUpdateHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int?>(_hubConnection, "ReceiveNullableData", ReceiveNullableDataHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[], global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[]>(_hubConnection, "ReceiveArrayData", ReceiveArrayDataHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string name, int value)>(_hubConnection, "ReceiveTupleData", ReceiveTupleDataHandler);
     }
     
     private void ValidateHubConnection()

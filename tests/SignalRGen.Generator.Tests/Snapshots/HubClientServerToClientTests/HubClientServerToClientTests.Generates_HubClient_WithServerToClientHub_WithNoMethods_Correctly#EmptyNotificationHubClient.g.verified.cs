@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IEmptyNotificationHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IEmptyNotificationHubClient"/> interface.
 /// </summary>
 public class EmptyNotificationHubClient : HubClientBase
 {
@@ -27,9 +27,6 @@ public class EmptyNotificationHubClient : HubClientBase
     }
     
 
-
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -37,7 +34,6 @@ public class EmptyNotificationHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

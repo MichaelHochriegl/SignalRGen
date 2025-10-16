@@ -13,7 +13,7 @@
 namespace MyCompany.App.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IDefaultHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::MyCompany.App.Clients.IDefaultHub"/> interface.
 /// </summary>
 public class DefaultHubClient : HubClientBase
 {
@@ -44,7 +44,6 @@ public class DefaultHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync("Ack", cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
