@@ -13,7 +13,7 @@
 namespace SignalRGen.Example.Contracts;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IExampleHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> interface.
 /// </summary>
 public class ExampleHubClient : HubClientBase
 {
@@ -61,7 +61,6 @@ public class ExampleHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<int>("SendBaseMessage", new object?[] { message }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -70,7 +69,7 @@ public class ExampleHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveExampleCountUpdate", ReceiveExampleCountUpdateHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBaseMessage", ReceiveBaseMessageHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBaseMessage", ReceiveBaseMessageHandler);
     }
     
     private void ValidateHubConnection()

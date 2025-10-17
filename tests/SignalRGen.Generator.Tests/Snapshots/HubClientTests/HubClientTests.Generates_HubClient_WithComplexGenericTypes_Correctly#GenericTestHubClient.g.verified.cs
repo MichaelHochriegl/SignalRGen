@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IGenericTestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> interface.
 /// </summary>
 public class GenericTestHubClient : HubClientBase
 {
@@ -68,7 +68,6 @@ public class GenericTestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<global::System.Threading.Tasks.Task<string>>("SendNestedTask", new object?[] { nestedTask }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -77,9 +76,9 @@ public class GenericTestHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "ReceiveGenericList", ReceiveGenericListHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, int>>(_hubConnection, "ReceiveDictionary", ReceiveDictionaryHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>>(_hubConnection, "ReceiveNestedGeneric", ReceiveNestedGenericHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "SendAndReceiveGeneric", SendAndReceiveGenericHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, int>>(_hubConnection, "ReceiveDictionary", ReceiveDictionaryHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>>(_hubConnection, "ReceiveNestedGeneric", ReceiveNestedGenericHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "SendAndReceiveGeneric", SendAndReceiveGenericHandler);
     }
     
     private void ValidateHubConnection()

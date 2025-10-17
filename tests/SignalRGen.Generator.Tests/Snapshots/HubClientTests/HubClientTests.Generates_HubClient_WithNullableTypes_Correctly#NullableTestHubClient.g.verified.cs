@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "INullableTestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> interface.
 /// </summary>
 public class NullableTestHubClient : HubClientBase
 {
@@ -68,7 +68,6 @@ public class NullableTestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string>("SendAndReceiveNullable", new object?[] { input }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -77,9 +76,9 @@ public class NullableTestHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveNullableString", ReceiveNullableStringHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int?>(_hubConnection, "ReceiveNullableInt", ReceiveNullableIntHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveNullableCustomType", ReceiveNullableCustomTypeHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[]>(_hubConnection, "NotifyWithNullableArray", NotifyWithNullableArrayHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int?>(_hubConnection, "ReceiveNullableInt", ReceiveNullableIntHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveNullableCustomType", ReceiveNullableCustomTypeHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string[]>(_hubConnection, "NotifyWithNullableArray", NotifyWithNullableArrayHandler);
     }
     
     private void ValidateHubConnection()

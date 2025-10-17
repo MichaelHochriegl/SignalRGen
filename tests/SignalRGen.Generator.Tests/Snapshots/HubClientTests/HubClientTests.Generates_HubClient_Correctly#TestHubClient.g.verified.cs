@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "ITestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.ITestHub"/> interface.
 /// </summary>
 public class TestHubClient : HubClientBase
 {
@@ -77,7 +77,6 @@ public class TestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string>("SendClientToServerWithReturnType", new object?[] { morty, partOfMission }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -86,9 +85,9 @@ public class TestHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>(_hubConnection, "ReceiveCustomTypeUpdate", ReceiveCustomTypeUpdateHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveFooUpdate", ReceiveFooUpdateHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveFooUpdate", ReceiveFooUpdateHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string, int>(_hubConnection, "ReceiveNormalTypeWithSpecificAttributeApplied", ReceiveNormalTypeWithSpecificAttributeAppliedHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveWithArbitraryAttribute", ReceiveWithArbitraryAttributeHandler);
     }
     
     private void ValidateHubConnection()

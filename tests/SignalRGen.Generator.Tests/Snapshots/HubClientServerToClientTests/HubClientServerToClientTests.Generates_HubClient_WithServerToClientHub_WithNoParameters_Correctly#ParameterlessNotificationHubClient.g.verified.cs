@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IParameterlessNotificationHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IParameterlessNotificationHubClient"/> interface.
 /// </summary>
 public class ParameterlessNotificationHubClient : HubClientBase
 {
@@ -43,8 +43,6 @@ public class ParameterlessNotificationHubClient : HubClientBase
         return OnReceiveRefreshSignal?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -53,7 +51,7 @@ public class ParameterlessNotificationHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "ReceiveHeartbeat", ReceiveHeartbeatHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "ReceiveRefreshSignal", ReceiveRefreshSignalHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On(_hubConnection, "ReceiveRefreshSignal", ReceiveRefreshSignalHandler);
     }
     
     private void ValidateHubConnection()

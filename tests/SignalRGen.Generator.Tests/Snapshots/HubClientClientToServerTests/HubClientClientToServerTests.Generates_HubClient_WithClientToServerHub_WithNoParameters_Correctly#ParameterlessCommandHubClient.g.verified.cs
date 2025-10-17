@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IParameterlessCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IParameterlessCommandHubClient"/> interface.
 /// </summary>
 public class ParameterlessCommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class ParameterlessCommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the Ping on the <see cref = "IParameterlessCommandHubClient"/>.
@@ -73,7 +72,6 @@ public class ParameterlessCommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<bool>("IsAlive", cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -81,7 +79,6 @@ public class ParameterlessCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

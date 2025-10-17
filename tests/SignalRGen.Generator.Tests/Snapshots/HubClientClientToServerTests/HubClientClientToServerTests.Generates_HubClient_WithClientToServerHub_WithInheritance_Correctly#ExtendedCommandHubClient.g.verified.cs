@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IExtendedCommandHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IExtendedCommandHubClient"/> interface.
 /// </summary>
 public class ExtendedCommandHubClient : HubClientBase
 {
@@ -26,7 +26,6 @@ public class ExtendedCommandHubClient : HubClientBase
     {
     }
     
-
 
     /// <summary>
     /// Can be invoked to trigger the SendExtendedCommand on the <see cref = "IExtendedCommandHubClient"/>.
@@ -55,7 +54,6 @@ public class ExtendedCommandHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<string>("GetBaseData", new object?[] { id }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -63,7 +61,6 @@ public class ExtendedCommandHubClient : HubClientBase
         {
             return;
         }
-    
     }
     
     private void ValidateHubConnection()

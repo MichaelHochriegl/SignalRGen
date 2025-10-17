@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IValueTupleTestHub"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> interface.
 /// </summary>
 public class ValueTupleTestHubClient : HubClientBase
 {
@@ -60,7 +60,6 @@ public class ValueTupleTestHubClient : HubClientBase
         ValidateHubConnection();
         return InvokeCoreAsync<(bool success, string message)>("SendAndReceiveTuple", new object?[] { input }, cancellationToken: ct);
     }
-
     
     protected override void RegisterHubMethods()
     {
@@ -69,8 +68,8 @@ public class ValueTupleTestHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string name, int age)>(_hubConnection, "ReceiveTuple", ReceiveTupleHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string, (int, bool))>(_hubConnection, "ReceiveNestedTuple", ReceiveNestedTupleHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string FirstName, string LastName, int Age)>(_hubConnection, "ReceiveNamedTuple", ReceiveNamedTupleHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string, (int, bool))>(_hubConnection, "ReceiveNestedTuple", ReceiveNestedTupleHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<(string FirstName, string LastName, int Age)>(_hubConnection, "ReceiveNamedTuple", ReceiveNamedTupleHandler);
     }
     
     private void ValidateHubConnection()

@@ -13,7 +13,7 @@
 namespace SignalRGen.Clients;
 
 /// <summary>
-/// Represents a HubClient for the <see cref = "IMultiLevelNotificationHubClient"/> interface.
+/// Represents a HubClient for the <see cref = "global::SignalRGen.Clients.IMultiLevelNotificationHubClient"/> interface.
 /// </summary>
 public class MultiLevelNotificationHubClient : HubClientBase
 {
@@ -51,8 +51,6 @@ public class MultiLevelNotificationHubClient : HubClientBase
         return OnReceiveBaseNotification?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-
-
     
     protected override void RegisterHubMethods()
     {
@@ -61,8 +59,8 @@ public class MultiLevelNotificationHubClient : HubClientBase
             return;
         }
         global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>(_hubConnection, "ReceiveTopNotification", ReceiveTopNotificationHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveMidNotification", ReceiveMidNotificationHandler);
-	    global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBaseNotification", ReceiveBaseNotificationHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<int>(_hubConnection, "ReceiveMidNotification", ReceiveMidNotificationHandler);
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionExtensions.On<string>(_hubConnection, "ReceiveBaseNotification", ReceiveBaseNotificationHandler);
     }
     
     private void ValidateHubConnection()

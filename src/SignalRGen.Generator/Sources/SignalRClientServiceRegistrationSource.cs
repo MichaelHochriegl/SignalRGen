@@ -6,94 +6,22 @@ namespace SignalRGen.Generator.Sources;
 
 internal static class SignalRClientServiceRegistrationSource
 {
-    private const string SignalRClientServiceRegistrationTemplate =
-        """
-        {~{autoGeneratedHint}~}
-        
-        #nullable enable
-        
-        namespace {~{namespaceName}~};
-        
-        public static class SignalRClientServiceRegistration
-        {
-            /// <summary>
-            /// Creates the base configuration for all registered Hubs. The Hubs you want to use must be registered with the appropriate `With{...}` call.
-            /// </summary>
-            /// <param name = "services">The services available in the application.</param>
-            /// <param name = "generalConfiguration">An action used to configure the provided options.</param>
-            /// <returns>The <see cref = "global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection{T}"/> to register the specified Hub.</returns>
-            public static global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<{~{tSelector}~}> Add{~{moduleName}~}Hubs(this global::Microsoft.Extensions.DependencyInjection.IServiceCollection services, Action<global::SignalRGen.Abstractions.Configuration.SignalROptions> generalConfiguration)
-            {
-                ArgumentNullException.ThrowIfNull(generalConfiguration);
-                var config = new global::SignalRGen.Abstractions.Configuration.SignalROptions();
-                generalConfiguration.Invoke(config);
-                return new global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<{~{tSelector}~}>(services, config);
-            }
-        
-        {~{withHubMethods}~}
-        }
-        """;
-    
-    private const string WithHubTemplate =
-        """
-            /// <summary>
-            /// Registers the <see cref = "{~{hubName}~}"/> in the <see cref = "global::Microsoft.Extensions.DependencyInjection.ServiceCollection"/>.
-            /// </summary>
-            /// <remarks>
-            /// <para>
-            /// By default the <see cref = "{~{hubName}~}"/> is registered with <see cref = "global::Microsoft.Extensions.DependencyInjection.ServiceLifetime"/> singleton.
-            /// </para>
-            /// If no <see cref = "global::Microsoft.AspNetCore.SignalR.Client.IRetryPolicy"/> is configured for the <see cref = "global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder"/> a default retry policy will be used.
-            /// <list type="bullet">
-            ///     <item>
-            ///         Every second - 10 attempts
-            ///     </item>
-            ///     <item>
-            ///         Every 3 seconds - 5 attempts
-            ///     </item>
-            ///     <item>
-            ///         Every 10 seconds - 2 attempts
-            ///     </item>
-            /// </list>
-            /// </remarks>
-            /// <param name = "services">The <see cref = "global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection{T}"/> to register the Hub.</param>
-            /// <param name = "configuration">An action used to configure the provided options.</param>
-            /// <returns>The <see cref = "global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection{T}"/> to register additional Hubs.</returns>
-            public static global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<{~{tSelector}~}> With{~{hubName}~}(this global::SignalRGen.Abstractions.Configuration.SignalRHubServiceCollection<{~{tSelector}~}> services, Action<global::SignalRGen.Abstractions.Configuration.HubClientOptions>? configuration = null)
-            {
-                ArgumentNullException.ThrowIfNull(services);
-                var config = new global::SignalRGen.Abstractions.Configuration.HubClientOptions();
-                configuration?.Invoke(config);
-                services.Services.Add(new global::Microsoft.Extensions.DependencyInjection.ServiceDescriptor(typeof({~{hubName}~}), factory: _ =>
-                {
-                    return new {~{hubName}~}(config.HubConnectionBuilderConfiguration,
-                    new Uri(services.GeneralConfiguration.HubBaseUri, {~{hubName}~}.HubUri),
-                    config.HttpConnectionOptionsConfiguration!);
-                }, config.HubClientLifetime));
-                return services;
-            }
-        """;
-    
-    internal static SourceText GetSource(EquatableArray<HubClientToGenerate> hubs, MsBuildOptions options)
+    internal static SourceText GetSource(EquatableArray<HubClientToGenerate> hubs, MsBuildOptions? options)
     {
-        var withHubMethods = hubs.Select(hub =>
-        {
-            var template = WithHubTemplate
-                .Replace("{~{hubName}~}", hub.HubName)
-                .Replace("{~{tSelector}~}", $"{options.RootNamespace}.HubClientBase");
+        var rootNamespace = options?.RootNamespace ?? "SignalRGen.Generator";
 
-            return template;
-        });
+        var model = new
+        {
+            NamespaceName = rootNamespace.EndsWith(".Client.Extensions.DependencyInjection")
+                ? rootNamespace
+                : $"{rootNamespace}.Client.Extensions.DependencyInjection",
+            ModuleName = options?.ModuleName ?? "SignalR",
+            Selector = $"{rootNamespace}.HubClientBase",
+            Hubs = hubs.Select(hub => new { HubName = hub.HubName }).ToArray()
+        };
         
-        var template = SignalRClientServiceRegistrationTemplate
-            .Replace("{~{autoGeneratedHint}~}", AutoGeneratedHintSource.AutoGeneratedHintTemplate)
-            .Replace("{~{namespaceName}~}",
-                options.RootNamespace.EndsWith(".Client.Extensions.DependencyInjection")
-                    ? options.RootNamespace
-                    : $"{options.RootNamespace}.Client.Extensions.DependencyInjection")
-            .Replace("{~{moduleName}~}", options.ModuleName)
-            .Replace("{~{tSelector}~}", $"{options.RootNamespace}.HubClientBase")
-            .Replace("{~{withHubMethods}~}", string.Join("\n", withHubMethods));
+        var template = TemplateLoader.GetTemplate("SignalRClientServiceRegistration")
+            .Render(model);
 
         return SourceText.From(template, Encoding.UTF8);
     }
