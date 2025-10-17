@@ -12,38 +12,38 @@ internal static class HubClientSource
         
         var model = new
         {
-            namespace_name = hubClientToGenerate.InterfaceNamespace,
-            hub_name = hubClientToGenerate.HubName,
-            hub_uri = hubClientToGenerate.HubUri,
-            hub_client_interface = hubClientToGenerate.InterfaceName,
-            full_interface_name = fullInterfaceName,
-            server_to_client_methods = hubClientToGenerate.ServerToClientMethods.Select(method => new
+            NamespaceName = hubClientToGenerate.InterfaceNamespace,
+            HubName = hubClientToGenerate.HubName,
+            HubUri = hubClientToGenerate.HubUri,
+            HubClientInterface = hubClientToGenerate.InterfaceName,
+            FullInterfaceName = fullInterfaceName,
+            ServerToClientMethods = hubClientToGenerate.ServerToClientMethods.Select(method => new
             {
-                identifier = method.Identifier,
-                parameters = method.Parameters.Select(p => new
+                Identifier = method.Identifier,
+                Parameters = method.Parameters.Select(p => new
                 {
-                    type = p.Type.Replace("*", ""),
-                    name = p.Name
+                    Type = p.Type.Replace("*", ""),
+                    Name = p.Name
                 }).ToArray(),
-                parameter_types = string.Join(", ", method.Parameters.Select(p => p.Type.Replace("*", ""))),
-                parameter_list = string.Join(", ", method.Parameters.Select(p => $"{p.Type.Replace("*", "")} {p.Name}")),
-                parameter_names = string.Join(", ", method.Parameters.Select(p => p.Name)),
-                has_parameters = method.Parameters.Any()
+                ParameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type.Replace("*", ""))),
+                ParameterList = string.Join(", ", method.Parameters.Select(p => $"{p.Type.Replace("*", "")} {p.Name}")),
+                ParameterNames = string.Join(", ", method.Parameters.Select(p => p.Name)),
+                HasParameters = method.Parameters.Any()
             }).ToArray(),
-            client_to_server_methods = hubClientToGenerate.ClientToServerMethods.Select(method => new
+            ClientToServerMethods = hubClientToGenerate.ClientToServerMethods.Select(method => new
             {
-                identifier = method.Identifier,
-                parameters = method.Parameters.Select(p => new
+                Identifier = method.Identifier,
+                Parameters = method.Parameters.Select(p => new
                 {
-                    type = p.Type,
-                    name = p.Name
+                    Type = p.Type,
+                    Name = p.Name
                 }).ToArray(),
-                parameter_types = string.Join(", ", method.Parameters.Select(p => p.Type)),
-                parameter_list = string.Join(", ", method.Parameters.Select(p => $"{p.Type} {p.Name}")),
-                parameter_names = string.Join(", ", method.Parameters.Select(p => p.Name)),
-                has_parameters = method.Parameters.Any(),
-                return_type = method.ReturnType,
-                generic_return_type = method.AwaitableReturnType is not null ? $"<{method.AwaitableReturnType}>" : string.Empty
+                ParameterTypes = string.Join(", ", method.Parameters.Select(p => p.Type)),
+                ParameterList = string.Join(", ", method.Parameters.Select(p => $"{p.Type} {p.Name}")),
+                ParameterNames = string.Join(", ", method.Parameters.Select(p => p.Name)),
+                HasParameters = method.Parameters.Any(),
+                ReturnType = method.ReturnType,
+                GenericReturnType = method.AwaitableReturnType is not null ? $"<{method.AwaitableReturnType}>" : string.Empty
             }).ToArray()
         };
 
