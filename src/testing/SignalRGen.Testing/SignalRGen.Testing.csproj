@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <IsPackable>true</IsPackable>
+        <IncludeBuildOutput>false</IncludeBuildOutput>
+    </PropertyGroup>
+
+    <!-- NuGet settings -->
+    <PropertyGroup>
+        <PackageId>SignalRGen.Testing</PackageId>
+        <Title>SignalRGen.Testing</Title>
+        <PackageSummary>A C# source generator that automatically creates fake clients for the strongly-typed clients created by SignalRGen.</PackageSummary>
+        <PackageTags>SignalRGen;ASP.NET Core;Source Generator;SignalR;Testing</PackageTags>
+        <Authors>Michael Hochriegl</Authors>
+        <PackageProjectUrl>https://signalrgen.net</PackageProjectUrl>
+        <PackageIcon>logo_128x128.png</PackageIcon>
+        <RepositoryType>git</RepositoryType>
+        <RepositoryUrl>https://github.com/MichaelHochriegl/SignalRGen</RepositoryUrl>
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <Copyright>Copyright © $([System.DateTime]::Now.Year) Michael Hochriegl</Copyright>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <Description>SignalRGen.Testing simplifies the process of writing tests for SignalR clients.</Description>
+        <IncludeContentInPack>true</IncludeContentInPack>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+
+    <!-- Add Metadata to the NuGet Package -->
+    <ItemGroup>
+        <None Include="../../../LICENSE" Pack="true" PackagePath="\" />
+        <None Include="../../../README.md" Pack="true" PackagePath="\" />
+        <None Include="../../../assets/logo_128x128.png" Pack="true" PackagePath="\" />
+    </ItemGroup>
+
+    <!-- Properly store dlls in the NuGet Package   -->
+    <ItemGroup>
+        <None Include="../SignalRGen.Testing.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Testing.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+
+        <TfmSpecificPackageFile
+                Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/$(TargetFramework)/SignalRGen.Testing.Abstractions.dll"
+                Pack="true"
+                PackagePath="lib/$(TargetFramework)" />
+    </ItemGroup>
+
+    <!-- Project References   -->
+    <ItemGroup>
+      <ProjectReference Include="..\..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
+      <ProjectReference Include="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj" />
+      <ProjectReference Include="..\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" />
+    </ItemGroup>
+    
+</Project>
