@@ -1,18 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="FluentAssertions" Version="6.12.0" />
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4">
-          <PrivateAssets>all</PrivateAssets>
-          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" PrivateAssets="all" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
@@ -30,21 +29,23 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" />
-      <ProjectReference Include="..\..\src\SignalRGen.Generator\SignalRGen.Generator.csproj" />
-      <ProjectReference Include="..\..\src\SignalRGen.Shared\SignalRGen.Shared.csproj" />
+        <Using Include="Xunit"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="HubClientAttributeTests.Generates_HubClientAttribute_Correctly#ClientToServerMethodAttribute.g.verified.cs">
-        <DependentUpon>HubClientAttributeTests.cs</DependentUpon>
-      </None>
-      <None Update="HubClientTests.Generates_HubClient_Correctly#ClientToServerMethodAttribute.g.verified.cs">
-        <DependentUpon>HubClientTests.cs</DependentUpon>
-      </None>
-      <None Update="HubClientTests.Generates_NamespaceNested_HubClient_Correctly#ClientToServerMethodAttribute.g.verified.cs">
-        <DependentUpon>HubClientTests.cs</DependentUpon>
-      </None>
+      <ProjectReference Include="..\..\src\SignalRGen.Shared\SignalRGen.Shared.csproj" />
+      <ProjectReference Include="..\..\src\testing\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj" />
+      <ProjectReference Include="..\..\src\testing\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>SignalRGen.Testing.Generator.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Snapshots\UnitTest1\" />
     </ItemGroup>
 
 </Project>

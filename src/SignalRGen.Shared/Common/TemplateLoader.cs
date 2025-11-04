@@ -20,10 +20,11 @@ internal static class TemplateLoader
     /// </returns>
     public static Template GetTemplate(string name)
     {
+        var assemblyName = Assembly.GetExecutingAssembly().GetName();
         using var stream = Assembly
             .GetExecutingAssembly()
             .GetManifestResourceStream(
-                $"SignalRGen.Generator.Sources.{name}.sbntxt"
+                $"{assemblyName.Name}.Sources.{name}.sbntxt"
             )!;
 
         using var reader = new StreamReader(stream);

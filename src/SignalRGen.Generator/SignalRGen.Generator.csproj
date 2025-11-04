@@ -35,7 +35,8 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <Compile Include="../SignalRGen.Shared/IsExternalInit.cs"/>
+        <Compile Include="../SignalRGen.Shared/**/*.cs"/>
+        <Compile Remove="../SignalRGen.Shared/obj/**/*.cs"/>
     </ItemGroup>
 
     <Target Name="GetDependencyTargetPaths">

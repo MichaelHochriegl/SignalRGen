@@ -28,7 +28,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Include="../../SignalRGen.Shared/IsExternalInit.cs"/>
+        <Compile Include="../../SignalRGen.Shared/**/*.cs"/>
+        <Compile Remove="../../SignalRGen.Shared/obj/**/*.cs"/>
     </ItemGroup>
 
     <Target Name="GetDependencyTargetPaths">
@@ -36,5 +37,11 @@
             <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" IncludeRuntimeDependency="false" />
         </ItemGroup>
     </Target>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>SignalRGen.Testing.Generator.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
 
 </Project>
