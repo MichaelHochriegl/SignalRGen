@@ -19,7 +19,7 @@ internal static class FakeHubClientSource
         var modelScriptObject = new ScriptObject
         {
             { "namespace_name", model.Namespace },
-            { "hubClient_name", model.HubClientName },
+            { "hub_client_name", model.HubClientName },
             {
                 "client_to_server", model.ClientToServerMethods.Select(m => new
                 {

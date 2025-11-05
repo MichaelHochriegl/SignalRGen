@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
-public sealed class Fake{{ hub_client_name }} : {{ hub_client_name }}
+public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_client_name }}
 {
     private readonly Lock _lock = new();
 

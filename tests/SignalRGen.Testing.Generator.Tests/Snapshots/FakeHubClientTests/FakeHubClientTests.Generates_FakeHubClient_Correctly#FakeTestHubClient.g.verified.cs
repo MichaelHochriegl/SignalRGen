@@ -19,7 +19,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
 
-public sealed class Fake : 
+public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
 {
     private readonly Lock _lock = new();
 
