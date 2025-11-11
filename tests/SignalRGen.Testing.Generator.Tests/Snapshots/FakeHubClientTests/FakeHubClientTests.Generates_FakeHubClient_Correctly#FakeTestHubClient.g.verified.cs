@@ -41,4 +41,33 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     public Func<string, bool, CancellationToken, global::System.Threading.Tasks.Task<string>>? SendClientToServerWithReturnTypeHandler { get; set; }
     
     
+    /// <summary>
+    /// When true, the fake client operates in strict mode:
+    /// any unconfigured or unexpected invocation will throw an exception.
+    /// Use to ensure tests explicitly define expected interactions.
+    /// </summary>
+    public bool Strict { get; set; }
+    
+    public FakeTestHubClient(
+             Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
+             Uri? baseHubUri = null,
+             Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration = null)
+             : base(hubConnectionBuilderConfiguration, baseHubUri ?? new Uri("http://localhost/"), httpConnectionOptionsConfiguration)
+    {
+    }
+    
+    protected override void RegisterHubMethods()
+    {
+    }
+    
+    public override Task StartAsync(
+        Dictionary<string, string>? queryStrings = null,
+        Dictionary<string, string>? headers = null,
+        CancellationToken cancellationToken = default)
+    {
+        _hubConnection = new HubConnectionBuilder().WithUrl("http://localhost").Build();
+        return Task.CompletedTask;
+    }
+    
+    public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
 }
