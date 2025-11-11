@@ -23,17 +23,40 @@ using Microsoft.AspNetCore.Http.Connections.Client;
 public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_client_name }}
 {
     private readonly Lock _lock = new();
-
     {{~ for method in client_to_server ~}}
-    {{~ $camel = to_camel_case method.identifier ~}} 
-    public IReadOnlyList<({{~ for p in method.parameters ~}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{~ end ~}})> {{ method.identifier }}Calls
+    {{- $camel = to_camel_case method.identifier -}}
+    {{- $params = method.parameters -}}
+    {{- $paramCount = $params.size -}}
+    {{- $ret = method.return_type -}}
+
+    {{- #region Calls list + backing field -}}
+    {{ if $paramCount == 0 }}
+    public int {{ method.identifier }}CallCount
+    {
+        get { lock (_lock) return _{{ $camel }}CallCount; }
+    }
+    private int _{{ $camel }}CallCount = 0;
+
+    {{ else if $paramCount == 1 }}
+    public IReadOnlyList<{{ $params[0].type }}> {{ method.identifier }}Calls
     {
         get { lock (_lock) return _{{ $camel }}Calls.ToList(); }
     }
-    private readonly List<({{~ for p in method.parameters ~}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{~ end ~}})> _{{ $camel }}Calls = new();
+    private readonly List<{{ $params[0].type }}> _{{ $camel }}Calls = new();
 
-    public Func<{{~ for p in method.parameters ~}}{{ if !for.first }}, {{ end }}{{ p.type }}{{~ end ~}}, CancellationToken, {{ method.return_type }}>? {{ method.identifier }}Handler { get; set; }
-
-    {{~ end ~}}
-
+    {{ else }}
+    public IReadOnlyList<( {{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }})> {{ method.identifier }}Calls
+    {
+        get { lock (_lock) return _{{ $camel }}Calls.ToList(); }
+    }
+    private readonly List<( {{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }})> _{{ $camel }}Calls = new();
+    {{ end }}
+    {{- #endregion }}
+    {{- #region Handler delegate -}}
+    {{ if $paramCount == 0 }}
+    public Func<CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
+    {{ else }}
+    public Func<{{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }}{{- end }}, CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
+    {{ end }}
+    {{ end }}
 }

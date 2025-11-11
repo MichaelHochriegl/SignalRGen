@@ -28,16 +28,17 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         get { lock (_lock) return _sendClientToServerNoReturnTypeCalls.ToList(); }
     }
     private readonly List<(string rick, int age)> _sendClientToServerNoReturnTypeCalls = new();
-
+    
     public Func<string, int, CancellationToken, global::System.Threading.Tasks.Task>? SendClientToServerNoReturnTypeHandler { get; set; }
-
+    
+    
     public IReadOnlyList<(string morty, bool partOfMission)> SendClientToServerWithReturnTypeCalls
     {
         get { lock (_lock) return _sendClientToServerWithReturnTypeCalls.ToList(); }
     }
     private readonly List<(string morty, bool partOfMission)> _sendClientToServerWithReturnTypeCalls = new();
-
+    
     public Func<string, bool, CancellationToken, global::System.Threading.Tasks.Task<string>>? SendClientToServerWithReturnTypeHandler { get; set; }
-
-
+    
+    
 }
