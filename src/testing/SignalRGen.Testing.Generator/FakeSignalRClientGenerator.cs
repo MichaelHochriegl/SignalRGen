@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using SignalRGen.Testing.Generator.Extractors;
@@ -9,26 +10,26 @@ namespace SignalRGen.Testing.Generator;
 internal sealed class FakeSignalRClientGenerator : IIncrementalGenerator
 {
     private const string MarkerAttributeFullQualifiedName = "SignalRGen.Testing.Abstractions.Attributes.GenerateFakeForHubClientAttribute";
-    
+
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var markedTypes = context.SyntaxProvider.ForAttributeWithMetadataName(
             MarkerAttributeFullQualifiedName,
             static (syntaxNode, _) => syntaxNode is CompilationUnitSyntax,
             GetSemanticTargetForGeneration)
+            .SelectMany(static (items, _) => items)
             .WithTrackingName(TrackingNames.InitialExtraction);
-        
+   
         context.RegisterSourceOutput(markedTypes, GenerateFakeHubClient);
     }
 
-    private void GenerateFakeHubClient(SourceProductionContext context, FakeHubClientToGenerate? fakeHubClientToGenerate)
+    private void GenerateFakeHubClient(SourceProductionContext context, FakeHubClientToGenerate fakeHubClientToGenerate)
     {
-        if (fakeHubClientToGenerate is null) return;
         var sourceText = FakeHubClientSource.GetSource(fakeHubClientToGenerate);
         context.AddSource($"Fake{fakeHubClientToGenerate.HubClientName}.g.cs", sourceText);
     }
 
-    private static FakeHubClientToGenerate? GetSemanticTargetForGeneration(
+    private static ImmutableArray<FakeHubClientToGenerate> GetSemanticTargetForGeneration(
         GeneratorAttributeSyntaxContext context,
         CancellationToken cancellationToken)
     {
@@ -37,30 +38,36 @@ internal sealed class FakeSignalRClientGenerator : IIncrementalGenerator
 
         if (markerAttribute is null)
         {
-            return null;
+            return ImmutableArray<FakeHubClientToGenerate>.Empty;
         }
 
-        var fakeHubClientAttribute = context.Attributes.FirstOrDefault(x =>
-            x.AttributeClass is not null
-            && x.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default));
+        var results = ImmutableArray.CreateBuilder<FakeHubClientToGenerate>();
 
-        if (fakeHubClientAttribute is null)
+        foreach (var attribute in context.Attributes)
         {
-            return null;
-        }
-        
-        var hubClientAttributeArgument = fakeHubClientAttribute.ConstructorArguments.FirstOrDefault();
+            if (attribute.AttributeClass is null ||
+                !attribute.AttributeClass.Equals(markerAttribute, SymbolEqualityComparer.Default))
+            {
+                continue;
+            }
 
-        if (hubClientAttributeArgument.Value is not INamedTypeSymbol hubClientTypeSymbol)
-        {
-            return null;            
+            var hubClientAttributeArgument = attribute.ConstructorArguments.FirstOrDefault();
+
+            if (hubClientAttributeArgument.Value is not INamedTypeSymbol hubClientTypeSymbol)
+            {
+                continue;
+            }
+
+            var hubClientNamespace = hubClientTypeSymbol.ContainingNamespace.ToString();
+            var hubClientName = hubClientTypeSymbol.Name;
+
+            var extractor = new HubClientMethodExtractor(context.SemanticModel, hubClientTypeSymbol);
+            var extractedData = extractor.Extract();
+
+            results.Add(new FakeHubClientToGenerate(hubClientNamespace, hubClientName, extractedData.ClientToServerMethods,
+                extractedData.ServerToClientMethods));
         }
-        var hubClientNamespace = hubClientTypeSymbol.ContainingNamespace.ToString();
-        var hubClientName = hubClientTypeSymbol.Name;
-        
-        var extractor = new HubClientMethodExtractor(context.SemanticModel, hubClientTypeSymbol);
-        var extractedData = extractor.Extract();
-        
-        return new FakeHubClientToGenerate(hubClientNamespace, hubClientName, extractedData.ClientToServerMethods, extractedData.ServerToClientMethods);
+
+        return results.ToImmutable();
     }
 }

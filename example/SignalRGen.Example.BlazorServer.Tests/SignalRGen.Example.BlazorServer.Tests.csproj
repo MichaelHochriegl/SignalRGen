@@ -19,7 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\testing\SignalRGen.Testing\SignalRGen.Testing.csproj" />
+      <ProjectReference Include="..\..\src\testing\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj" />
+      <ProjectReference Include="..\..\src\testing\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
       <ProjectReference Include="..\SignalRGen.Example.Client.BlazorServer\SignalRGen.Example.Client.BlazorServer.csproj" />
     </ItemGroup>
 
