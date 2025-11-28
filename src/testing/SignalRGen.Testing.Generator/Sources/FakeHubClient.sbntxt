@@ -88,4 +88,83 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     }
     
     public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    
+    protected override async Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+    {
+        switch (methodName)
+        {
+            {{~ for method in client_to_server ~}}
+            {{~ if method.return_type == "global::System.Threading.Tasks.Task" ~}}
+            case "{{ method.identifier }}":
+                await Handle{{ method.identifier }}(args, cancellationToken);
+                return;
+            {{~ end ~}}
+            {{~ end ~}}
+           
+           default:
+                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                return;
+        }
+    }
+    
+    protected override async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+    {
+        switch (methodName)
+        {
+            {{~ for method in client_to_server ~}}
+            {{~ if method.return_type != "global::System.Threading.Tasks.Task" ~}}
+            case "{{ method.identifier }}":
+                // We await the specific handler which returns the concrete type (e.g., string),
+                // then cast it to TResult (which should be that same type).
+                var result = await Handle{{ method.identifier }}(args, cancellationToken);
+                return (TResult)(object)result!;
+            {{~ end ~}}
+            {{~ end ~}}
+           
+           default:
+                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                return default!;
+        }
+    }
+    {{~ for method in client_to_server ~}}
+    {{- $camel = to_camel_case method.identifier -}}
+    {{- $params = method.parameters -}}
+    {{- $ret = method.return_type -}}
+    {{- $isVoid = $ret == "global::System.Threading.Tasks.Task" -}}
+    {{~ $unwrappedRet = $ret | string.replace "global::System.Threading.Tasks.Task<" "" | string.replace ">" "" ~}}
+    
+    private async {{ $ret }} Handle{{ method.identifier }}(object?[] args, CancellationToken cancellationToken)
+    {
+        // Unpack arguments
+        {{~ for p in $params ~}}
+        var {{ p.name }} = ({{ p.type }})args[{{ for.index }}]!;
+        {{~ end ~}}
+    
+        // Record invocation
+        lock (_lock)
+        {
+             {{~ if $params.size == 0 ~}}
+             _{{ $camel }}CallCount++;
+             {{~ else if $params.size == 1 ~}}
+             _{{ $camel }}Calls.Add({{ $params[0].name }});
+             {{~ else ~}}
+             _{{ $camel }}Calls.Add(({{ for p in $params }}{{ if !for.first }}, {{ end }}{{ p.name }}{{ end }}));
+             {{~ end ~}}
+        }
+   
+        // Invoke custom handler if present
+        if ({{ method.identifier }}Handler is not null)
+        {
+            {{ if !$isVoid }}return {{ end }}await {{ method.identifier }}Handler(
+                {{- for p in $params -}}{{ p.name }}, {{ end -}}
+                cancellationToken
+            );
+        }
+        else if (Strict)
+        {
+            throw new InvalidOperationException("No behavior configured for {{ method.identifier }}.");
+        }
+        {{ if !$isVoid }}return default!;{{ end }}
+    }
+    {{~ end ~}}
 }

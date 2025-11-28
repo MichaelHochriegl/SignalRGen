@@ -70,4 +70,84 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     }
     
     public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    
+    protected override async Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+    {
+        switch (methodName)
+        {
+            case "SendClientToServerNoReturnType":
+                await HandleSendClientToServerNoReturnType(args, cancellationToken);
+                return;
+           
+           default:
+                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                return;
+        }
+    }
+    
+    protected override async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+    {
+        switch (methodName)
+        {
+            case "SendClientToServerWithReturnType":
+                // We await the specific handler which returns the concrete type (e.g., string),
+                // then cast it to TResult (which should be that same type).
+                var result = await HandleSendClientToServerWithReturnType(args, cancellationToken);
+                return (TResult)(object)result!;
+           
+           default:
+                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                return default!;
+        }
+    }
+    
+    private async global::System.Threading.Tasks.Task HandleSendClientToServerNoReturnType(object?[] args, CancellationToken cancellationToken)
+    {
+        // Unpack arguments
+        var rick = (string)args[0]!;
+        var age = (int)args[1]!;
+    
+        // Record invocation
+        lock (_lock)
+        {
+             _sendClientToServerNoReturnTypeCalls.Add((rick, age));
+        }
+   
+        // Invoke custom handler if present
+        if (SendClientToServerNoReturnTypeHandler is not null)
+        {
+            await SendClientToServerNoReturnTypeHandler(rick, age, cancellationToken
+            );
+        }
+        else if (Strict)
+        {
+            throw new InvalidOperationException("No behavior configured for SendClientToServerNoReturnType.");
+        }
+        
+    }
+    
+    private async global::System.Threading.Tasks.Task<string> HandleSendClientToServerWithReturnType(object?[] args, CancellationToken cancellationToken)
+    {
+        // Unpack arguments
+        var morty = (string)args[0]!;
+        var partOfMission = (bool)args[1]!;
+    
+        // Record invocation
+        lock (_lock)
+        {
+             _sendClientToServerWithReturnTypeCalls.Add((morty, partOfMission));
+        }
+   
+        // Invoke custom handler if present
+        if (SendClientToServerWithReturnTypeHandler is not null)
+        {
+            return await SendClientToServerWithReturnTypeHandler(morty, partOfMission, cancellationToken
+            );
+        }
+        else if (Strict)
+        {
+            throw new InvalidOperationException("No behavior configured for SendClientToServerWithReturnType.");
+        }
+        return default!;
+    }
 }
