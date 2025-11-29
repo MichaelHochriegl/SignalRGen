@@ -86,11 +86,11 @@ internal sealed class HubClientMethodExtractor
                 continue;
             }
             
-            var methodName = methodSymbol.Name;
-            if (!methodName.EndsWith("Handler", StringComparison.Ordinal))
+            if (!methodSymbol.Name.EndsWith("Handler", StringComparison.Ordinal))
             {
                 continue;
             }
+            var methodName = methodSymbol.Name.Replace("Handler", string.Empty);
             
             var parameters = methodSymbol.Parameters
                 .Where(p => p.Type

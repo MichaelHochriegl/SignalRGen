@@ -19,6 +19,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
+using SignalRGen.Testing.Abstractions;
 
 public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_client_name }}
 {
@@ -58,14 +59,40 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {{ else }}
     public Func<{{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }}{{- end }}, CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
     {{ end }}
+    {{- #endregion }}
     {{ end }}
+
+    {{~ for method in server_to_client ~}}
+    {{- $camel = to_camel_case method.identifier -}}
+    {{- $params = method.parameters -}}
+    {{- $paramCount = $params.size -}}
+
+    {{- capture $tupleType -}}
+        {{- if $paramCount == 0 -}}
+            global::System.ValueTuple
+        {{- else if $paramCount == 1 -}}
+            {{ $params[0].type }}
+        {{- else -}}
+            ({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end -}})
+        {{- end -}}
+    {{- end -}}
+    {{- $tupleType = $tupleType | string.strip -}}
+
+    public IReadOnlyList<{{ $tupleType }}> {{ method.identifier }}Events
+    {
+        get { lock (_lock) return _{{ $camel }}Events.ToList(); }
+    }
+    private readonly List<{{ $tupleType }}> _{{ $camel }}Events = new();
+    private readonly EventChannel<{{ $tupleType }}> _{{ $camel }}Channel = new();
+    {{~ end ~}}
+
     /// <summary>
     /// When true, the fake client operates in strict mode:
     /// any unconfigured or unexpected invocation will throw an exception.
     /// Use to ensure tests explicitly define expected interactions.
     /// </summary>
     public bool Strict { get; set; }
-    
+
     public Fake{{ hub_client_name }}(
              Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
              Uri? baseHubUri = null,
@@ -73,11 +100,11 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
              : base(hubConnectionBuilderConfiguration, baseHubUri ?? new Uri("http://localhost/"), httpConnectionOptionsConfiguration)
     {
     }
-    
+
     protected override void RegisterHubMethods()
     {
     }
-    
+
     public override Task StartAsync(
         Dictionary<string, string>? queryStrings = null,
         Dictionary<string, string>? headers = null,
@@ -86,9 +113,9 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
         _hubConnection = new HubConnectionBuilder().WithUrl("http://localhost").Build();
         return Task.CompletedTask;
     }
-    
+
     public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-    
+
     protected override async Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
     {
         switch (methodName)
@@ -100,13 +127,13 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
                 return;
             {{~ end ~}}
             {{~ end ~}}
-           
+       
            default:
                 if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return;
         }
     }
-    
+
     protected override async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
     {
         switch (methodName)
@@ -114,13 +141,11 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
             {{~ for method in client_to_server ~}}
             {{~ if method.return_type != "global::System.Threading.Tasks.Task" ~}}
             case "{{ method.identifier }}":
-                // We await the specific handler which returns the concrete type (e.g., string),
-                // then cast it to TResult (which should be that same type).
                 var result = await Handle{{ method.identifier }}(args, cancellationToken);
                 return (TResult)(object)result!;
             {{~ end ~}}
             {{~ end ~}}
-           
+       
            default:
                 if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return default!;
@@ -132,15 +157,13 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {{- $ret = method.return_type -}}
     {{- $isVoid = $ret == "global::System.Threading.Tasks.Task" -}}
     {{~ $unwrappedRet = $ret | string.replace "global::System.Threading.Tasks.Task<" "" | string.replace ">" "" ~}}
-    
+
     private async {{ $ret }} Handle{{ method.identifier }}(object?[] args, CancellationToken cancellationToken)
     {
-        // Unpack arguments
         {{~ for p in $params ~}}
         var {{ p.name }} = ({{ p.type }})args[{{ for.index }}]!;
         {{~ end ~}}
-    
-        // Record invocation
+
         lock (_lock)
         {
              {{~ if $params.size == 0 ~}}
@@ -151,8 +174,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
              _{{ $camel }}Calls.Add(({{ for p in $params }}{{ if !for.first }}, {{ end }}{{ p.name }}{{ end }}));
              {{~ end ~}}
         }
-   
-        // Invoke custom handler if present
+
         if ({{ method.identifier }}Handler is not null)
         {
             {{ if !$isVoid }}return {{ end }}await {{ method.identifier }}Handler(
@@ -167,4 +189,65 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
         {{ if !$isVoid }}return default!;{{ end }}
     }
     {{~ end ~}}
+
+    {{~ for method in server_to_client ~}}
+    {{- $camel = to_camel_case method.identifier -}}
+    {{- $params = method.parameters -}}
+    {{- $paramCount = $params.size -}}
+
+    {{- capture $tupleType -}}
+        {{- if $paramCount == 0 -}}
+            global::System.ValueTuple
+        {{- else if $paramCount == 1 -}}
+            {{ $params[0].type }}
+        {{- else -}}
+            ({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end -}})
+        {{- end -}}
+    {{- end -}}
+    {{- $tupleType = $tupleType | string.strip -}}
+
+    public async Task Simulate{{ method.identifier }}Async({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }}{{ if $paramCount > 0 }}, {{ end }}CancellationToken ct = default)
+    {
+        {{- if $paramCount == 0 -}}
+        var item = new global::System.ValueTuple();
+        {{- else if $paramCount == 1 -}}
+        var item = {{ $params[0].name }};
+        {{- else -}}
+        var item = ({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.name }}{{- end -}});
+        {{- end -}}
+
+        lock (_lock) _{{ $camel }}Events.Add(item);
+        await _{{ $camel }}Channel.PublishAsync(item, ct);
+
+        var handler = On{{ method.identifier }};
+        if (handler is not null)
+        {
+            await handler.Invoke({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.name }}{{- end -}});
+        }
+    }
+
+    public async Task<{{ $tupleType }}> WaitFor{{ method.identifier }}Async(CancellationToken ct = default)
+        => await _{{ $camel }}Channel.WaitNextAsync(ct);
+    {{~ end ~}}
+
+    public void ClearRecorded()
+    {
+        lock (_lock)
+        {
+            {{~ for method in client_to_server ~}}
+            {{~ if method.parameters.size == 0 ~}}
+            _{{ to_camel_case method.identifier }}CallCount = 0;
+            {{~ else ~}}
+            _{{ to_camel_case method.identifier }}Calls.Clear();
+            {{~ end ~}}
+            {{~ end ~}}
+
+            {{~ for method in server_to_client ~}}
+            _{{ to_camel_case method.identifier }}Events.Clear();
+            {{~ end ~}}
+        }
+        {{~ for method in server_to_client ~}}
+        _{{ to_camel_case method.identifier }}Channel.Reset();
+        {{~ end ~}}
+    }
 }
