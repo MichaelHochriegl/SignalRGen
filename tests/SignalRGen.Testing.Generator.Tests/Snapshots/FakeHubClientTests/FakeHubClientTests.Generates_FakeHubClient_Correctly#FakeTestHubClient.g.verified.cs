@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.AspNetCore.Http.Connections.Client;
+using SignalRGen.Testing.Abstractions;
 
 public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
 {
@@ -41,13 +42,46 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     public Func<string, bool, CancellationToken, global::System.Threading.Tasks.Task<string>>? SendClientToServerWithReturnTypeHandler { get; set; }
     
     
+
+
+    public IReadOnlyList<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> OnReceiveCustomTypeUpdateEvents
+    {
+        get { lock (_lock) return _onReceiveCustomTypeUpdateEvents.ToList(); }
+    }
+    private readonly List<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateEvents = new();
+    private readonly EventChannel<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateChannel = new();
+
+
+    public IReadOnlyList<(string arg1, int arg2)> OnReceiveFooUpdateEvents
+    {
+        get { lock (_lock) return _onReceiveFooUpdateEvents.ToList(); }
+    }
+    private readonly List<(string arg1, int arg2)> _onReceiveFooUpdateEvents = new();
+    private readonly EventChannel<(string arg1, int arg2)> _onReceiveFooUpdateChannel = new();
+
+
+    public IReadOnlyList<(string arg1, int arg2)> OnReceiveNormalTypeWithSpecificAttributeAppliedEvents
+    {
+        get { lock (_lock) return _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.ToList(); }
+    }
+    private readonly List<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedEvents = new();
+    private readonly EventChannel<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedChannel = new();
+
+
+    public IReadOnlyList<int> OnReceiveWithArbitraryAttributeEvents
+    {
+        get { lock (_lock) return _onReceiveWithArbitraryAttributeEvents.ToList(); }
+    }
+    private readonly List<int> _onReceiveWithArbitraryAttributeEvents = new();
+    private readonly EventChannel<int> _onReceiveWithArbitraryAttributeChannel = new();
+
     /// <summary>
     /// When true, the fake client operates in strict mode:
     /// any unconfigured or unexpected invocation will throw an exception.
     /// Use to ensure tests explicitly define expected interactions.
     /// </summary>
     public bool Strict { get; set; }
-    
+
     public FakeTestHubClient(
              Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
              Uri? baseHubUri = null,
@@ -55,11 +89,11 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
              : base(hubConnectionBuilderConfiguration, baseHubUri ?? new Uri("http://localhost/"), httpConnectionOptionsConfiguration)
     {
     }
-    
+
     protected override void RegisterHubMethods()
     {
     }
-    
+
     public override Task StartAsync(
         Dictionary<string, string>? queryStrings = null,
         Dictionary<string, string>? headers = null,
@@ -68,9 +102,9 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         _hubConnection = new HubConnectionBuilder().WithUrl("http://localhost").Build();
         return Task.CompletedTask;
     }
-    
+
     public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
-    
+
     protected override async Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
     {
         switch (methodName)
@@ -78,42 +112,37 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
             case "SendClientToServerNoReturnType":
                 await HandleSendClientToServerNoReturnType(args, cancellationToken);
                 return;
-           
+       
            default:
                 if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return;
         }
     }
-    
+
     protected override async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
     {
         switch (methodName)
         {
             case "SendClientToServerWithReturnType":
-                // We await the specific handler which returns the concrete type (e.g., string),
-                // then cast it to TResult (which should be that same type).
                 var result = await HandleSendClientToServerWithReturnType(args, cancellationToken);
                 return (TResult)(object)result!;
-           
+       
            default:
                 if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return default!;
         }
     }
-    
+
     private async global::System.Threading.Tasks.Task HandleSendClientToServerNoReturnType(object?[] args, CancellationToken cancellationToken)
     {
-        // Unpack arguments
         var rick = (string)args[0]!;
         var age = (int)args[1]!;
-    
-        // Record invocation
+
         lock (_lock)
         {
              _sendClientToServerNoReturnTypeCalls.Add((rick, age));
         }
-   
-        // Invoke custom handler if present
+
         if (SendClientToServerNoReturnTypeHandler is not null)
         {
             await SendClientToServerNoReturnTypeHandler(rick, age, cancellationToken
@@ -125,20 +154,17 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
         
     }
-    
+
     private async global::System.Threading.Tasks.Task<string> HandleSendClientToServerWithReturnType(object?[] args, CancellationToken cancellationToken)
     {
-        // Unpack arguments
         var morty = (string)args[0]!;
         var partOfMission = (bool)args[1]!;
-    
-        // Record invocation
+
         lock (_lock)
         {
              _sendClientToServerWithReturnTypeCalls.Add((morty, partOfMission));
         }
-   
-        // Invoke custom handler if present
+
         if (SendClientToServerWithReturnTypeHandler is not null)
         {
             return await SendClientToServerWithReturnTypeHandler(morty, partOfMission, cancellationToken
@@ -149,5 +175,83 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
             throw new InvalidOperationException("No behavior configured for SendClientToServerWithReturnType.");
         }
         return default!;
+    }
+
+    
+    public async Task SimulateOnReceiveCustomTypeUpdateAsync(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> arg, CancellationToken ct = default)
+    {var item = arg;lock (_lock) _onReceiveCustomTypeUpdateEvents.Add(item);
+        await _onReceiveCustomTypeUpdateChannel.PublishAsync(item, ct);
+
+        var handler = OnReceiveCustomTypeUpdate;
+        if (handler is not null)
+        {
+            await handler.Invoke(arg);
+        }
+    }
+
+    public async Task<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> WaitForOnReceiveCustomTypeUpdateAsync(CancellationToken ct = default)
+        => await _onReceiveCustomTypeUpdateChannel.WaitNextAsync(ct);
+
+    
+    public async Task SimulateOnReceiveFooUpdateAsync(string arg1, int arg2, CancellationToken ct = default)
+    {var item = (arg1, arg2);lock (_lock) _onReceiveFooUpdateEvents.Add(item);
+        await _onReceiveFooUpdateChannel.PublishAsync(item, ct);
+
+        var handler = OnReceiveFooUpdate;
+        if (handler is not null)
+        {
+            await handler.Invoke(arg1, arg2);
+        }
+    }
+
+    public async Task<(string arg1, int arg2)> WaitForOnReceiveFooUpdateAsync(CancellationToken ct = default)
+        => await _onReceiveFooUpdateChannel.WaitNextAsync(ct);
+
+    
+    public async Task SimulateOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(string arg1, int arg2, CancellationToken ct = default)
+    {var item = (arg1, arg2);lock (_lock) _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.Add(item);
+        await _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.PublishAsync(item, ct);
+
+        var handler = OnReceiveNormalTypeWithSpecificAttributeApplied;
+        if (handler is not null)
+        {
+            await handler.Invoke(arg1, arg2);
+        }
+    }
+
+    public async Task<(string arg1, int arg2)> WaitForOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(CancellationToken ct = default)
+        => await _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.WaitNextAsync(ct);
+
+    
+    public async Task SimulateOnReceiveWithArbitraryAttributeAsync(int arg, CancellationToken ct = default)
+    {var item = arg;lock (_lock) _onReceiveWithArbitraryAttributeEvents.Add(item);
+        await _onReceiveWithArbitraryAttributeChannel.PublishAsync(item, ct);
+
+        var handler = OnReceiveWithArbitraryAttribute;
+        if (handler is not null)
+        {
+            await handler.Invoke(arg);
+        }
+    }
+
+    public async Task<int> WaitForOnReceiveWithArbitraryAttributeAsync(CancellationToken ct = default)
+        => await _onReceiveWithArbitraryAttributeChannel.WaitNextAsync(ct);
+
+    public void ClearRecorded()
+    {
+        lock (_lock)
+        {
+            _sendClientToServerNoReturnTypeCalls.Clear();
+            _sendClientToServerWithReturnTypeCalls.Clear();
+
+            _onReceiveCustomTypeUpdateEvents.Clear();
+            _onReceiveFooUpdateEvents.Clear();
+            _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.Clear();
+            _onReceiveWithArbitraryAttributeEvents.Clear();
+        }
+        _onReceiveCustomTypeUpdateChannel.Reset();
+        _onReceiveFooUpdateChannel.Reset();
+        _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.Reset();
+        _onReceiveWithArbitraryAttributeChannel.Reset();
     }
 }

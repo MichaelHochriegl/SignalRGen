@@ -61,12 +61,10 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {{ end }}
     {{- #endregion }}
     {{ end }}
-
     {{~ for method in server_to_client ~}}
     {{- $camel = to_camel_case method.identifier -}}
     {{- $params = method.parameters -}}
     {{- $paramCount = $params.size -}}
-
     {{- capture $tupleType -}}
         {{- if $paramCount == 0 -}}
             global::System.ValueTuple
@@ -76,7 +74,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
             ({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end -}})
         {{- end -}}
     {{- end -}}
-    {{- $tupleType = $tupleType | string.strip -}}
+    {{ $tupleType = $tupleType | string.strip }}
 
     public IReadOnlyList<{{ $tupleType }}> {{ method.identifier }}Events
     {
@@ -189,12 +187,10 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
         {{ if !$isVoid }}return default!;{{ end }}
     }
     {{~ end ~}}
-
     {{~ for method in server_to_client ~}}
     {{- $camel = to_camel_case method.identifier -}}
     {{- $params = method.parameters -}}
     {{- $paramCount = $params.size -}}
-
     {{- capture $tupleType -}}
         {{- if $paramCount == 0 -}}
             global::System.ValueTuple
@@ -204,8 +200,8 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
             ({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end -}})
         {{- end -}}
     {{- end -}}
-    {{- $tupleType = $tupleType | string.strip -}}
-
+    {{ $tupleType = $tupleType | string.strip }}
+    
     public async Task Simulate{{ method.identifier }}Async({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }}{{ if $paramCount > 0 }}, {{ end }}CancellationToken ct = default)
     {
         {{- if $paramCount == 0 -}}
@@ -219,7 +215,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
         lock (_lock) _{{ $camel }}Events.Add(item);
         await _{{ $camel }}Channel.PublishAsync(item, ct);
 
-        var handler = On{{ method.identifier }};
+        var handler = {{ method.identifier }};
         if (handler is not null)
         {
             await handler.Invoke({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.name }}{{- end -}});
