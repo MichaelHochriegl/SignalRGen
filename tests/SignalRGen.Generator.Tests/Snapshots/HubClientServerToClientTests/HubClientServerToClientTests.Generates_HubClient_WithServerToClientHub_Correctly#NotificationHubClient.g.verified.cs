@@ -29,7 +29,9 @@ public class NotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNotification of the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, string, global::System.Threading.Tasks.Task>? OnReceiveNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNotificationDelegate(string message, string type);
+    public ReceiveNotificationDelegate? OnReceiveNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNotificationHandler(string message, string type)
     {
         return OnReceiveNotification?.Invoke(message, type) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class NotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveAlert of the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveAlert = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveAlertDelegate(string alertMessage, int severity);
+    public ReceiveAlertDelegate? OnReceiveAlert = default;
+    
     private global::System.Threading.Tasks.Task ReceiveAlertHandler(string alertMessage, int severity)
     {
         return OnReceiveAlert?.Invoke(alertMessage, severity) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class NotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "global::SignalRGen.Clients.INotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeUpdate = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateDelegate(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto);
+    public ReceiveCustomTypeUpdateDelegate? OnReceiveCustomTypeUpdate = default;
+    
     private global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
         return OnReceiveCustomTypeUpdate?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;

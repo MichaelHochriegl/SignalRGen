@@ -29,11 +29,9 @@ public class {{ hub_name }} : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method {{ method.identifier }} of the <see cref = "{{ full_interface_name }}"/> gets invoked.
     /// </summary>
-    {{~ if method.has_parameters ~}}
-    public global::System.Func<{{ method.parameter_types }}, global::System.Threading.Tasks.Task>? On{{ method.identifier }} = default;
-    {{~ else ~}}
-    public global::System.Func<global::System.Threading.Tasks.Task>? On{{ method.identifier }} = default;
-    {{~ end ~}}
+    public delegate global::System.Threading.Tasks.Task {{ method.identifier }}Delegate({{ method.parameter_list }});
+    public {{ method.identifier }}Delegate? On{{ method.identifier }} = default;
+    
     private global::System.Threading.Tasks.Task {{ method.identifier }}Handler({{ method.parameter_list }})
     {
         return On{{ method.identifier }}?.Invoke({{ method.parameter_names }}) ?? global::System.Threading.Tasks.Task.CompletedTask;

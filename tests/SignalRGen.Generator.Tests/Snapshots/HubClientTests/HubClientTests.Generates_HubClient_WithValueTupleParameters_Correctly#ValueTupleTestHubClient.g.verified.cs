@@ -29,7 +29,9 @@ public class ValueTupleTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveTuple of the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<(string name, int age), global::System.Threading.Tasks.Task>? OnReceiveTuple = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveTupleDelegate((string name, int age) person);
+    public ReceiveTupleDelegate? OnReceiveTuple = default;
+    
     private global::System.Threading.Tasks.Task ReceiveTupleHandler((string name, int age) person)
     {
         return OnReceiveTuple?.Invoke(person) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ValueTupleTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNestedTuple of the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<(string, (int, bool)), global::System.Threading.Tasks.Task>? OnReceiveNestedTuple = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNestedTupleDelegate((string, (int, bool)) complexTuple);
+    public ReceiveNestedTupleDelegate? OnReceiveNestedTuple = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNestedTupleHandler((string, (int, bool)) complexTuple)
     {
         return OnReceiveNestedTuple?.Invoke(complexTuple) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class ValueTupleTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNamedTuple of the <see cref = "global::SignalRGen.Clients.IValueTupleTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<(string FirstName, string LastName, int Age), global::System.Threading.Tasks.Task>? OnReceiveNamedTuple = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNamedTupleDelegate((string FirstName, string LastName, int Age) person);
+    public ReceiveNamedTupleDelegate? OnReceiveNamedTuple = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNamedTupleHandler((string FirstName, string LastName, int Age) person)
     {
         return OnReceiveNamedTuple?.Invoke(person) ?? global::System.Threading.Tasks.Task.CompletedTask;

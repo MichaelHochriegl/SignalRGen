@@ -29,7 +29,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "global::SignalRGen.Clients.Nested.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeUpdate = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateDelegate(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes);
+    public ReceiveCustomTypeUpdateDelegate? OnReceiveCustomTypeUpdate = default;
+    
     private global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateHandler(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes)
     {
         return OnReceiveCustomTypeUpdate?.Invoke(customTypes) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveFooUpdate of the <see cref = "global::SignalRGen.Clients.Nested.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveFooUpdate = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveFooUpdateDelegate(string bar, int bass);
+    public ReceiveFooUpdateDelegate? OnReceiveFooUpdate = default;
+    
     private global::System.Threading.Tasks.Task ReceiveFooUpdateHandler(string bar, int bass)
     {
         return OnReceiveFooUpdate?.Invoke(bar, bass) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "global::SignalRGen.Clients.Nested.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNormalTypeWithSpecificAttributeAppliedDelegate(string bazz, int buzz);
+    public ReceiveNormalTypeWithSpecificAttributeAppliedDelegate? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNormalTypeWithSpecificAttributeAppliedHandler(string bazz, int buzz)
     {
         return OnReceiveNormalTypeWithSpecificAttributeApplied?.Invoke(bazz, buzz) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -53,7 +59,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "global::SignalRGen.Clients.Nested.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveWithArbitraryAttribute = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveWithArbitraryAttributeDelegate(int blub);
+    public ReceiveWithArbitraryAttributeDelegate? OnReceiveWithArbitraryAttribute = default;
+    
     private global::System.Threading.Tasks.Task ReceiveWithArbitraryAttributeHandler(int blub)
     {
         return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? global::System.Threading.Tasks.Task.CompletedTask;
