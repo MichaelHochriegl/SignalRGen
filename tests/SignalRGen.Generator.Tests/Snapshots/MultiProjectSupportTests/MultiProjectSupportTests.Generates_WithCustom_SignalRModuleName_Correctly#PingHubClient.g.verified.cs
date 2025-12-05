@@ -29,7 +29,9 @@ public class PingHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method Ping of the <see cref = "global::MyCompany.App.Clients.IPingHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnPing = default;
+    public delegate global::System.Threading.Tasks.Task PingDelegate();
+    public PingDelegate? OnPing = default;
+    
     private global::System.Threading.Tasks.Task PingHandler()
     {
         return OnPing?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;

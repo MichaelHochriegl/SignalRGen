@@ -29,7 +29,9 @@ public class ExampleHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveExampleCountUpdate = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveExampleCountUpdateDelegate(int count);
+    public ReceiveExampleCountUpdateDelegate? OnReceiveExampleCountUpdate = default;
+    
     private global::System.Threading.Tasks.Task ReceiveExampleCountUpdateHandler(int count)
     {
         return OnReceiveExampleCountUpdate?.Invoke(count) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ExampleHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveCollection of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Collections.Generic.IEnumerable<T>, global::System.Threading.Tasks.Task>? OnReceiveCollection = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveCollectionDelegate(global::System.Collections.Generic.IEnumerable<T> items);
+    public ReceiveCollectionDelegate? OnReceiveCollection = default;
+    
     private global::System.Threading.Tasks.Task ReceiveCollectionHandler(global::System.Collections.Generic.IEnumerable<T> items)
     {
         return OnReceiveCollection?.Invoke(items) ?? global::System.Threading.Tasks.Task.CompletedTask;

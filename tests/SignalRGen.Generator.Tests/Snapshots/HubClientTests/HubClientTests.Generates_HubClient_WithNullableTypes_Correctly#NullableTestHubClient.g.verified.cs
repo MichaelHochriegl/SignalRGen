@@ -29,7 +29,9 @@ public class NullableTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNullableString of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveNullableString = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNullableStringDelegate(string nullableMessage);
+    public ReceiveNullableStringDelegate? OnReceiveNullableString = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNullableStringHandler(string nullableMessage)
     {
         return OnReceiveNullableString?.Invoke(nullableMessage) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class NullableTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNullableInt of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<int?, global::System.Threading.Tasks.Task>? OnReceiveNullableInt = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNullableIntDelegate(int? nullableNumber);
+    public ReceiveNullableIntDelegate? OnReceiveNullableInt = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNullableIntHandler(int? nullableNumber)
     {
         return OnReceiveNullableInt?.Invoke(nullableNumber) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class NullableTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNullableCustomType of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveNullableCustomType = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNullableCustomTypeDelegate(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto nullableDto);
+    public ReceiveNullableCustomTypeDelegate? OnReceiveNullableCustomType = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNullableCustomTypeHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto nullableDto)
     {
         return OnReceiveNullableCustomType?.Invoke(nullableDto) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -53,7 +59,9 @@ public class NullableTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method NotifyWithNullableArray of the <see cref = "global::SignalRGen.Clients.INullableTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string[], global::System.Threading.Tasks.Task>? OnNotifyWithNullableArray = default;
+    public delegate global::System.Threading.Tasks.Task NotifyWithNullableArrayDelegate(string[] nullableArray);
+    public NotifyWithNullableArrayDelegate? OnNotifyWithNullableArray = default;
+    
     private global::System.Threading.Tasks.Task NotifyWithNullableArrayHandler(string[] nullableArray)
     {
         return OnNotifyWithNullableArray?.Invoke(nullableArray) ?? global::System.Threading.Tasks.Task.CompletedTask;

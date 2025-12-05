@@ -29,7 +29,9 @@ public class ExtendedNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveExtendedNotification of the <see cref = "global::SignalRGen.Clients.IExtendedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveExtendedNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveExtendedNotificationDelegate(string message, int priority);
+    public ReceiveExtendedNotificationDelegate? OnReceiveExtendedNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveExtendedNotificationHandler(string message, int priority)
     {
         return OnReceiveExtendedNotification?.Invoke(message, priority) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ExtendedNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveCustomTypeNotification of the <see cref = "global::SignalRGen.Clients.IExtendedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveCustomTypeNotificationDelegate(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto);
+    public ReceiveCustomTypeNotificationDelegate? OnReceiveCustomTypeNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveCustomTypeNotificationHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
         return OnReceiveCustomTypeNotification?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class ExtendedNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveBaseNotification of the <see cref = "global::SignalRGen.Clients.IExtendedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveBaseNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveBaseNotificationDelegate(string message);
+    public ReceiveBaseNotificationDelegate? OnReceiveBaseNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveBaseNotificationHandler(string message)
     {
         return OnReceiveBaseNotification?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;

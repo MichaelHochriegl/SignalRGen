@@ -29,7 +29,9 @@ public class ComplexNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveUserList of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveUserList = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveUserListDelegate(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> users);
+    public ReceiveUserListDelegate? OnReceiveUserList = default;
+    
     private global::System.Threading.Tasks.Task ReceiveUserListHandler(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> users)
     {
         return OnReceiveUserList?.Invoke(users) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ComplexNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveDataUpdate of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<Dictionary<string, int>, global::System.Threading.Tasks.Task>? OnReceiveDataUpdate = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveDataUpdateDelegate(Dictionary<string, int> metrics);
+    public ReceiveDataUpdateDelegate? OnReceiveDataUpdate = default;
+    
     private global::System.Threading.Tasks.Task ReceiveDataUpdateHandler(Dictionary<string, int> metrics)
     {
         return OnReceiveDataUpdate?.Invoke(metrics) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class ComplexNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNullableData of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, int?, global::System.Threading.Tasks.Task>? OnReceiveNullableData = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNullableDataDelegate(string nullableMessage, int? nullableCount);
+    public ReceiveNullableDataDelegate? OnReceiveNullableData = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNullableDataHandler(string nullableMessage, int? nullableCount)
     {
         return OnReceiveNullableData?.Invoke(nullableMessage, nullableCount) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -53,7 +59,9 @@ public class ComplexNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveArrayData of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string[], global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[], global::System.Threading.Tasks.Task>? OnReceiveArrayData = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveArrayDataDelegate(string[] messages, global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos);
+    public ReceiveArrayDataDelegate? OnReceiveArrayData = default;
+    
     private global::System.Threading.Tasks.Task ReceiveArrayDataHandler(string[] messages, global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
     {
         return OnReceiveArrayData?.Invoke(messages, dtos) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -61,7 +69,9 @@ public class ComplexNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveTupleData of the <see cref = "global::SignalRGen.Clients.IComplexNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<(string name, int value), global::System.Threading.Tasks.Task>? OnReceiveTupleData = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveTupleDataDelegate((string name, int value) tupleData);
+    public ReceiveTupleDataDelegate? OnReceiveTupleData = default;
+    
     private global::System.Threading.Tasks.Task ReceiveTupleDataHandler((string name, int value) tupleData)
     {
         return OnReceiveTupleData?.Invoke(tupleData) ?? global::System.Threading.Tasks.Task.CompletedTask;
