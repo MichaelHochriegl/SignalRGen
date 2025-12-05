@@ -76,31 +76,37 @@ internal sealed class HubClientMethodExtractor
 
         foreach (var member in _hubClientTypeSymbol.GetMembers())
         {
-            if (member is not IMethodSymbol methodSymbol)
+            if (member is not IFieldSymbol fieldSymbol)
             {
                 continue;
             }
 
-            if (methodSymbol.DeclaredAccessibility != Accessibility.Private)
+            if (fieldSymbol.DeclaredAccessibility != Accessibility.Public)
             {
                 continue;
             }
             
-            if (!methodSymbol.Name.EndsWith("Handler", StringComparison.Ordinal))
+            if (!fieldSymbol.Name.StartsWith("On", StringComparison.Ordinal))
             {
                 continue;
             }
-            var methodName = methodSymbol.Name.Replace("Handler", string.Empty);
+            var methodName = member.Name;
+
+            var invokeMethod = (fieldSymbol.Type as INamedTypeSymbol)?.DelegateInvokeMethod;
+            if (invokeMethod is null)
+            {
+                continue;
+            }
             
-            var parameters = methodSymbol.Parameters
+            var parameters = invokeMethod.Parameters
                 .Where(p => p.Type
                                 .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat) 
                             != "global::System.Threading.CancellationToken")
                 .Select(p => new Parameter(p.Type.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat), p.Name))
                 .ToImmutableArray()
                 .AsEquatableArray();
-            var returnType = methodSymbol.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
-            var awaitableReturnType = methodSymbol.ReturnType
+            var returnType = invokeMethod.ReturnType.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
+            var awaitableReturnType = invokeMethod.ReturnType
                 .GetAwaitableResultType(_semanticModel.Compilation)?
                 .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat);
             
