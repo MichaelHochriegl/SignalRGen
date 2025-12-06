@@ -14,14 +14,15 @@ public class ChatTests : BunitContext, IAsyncLifetime
     }
 
     [Fact]
-    public void Join_Chat_Updates_UI_To_Chat_Mode()
+    public async Task Join_Chat_Updates_UI_To_Chat_Mode()
     {
         // Arrange
+        await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
 
         // Act
         cut.Find("input[placeholder='Enter username']").Change("TestUser");
-        cut.Find("button").Click();
+        await cut.Find("button").ClickAsync();
 
         // Assert
         cut.Find(".chatting-as-section span").MarkupMatches("<span>TestUser</span>");
@@ -32,8 +33,7 @@ public class ChatTests : BunitContext, IAsyncLifetime
     public async Task Receiving_UserJoined_Event_Shows_Notification()
     {
         // Arrange
-        var fakeClient = Services.GetRequiredService<ChatHubContractClient>() as FakeChatHubContractClient;
-        ArgumentNullException.ThrowIfNull(fakeClient);
+        await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
         cut.Find("input[placeholder='Enter username']").Change("Me");
         await cut.Find("button").ClickAsync();
@@ -42,16 +42,19 @@ public class ChatTests : BunitContext, IAsyncLifetime
         await fakeClient.SimulateOnUserJoinedAsync("NewUser");
     
         // Assert
+        await fakeClient.WaitForOnUserJoinedAsync();
         await cut.WaitForStateAsync(() => 
             cut.FindAll(".messages div").Any(m => m.TextContent.Contains("User 'NewUser' joined")));
     }
+
+    
 
     [Fact]
     public async Task Receiving_UserLeft_Event_Shows_Notification()
     {
         // Arrange
         
-        var fakeClient = Services.GetRequiredService<ChatHubContractClient>() as FakeChatHubContractClient;
+        await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
         cut.Find("input[placeholder='Enter username']").Change("Me");
         await cut.Find("button").ClickAsync();
@@ -60,6 +63,7 @@ public class ChatTests : BunitContext, IAsyncLifetime
         await fakeClient.SimulateOnUserLeftAsync("OldUser");
     
         // Assert
+        await fakeClient.WaitForOnUserLeftAsync();
         await cut.WaitForStateAsync(() => 
             cut.FindAll(".messages div").Any(m => m.TextContent.Contains("User 'OldUser' left")));
     }
@@ -69,7 +73,7 @@ public class ChatTests : BunitContext, IAsyncLifetime
     {
         // Arrange
         
-        var fakeClient = Services.GetRequiredService<ChatHubContractClient>() as FakeChatHubContractClient;
+        await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
         cut.Find("input[placeholder='Enter username']").Change("Me");
         await cut.Find("button").ClickAsync();
@@ -78,37 +82,53 @@ public class ChatTests : BunitContext, IAsyncLifetime
         await fakeClient.SimulateOnMessageReceivedAsync("Alice", "Hello World");
     
         // Assert
+        await fakeClient.WaitForOnMessageReceivedAsync();
         await cut.WaitForStateAsync(() => 
             cut.FindAll(".messages div").Any(m => m.TextContent.Contains("Alice: Hello World")));
     }
     
     [Fact]
-    public void Sending_Message_Calls_Hub_Method_And_Updates_UI()
+    public async Task Sending_Message_Calls_Hub_Method_And_Updates_UI()
     {
         // Arrange
         
-        var fakeClient = Services.GetRequiredService<ChatHubContractClient>() as FakeChatHubContractClient;
+        await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
         cut.Find("input[placeholder='Enter username']").Change("Me");
-        cut.Find("button").Click();
+        await cut.Find("button").ClickAsync();
     
         // Act
         cut.Find("input[placeholder='Enter message']").Change("My secret message");
-        cut.Find("button").Click();
+        await cut.Find("button").ClickAsync();
     
         // Assert
         Assert.Contains("My secret message", fakeClient.SendMessageCalls);
         
-        cut.WaitForState(() => 
+        await cut.WaitForStateAsync(() => 
             cut.FindAll(".messages div").Any(m => m.TextContent.Contains("Me: My secret message")));
     }
+
+    private async Task<FakeChatHubContractClient> GetFake()
+    {
+        FakeChatHubContractClient? fakeClient = null;
+        try
+        {
+            fakeClient = Services.GetRequiredService<ChatHubContractClient>() as FakeChatHubContractClient;
+            ArgumentNullException.ThrowIfNull(fakeClient);
+            return fakeClient;
+        }
+        catch
+        {
+            if (fakeClient != null) await fakeClient.DisposeAsync();
+            throw;
+        }
+    }
+
     public Task InitializeAsync()
     {
         return Task.CompletedTask;
     }
 
-    // This is bad currently, but to get it fixed, we need to alter the "real" generated HubClient
-    // by implementing `Dispose`. Currently only `DisposeAsync` is implemented
     public new async Task DisposeAsync()
     {
         await base.DisposeAsync();
