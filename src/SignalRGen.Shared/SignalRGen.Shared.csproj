@@ -6,6 +6,13 @@
         <Nullable>enable</Nullable>
         <LangVersion>Latest</LangVersion>
         <IsPackable>false</IsPackable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
+        <PackageReference Include="Scriban" Version="6.4.0" PrivateAssets="all" GeneratePathProperty="true" />
+    </ItemGroup>
 
 </Project>

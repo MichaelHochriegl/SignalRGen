@@ -14,7 +14,7 @@ namespace SignalRGen.Generator;
 internal static class EquatableArray
 {
     /// <summary>
-    /// Creates an <see cref="EquatableArray{T}"/> instance from a given <see cref="ImmutableArray{T}"/>.
+    /// Creates an <see cref="EquatableArray{T}"/> instance from a given <see cref="ImmutableArray"/>.
     /// </summary>
     /// <typeparam name="T">The type of items in the input array.</typeparam>
     /// <param name="array">The input <see cref="ImmutableArray{T}"/> instance.</param>
