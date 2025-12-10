@@ -17,7 +17,7 @@ public class ChatHub : Hub<IChatHubServerToClient>, IChatHubClientToServer
     public Task SendMessage(string message)
     {
         var user = Context.UserIdentifier ?? "Anonymous";
-        return Clients.Others.MessageReceived(user, message);
+        return Clients.Others.MessageReceived(new ChatMessage(user, message, DateTime.UtcNow));
     }
 
     // We use the `OnDisconnectedAsync` method to notify the other clients that a user left.

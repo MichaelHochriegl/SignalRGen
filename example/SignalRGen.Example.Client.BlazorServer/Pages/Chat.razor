@@ -66,9 +66,9 @@ else
             
             // We subscribe to the `OnMessageReceived` event to get notified whenever a new message
             // was sent by other users.
-            ChatHubClient.OnMessageReceived += async (user, message) =>
+            ChatHubClient.OnMessageReceived += async (message) =>
             {
-                _messages.Add($"{user}: {message}");
+                _messages.Add($"{message.User}: {message.Message}");
                 await InvokeAsync(StateHasChanged);
             };
             

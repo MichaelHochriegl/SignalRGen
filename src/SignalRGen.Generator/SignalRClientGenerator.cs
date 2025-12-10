@@ -29,7 +29,10 @@ internal sealed class SignalRClientGenerator : IIncrementalGenerator
                     syntaxNode is InterfaceDeclarationSyntax,
                 GetSemanticTargetForGeneration)
             .WithTrackingName(TrackingNames.InitialExtraction);
-        var allHubClients = markedInterfaces.Collect().Combine(msBuildOptions).WithTrackingName(TrackingNames.Collect);
+        var allHubClients = markedInterfaces
+            .Collect()
+            .Combine(msBuildOptions)
+            .WithTrackingName(TrackingNames.Collect);
 
         context.RegisterSourceOutput(markedInterfaces, GenerateHubClient!);
         

@@ -12,4 +12,9 @@
     <ItemGroup>
         <Compile Include="../../SignalRGen.Shared/IsExternalInit.cs"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Threading.Channels" Version="9.0.11" />
+    </ItemGroup>
+
 </Project>

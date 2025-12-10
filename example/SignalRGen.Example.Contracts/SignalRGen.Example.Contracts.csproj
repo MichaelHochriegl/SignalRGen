@@ -19,11 +19,4 @@
       <ProjectReference Include="..\..\src\SignalRGen.Generator\SignalRGen.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.9.2">
-        <PrivateAssets>all</PrivateAssets>
-        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      </PackageReference>
-    </ItemGroup>
-
 </Project>
