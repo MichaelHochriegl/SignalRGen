@@ -79,7 +79,7 @@ public class ChatTests : BunitContext, IAsyncLifetime
         await cut.Find("button").ClickAsync();
     
         // Act
-        await fakeClient.SimulateOnMessageReceivedAsync("Alice", "Hello World");
+        await fakeClient.SimulateOnMessageReceivedAsync(new ChatMessage("Alice", "Hello World", DateTime.UtcNow));
     
         // Assert
         await fakeClient.WaitForOnMessageReceivedAsync();

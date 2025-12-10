@@ -3,3 +3,4 @@ using SignalRGen.Testing.Abstractions.Attributes;
 
 [assembly: GenerateFakeForHubClient(typeof(ExampleHubClient))]
 [assembly: GenerateFakeForHubClient(typeof(ChatHubContractClient))]
+[assembly: GenerateFakeForHubClient(typeof(BasicHubClient))]
