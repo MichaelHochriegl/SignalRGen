@@ -29,7 +29,9 @@ public class ParameterlessNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveHeartbeat of the <see cref = "global::SignalRGen.Clients.IParameterlessNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnReceiveHeartbeat = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveHeartbeatDelegate();
+    public ReceiveHeartbeatDelegate? OnReceiveHeartbeat = default;
+    
     private global::System.Threading.Tasks.Task ReceiveHeartbeatHandler()
     {
         return OnReceiveHeartbeat?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ParameterlessNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveRefreshSignal of the <see cref = "global::SignalRGen.Clients.IParameterlessNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnReceiveRefreshSignal = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveRefreshSignalDelegate();
+    public ReceiveRefreshSignalDelegate? OnReceiveRefreshSignal = default;
+    
     private global::System.Threading.Tasks.Task ReceiveRefreshSignalHandler()
     {
         return OnReceiveRefreshSignal?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;

@@ -29,7 +29,9 @@ public class DefaultHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method Notify of the <see cref = "global::MyCompany.App.Clients.IDefaultHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotify = default;
+    public delegate global::System.Threading.Tasks.Task NotifyDelegate();
+    public NotifyDelegate? OnNotify = default;
+    
     private global::System.Threading.Tasks.Task NotifyHandler()
     {
         return OnNotify?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
