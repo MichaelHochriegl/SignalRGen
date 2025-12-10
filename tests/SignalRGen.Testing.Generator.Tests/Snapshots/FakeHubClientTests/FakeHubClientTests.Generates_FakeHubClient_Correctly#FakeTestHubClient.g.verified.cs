@@ -44,20 +44,20 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     private readonly global::SignalRGen.Testing.Abstractions.EventChannel<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateChannel = new();
 
 
-    public global::System.Collections.Generic.IReadOnlyList<(string arg1, int arg2)> OnReceiveFooUpdateEvents
+    public global::System.Collections.Generic.IReadOnlyList<(string bar, int bass)> OnReceiveFooUpdateEvents
     {
         get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onReceiveFooUpdateEvents); }
     }
-    private readonly global::System.Collections.Generic.List<(string arg1, int arg2)> _onReceiveFooUpdateEvents = new();
-    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string arg1, int arg2)> _onReceiveFooUpdateChannel = new();
+    private readonly global::System.Collections.Generic.List<(string bar, int bass)> _onReceiveFooUpdateEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string bar, int bass)> _onReceiveFooUpdateChannel = new();
 
 
-    public global::System.Collections.Generic.IReadOnlyList<(string arg1, int arg2)> OnReceiveNormalTypeWithSpecificAttributeAppliedEvents
+    public global::System.Collections.Generic.IReadOnlyList<(string bazz, int buzz)> OnReceiveNormalTypeWithSpecificAttributeAppliedEvents
     {
         get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onReceiveNormalTypeWithSpecificAttributeAppliedEvents); }
     }
-    private readonly global::System.Collections.Generic.List<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedEvents = new();
-    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedChannel = new();
+    private readonly global::System.Collections.Generic.List<(string bazz, int buzz)> _onReceiveNormalTypeWithSpecificAttributeAppliedEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string bazz, int buzz)> _onReceiveNormalTypeWithSpecificAttributeAppliedChannel = new();
 
 
     public global::System.Collections.Generic.IReadOnlyList<int> OnReceiveWithArbitraryAttributeEvents
@@ -176,14 +176,14 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     }
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnReceiveCustomTypeUpdateAsync(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> arg, global::System.Threading.CancellationToken ct = default)
-    {var item = arg;lock (_lock) _onReceiveCustomTypeUpdateEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveCustomTypeUpdateAsync(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes, global::System.Threading.CancellationToken ct = default)
+    {var item = customTypes;lock (_lock) _onReceiveCustomTypeUpdateEvents.Add(item);
         await _onReceiveCustomTypeUpdateChannel.PublishAsync(item, ct);
 
         var handler = OnReceiveCustomTypeUpdate;
         if (handler is not null)
         {
-            await handler.Invoke(arg);
+            await handler.Invoke(customTypes);
         }
     }
 
@@ -191,44 +191,44 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         => await _onReceiveCustomTypeUpdateChannel.WaitNextAsync(ct);
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnReceiveFooUpdateAsync(string arg1, int arg2, global::System.Threading.CancellationToken ct = default)
-    {var item = (arg1, arg2);lock (_lock) _onReceiveFooUpdateEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveFooUpdateAsync(string bar, int bass, global::System.Threading.CancellationToken ct = default)
+    {var item = (bar, bass);lock (_lock) _onReceiveFooUpdateEvents.Add(item);
         await _onReceiveFooUpdateChannel.PublishAsync(item, ct);
 
         var handler = OnReceiveFooUpdate;
         if (handler is not null)
         {
-            await handler.Invoke(arg1, arg2);
+            await handler.Invoke(bar, bass);
         }
     }
 
-    public async global::System.Threading.Tasks.Task<(string arg1, int arg2)> WaitForOnReceiveFooUpdateAsync(global::System.Threading.CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<(string bar, int bass)> WaitForOnReceiveFooUpdateAsync(global::System.Threading.CancellationToken ct = default)
         => await _onReceiveFooUpdateChannel.WaitNextAsync(ct);
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(string arg1, int arg2, global::System.Threading.CancellationToken ct = default)
-    {var item = (arg1, arg2);lock (_lock) _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(string bazz, int buzz, global::System.Threading.CancellationToken ct = default)
+    {var item = (bazz, buzz);lock (_lock) _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.Add(item);
         await _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.PublishAsync(item, ct);
 
         var handler = OnReceiveNormalTypeWithSpecificAttributeApplied;
         if (handler is not null)
         {
-            await handler.Invoke(arg1, arg2);
+            await handler.Invoke(bazz, buzz);
         }
     }
 
-    public async global::System.Threading.Tasks.Task<(string arg1, int arg2)> WaitForOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(global::System.Threading.CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<(string bazz, int buzz)> WaitForOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(global::System.Threading.CancellationToken ct = default)
         => await _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.WaitNextAsync(ct);
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnReceiveWithArbitraryAttributeAsync(int arg, global::System.Threading.CancellationToken ct = default)
-    {var item = arg;lock (_lock) _onReceiveWithArbitraryAttributeEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveWithArbitraryAttributeAsync(int blub, global::System.Threading.CancellationToken ct = default)
+    {var item = blub;lock (_lock) _onReceiveWithArbitraryAttributeEvents.Add(item);
         await _onReceiveWithArbitraryAttributeChannel.PublishAsync(item, ct);
 
         var handler = OnReceiveWithArbitraryAttribute;
         if (handler is not null)
         {
-            await handler.Invoke(arg);
+            await handler.Invoke(blub);
         }
     }
 

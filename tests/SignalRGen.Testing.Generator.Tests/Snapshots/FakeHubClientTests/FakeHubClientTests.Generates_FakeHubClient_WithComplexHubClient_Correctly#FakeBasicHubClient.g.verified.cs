@@ -73,12 +73,12 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
     private readonly global::SignalRGen.Testing.Abstractions.EventChannel<global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicMessage>> _onSendFromServerToClientWithListChannel = new();
 
 
-    public global::System.Collections.Generic.IReadOnlyList<(string arg1, int arg2)> OnSendFromServerToClientPrimitiveTypesEvents
+    public global::System.Collections.Generic.IReadOnlyList<(string foo, int bar)> OnSendFromServerToClientPrimitiveTypesEvents
     {
         get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onSendFromServerToClientPrimitiveTypesEvents); }
     }
-    private readonly global::System.Collections.Generic.List<(string arg1, int arg2)> _onSendFromServerToClientPrimitiveTypesEvents = new();
-    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string arg1, int arg2)> _onSendFromServerToClientPrimitiveTypesChannel = new();
+    private readonly global::System.Collections.Generic.List<(string foo, int bar)> _onSendFromServerToClientPrimitiveTypesEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string foo, int bar)> _onSendFromServerToClientPrimitiveTypesChannel = new();
 
     /// <summary>
     /// When true, the fake client operates in strict mode:
@@ -236,14 +236,14 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
     }
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnSendFromServerToClientMessageAsync(global::SignalRGen.Clients.BasicMessage arg, global::System.Threading.CancellationToken ct = default)
-    {var item = arg;lock (_lock) _onSendFromServerToClientMessageEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnSendFromServerToClientMessageAsync(global::SignalRGen.Clients.BasicMessage message, global::System.Threading.CancellationToken ct = default)
+    {var item = message;lock (_lock) _onSendFromServerToClientMessageEvents.Add(item);
         await _onSendFromServerToClientMessageChannel.PublishAsync(item, ct);
 
         var handler = OnSendFromServerToClientMessage;
         if (handler is not null)
         {
-            await handler.Invoke(arg);
+            await handler.Invoke(message);
         }
     }
 
@@ -251,14 +251,14 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         => await _onSendFromServerToClientMessageChannel.WaitNextAsync(ct);
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnSendFromServerToClientWithListAsync(global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicMessage> arg, global::System.Threading.CancellationToken ct = default)
-    {var item = arg;lock (_lock) _onSendFromServerToClientWithListEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnSendFromServerToClientWithListAsync(global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicMessage> messages, global::System.Threading.CancellationToken ct = default)
+    {var item = messages;lock (_lock) _onSendFromServerToClientWithListEvents.Add(item);
         await _onSendFromServerToClientWithListChannel.PublishAsync(item, ct);
 
         var handler = OnSendFromServerToClientWithList;
         if (handler is not null)
         {
-            await handler.Invoke(arg);
+            await handler.Invoke(messages);
         }
     }
 
@@ -266,18 +266,18 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         => await _onSendFromServerToClientWithListChannel.WaitNextAsync(ct);
 
     
-    public async global::System.Threading.Tasks.Task SimulateOnSendFromServerToClientPrimitiveTypesAsync(string arg1, int arg2, global::System.Threading.CancellationToken ct = default)
-    {var item = (arg1, arg2);lock (_lock) _onSendFromServerToClientPrimitiveTypesEvents.Add(item);
+    public async global::System.Threading.Tasks.Task SimulateOnSendFromServerToClientPrimitiveTypesAsync(string foo, int bar, global::System.Threading.CancellationToken ct = default)
+    {var item = (foo, bar);lock (_lock) _onSendFromServerToClientPrimitiveTypesEvents.Add(item);
         await _onSendFromServerToClientPrimitiveTypesChannel.PublishAsync(item, ct);
 
         var handler = OnSendFromServerToClientPrimitiveTypes;
         if (handler is not null)
         {
-            await handler.Invoke(arg1, arg2);
+            await handler.Invoke(foo, bar);
         }
     }
 
-    public async global::System.Threading.Tasks.Task<(string arg1, int arg2)> WaitForOnSendFromServerToClientPrimitiveTypesAsync(global::System.Threading.CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<(string foo, int bar)> WaitForOnSendFromServerToClientPrimitiveTypesAsync(global::System.Threading.CancellationToken ct = default)
         => await _onSendFromServerToClientPrimitiveTypesChannel.WaitNextAsync(ct);
 
     public void ClearRecorded()

@@ -42,7 +42,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method ReceiveCustomTypeUpdate of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveCustomTypeUpdate = default;
+                                  public delegate global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateDelegate(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes);
+                                  public ReceiveCustomTypeUpdateDelegate? OnReceiveCustomTypeUpdate = default;
+                                  
                                   private global::System.Threading.Tasks.Task ReceiveCustomTypeUpdateHandler(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> customTypes)
                                   {
                                       return OnReceiveCustomTypeUpdate?.Invoke(customTypes) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -50,7 +52,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method ReceiveFooUpdate of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveFooUpdate = default;
+                                  public delegate global::System.Threading.Tasks.Task ReceiveFooUpdateDelegate(string bar, int bass);
+                                  public ReceiveFooUpdateDelegate? OnReceiveFooUpdate = default;
+                                  
                                   private global::System.Threading.Tasks.Task ReceiveFooUpdateHandler(string bar, int bass)
                                   {
                                       return OnReceiveFooUpdate?.Invoke(bar, bass) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -58,7 +62,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method ReceiveNormalTypeWithSpecificAttributeApplied of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
+                                  public delegate global::System.Threading.Tasks.Task ReceiveNormalTypeWithSpecificAttributeAppliedDelegate(string bazz, int buzz);
+                                  public ReceiveNormalTypeWithSpecificAttributeAppliedDelegate? OnReceiveNormalTypeWithSpecificAttributeApplied = default;
+                                  
                                   private global::System.Threading.Tasks.Task ReceiveNormalTypeWithSpecificAttributeAppliedHandler(string bazz, int buzz)
                                   {
                                       return OnReceiveNormalTypeWithSpecificAttributeApplied?.Invoke(bazz, buzz) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -66,7 +72,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method ReceiveWithArbitraryAttribute of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveWithArbitraryAttribute = default;
+                                  public delegate global::System.Threading.Tasks.Task ReceiveWithArbitraryAttributeDelegate(int blub);
+                                  public ReceiveWithArbitraryAttributeDelegate? OnReceiveWithArbitraryAttribute = default;
+                                  
                                   private global::System.Threading.Tasks.Task ReceiveWithArbitraryAttributeHandler(int blub)
                                   {
                                       return OnReceiveWithArbitraryAttribute?.Invoke(blub) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -209,7 +217,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method SendFromServerToClientMessage of the <see cref = "global::SignalRGen.Clients.IBasicHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<global::SignalRGen.Clients.BasicMessage, global::System.Threading.Tasks.Task>? OnSendFromServerToClientMessage = default;
+                                  public delegate global::System.Threading.Tasks.Task SendFromServerToClientMessageDelegate(global::SignalRGen.Clients.BasicMessage message);
+                                  public SendFromServerToClientMessageDelegate? OnSendFromServerToClientMessage = default;
+                                  
                                   private global::System.Threading.Tasks.Task SendFromServerToClientMessageHandler(global::SignalRGen.Clients.BasicMessage message)
                                   {
                                       return OnSendFromServerToClientMessage?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -217,7 +227,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method SendFromServerToClientWithList of the <see cref = "global::SignalRGen.Clients.IBasicHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicMessage>, global::System.Threading.Tasks.Task>? OnSendFromServerToClientWithList = default;
+                                  public delegate global::System.Threading.Tasks.Task SendFromServerToClientWithListDelegate(global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicMessage> messages);
+                                  public SendFromServerToClientWithListDelegate? OnSendFromServerToClientWithList = default;
+                                  
                                   private global::System.Threading.Tasks.Task SendFromServerToClientWithListHandler(global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicMessage> messages)
                                   {
                                       return OnSendFromServerToClientWithList?.Invoke(messages) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -225,7 +237,9 @@ public class FakeHubClientTests
                                   /// <summary>
                                   /// Is invoked whenever the client method SendFromServerToClientPrimitiveTypes of the <see cref = "global::SignalRGen.Clients.IBasicHub"/> gets invoked.
                                   /// </summary>
-                                  public global::System.Func<string, int, global::System.Threading.Tasks.Task>? OnSendFromServerToClientPrimitiveTypes = default;
+                                  public delegate global::System.Threading.Tasks.Task SendFromServerToClientPrimitiveTypesDelegate(string foo, int bar);
+                                  public SendFromServerToClientPrimitiveTypesDelegate? OnSendFromServerToClientPrimitiveTypes = default;
+                                  
                                   private global::System.Threading.Tasks.Task SendFromServerToClientPrimitiveTypesHandler(string foo, int bar)
                                   {
                                       return OnSendFromServerToClientPrimitiveTypes?.Invoke(foo, bar) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -287,17 +301,6 @@ public class FakeHubClientTests
                                       }
                                   }
                               }
-                              
-                              public record BasicMessage(string Message, BasicMessageType Type, DateTimeOffset Timestamp);
-                              
-                              public enum BasicMessageType
-                              {
-                                  Info,
-                                  Warning,
-                                  Error
-                              }
-                              
-                              public record BasicReturn(BasicMessage Message);
                               """;
         
         return TestHelper.Verify(source);
