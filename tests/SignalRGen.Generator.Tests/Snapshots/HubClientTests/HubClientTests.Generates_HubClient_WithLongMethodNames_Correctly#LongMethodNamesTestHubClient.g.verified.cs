@@ -29,7 +29,9 @@ public class LongMethodNamesTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming of the <see cref = "global::SignalRGen.Clients.ILongMethodNamesTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingDelegate(string message);
+    public ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingDelegate? OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming = default;
+    
     private global::System.Threading.Tasks.Task ReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNamingHandler(string message)
     {
         return OnReceiveVeryLongMethodNameThatExceedsNormalExpectationsForMethodNaming?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;

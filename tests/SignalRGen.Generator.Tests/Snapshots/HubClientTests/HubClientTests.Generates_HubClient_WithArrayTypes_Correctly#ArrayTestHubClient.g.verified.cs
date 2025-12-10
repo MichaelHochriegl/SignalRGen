@@ -29,7 +29,9 @@ public class ArrayTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveStringArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string[], global::System.Threading.Tasks.Task>? OnReceiveStringArray = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveStringArrayDelegate(string[] messages);
+    public ReceiveStringArrayDelegate? OnReceiveStringArray = default;
+    
     private global::System.Threading.Tasks.Task ReceiveStringArrayHandler(string[] messages)
     {
         return OnReceiveStringArray?.Invoke(messages) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ArrayTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveIntArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<int[], global::System.Threading.Tasks.Task>? OnReceiveIntArray = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveIntArrayDelegate(int[] numbers);
+    public ReceiveIntArrayDelegate? OnReceiveIntArray = default;
+    
     private global::System.Threading.Tasks.Task ReceiveIntArrayHandler(int[] numbers)
     {
         return OnReceiveIntArray?.Invoke(numbers) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class ArrayTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveCustomTypeArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[], global::System.Threading.Tasks.Task>? OnReceiveCustomTypeArray = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveCustomTypeArrayDelegate(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos);
+    public ReceiveCustomTypeArrayDelegate? OnReceiveCustomTypeArray = default;
+    
     private global::System.Threading.Tasks.Task ReceiveCustomTypeArrayHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto[] dtos)
     {
         return OnReceiveCustomTypeArray?.Invoke(dtos) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -53,7 +59,9 @@ public class ArrayTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveMultidimensionalArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<int[,], global::System.Threading.Tasks.Task>? OnReceiveMultidimensionalArray = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveMultidimensionalArrayDelegate(int[,] matrix);
+    public ReceiveMultidimensionalArrayDelegate? OnReceiveMultidimensionalArray = default;
+    
     private global::System.Threading.Tasks.Task ReceiveMultidimensionalArrayHandler(int[,] matrix)
     {
         return OnReceiveMultidimensionalArray?.Invoke(matrix) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -61,7 +69,9 @@ public class ArrayTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveJaggedArray of the <see cref = "global::SignalRGen.Clients.IArrayTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string[][], global::System.Threading.Tasks.Task>? OnReceiveJaggedArray = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveJaggedArrayDelegate(string[][] jaggedArray);
+    public ReceiveJaggedArrayDelegate? OnReceiveJaggedArray = default;
+    
     private global::System.Threading.Tasks.Task ReceiveJaggedArrayHandler(string[][] jaggedArray)
     {
         return OnReceiveJaggedArray?.Invoke(jaggedArray) ?? global::System.Threading.Tasks.Task.CompletedTask;

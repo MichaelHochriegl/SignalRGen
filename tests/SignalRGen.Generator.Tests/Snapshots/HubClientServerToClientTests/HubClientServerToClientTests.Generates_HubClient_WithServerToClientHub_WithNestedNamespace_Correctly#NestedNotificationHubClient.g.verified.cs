@@ -29,7 +29,9 @@ public class NestedNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNestedNotification of the <see cref = "global::SignalRGen.Clients.Nested.INestedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveNestedNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNestedNotificationDelegate(string message);
+    public ReceiveNestedNotificationDelegate? OnReceiveNestedNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNestedNotificationHandler(string message)
     {
         return OnReceiveNestedNotification?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class NestedNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNestedData of the <see cref = "global::SignalRGen.Clients.Nested.INestedNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveNestedData = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNestedDataDelegate(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto);
+    public ReceiveNestedDataDelegate? OnReceiveNestedData = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNestedDataHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
         return OnReceiveNestedData?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;

@@ -29,7 +29,9 @@ public class MultiLevelNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveTopNotification of the <see cref = "global::SignalRGen.Clients.IMultiLevelNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto, global::System.Threading.Tasks.Task>? OnReceiveTopNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveTopNotificationDelegate(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto);
+    public ReceiveTopNotificationDelegate? OnReceiveTopNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveTopNotificationHandler(global::SignalRGen.Generator.Tests.TestData.CustomTypeDto dto)
     {
         return OnReceiveTopNotification?.Invoke(dto) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class MultiLevelNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveMidNotification of the <see cref = "global::SignalRGen.Clients.IMultiLevelNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveMidNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveMidNotificationDelegate(int value);
+    public ReceiveMidNotificationDelegate? OnReceiveMidNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveMidNotificationHandler(int value)
     {
         return OnReceiveMidNotification?.Invoke(value) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class MultiLevelNotificationHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveBaseNotification of the <see cref = "global::SignalRGen.Clients.IMultiLevelNotificationHubClient"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveBaseNotification = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveBaseNotificationDelegate(string message);
+    public ReceiveBaseNotificationDelegate? OnReceiveBaseNotification = default;
+    
     private global::System.Threading.Tasks.Task ReceiveBaseNotificationHandler(string message)
     {
         return OnReceiveBaseNotification?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;

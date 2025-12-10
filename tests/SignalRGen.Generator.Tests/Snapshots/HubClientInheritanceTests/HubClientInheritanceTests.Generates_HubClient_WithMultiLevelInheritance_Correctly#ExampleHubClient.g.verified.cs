@@ -29,7 +29,9 @@ public class ExampleHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveExampleCountUpdate of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<int, global::System.Threading.Tasks.Task>? OnReceiveExampleCountUpdate = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveExampleCountUpdateDelegate(int count);
+    public ReceiveExampleCountUpdateDelegate? OnReceiveExampleCountUpdate = default;
+    
     private global::System.Threading.Tasks.Task ReceiveExampleCountUpdateHandler(int count)
     {
         return OnReceiveExampleCountUpdate?.Invoke(count) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class ExampleHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveBaseMessage of the <see cref = "global::SignalRGen.Example.Contracts.IExampleHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<string, global::System.Threading.Tasks.Task>? OnReceiveBaseMessage = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveBaseMessageDelegate(string message);
+    public ReceiveBaseMessageDelegate? OnReceiveBaseMessage = default;
+    
     private global::System.Threading.Tasks.Task ReceiveBaseMessageHandler(string message)
     {
         return OnReceiveBaseMessage?.Invoke(message) ?? global::System.Threading.Tasks.Task.CompletedTask;

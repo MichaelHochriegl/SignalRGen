@@ -29,7 +29,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method NotifyNoAttributeApplied of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyNoAttributeApplied = default;
+    public delegate global::System.Threading.Tasks.Task NotifyNoAttributeAppliedDelegate();
+    public NotifyNoAttributeAppliedDelegate? OnNotifyNoAttributeApplied = default;
+    
     private global::System.Threading.Tasks.Task NotifyNoAttributeAppliedHandler()
     {
         return OnNotifyNoAttributeApplied?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method NotifyServerToClient of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyServerToClient = default;
+    public delegate global::System.Threading.Tasks.Task NotifyServerToClientDelegate();
+    public NotifyServerToClientDelegate? OnNotifyServerToClient = default;
+    
     private global::System.Threading.Tasks.Task NotifyServerToClientHandler()
     {
         return OnNotifyServerToClient?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method NotifyWithReturnNoAttributeApplied of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyWithReturnNoAttributeApplied = default;
+    public delegate global::System.Threading.Tasks.Task NotifyWithReturnNoAttributeAppliedDelegate();
+    public NotifyWithReturnNoAttributeAppliedDelegate? OnNotifyWithReturnNoAttributeApplied = default;
+    
     private global::System.Threading.Tasks.Task NotifyWithReturnNoAttributeAppliedHandler()
     {
         return OnNotifyWithReturnNoAttributeApplied?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -53,7 +59,9 @@ public class TestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method NotifyWithReturnServerToClient of the <see cref = "global::SignalRGen.Clients.ITestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<global::System.Threading.Tasks.Task>? OnNotifyWithReturnServerToClient = default;
+    public delegate global::System.Threading.Tasks.Task NotifyWithReturnServerToClientDelegate();
+    public NotifyWithReturnServerToClientDelegate? OnNotifyWithReturnServerToClient = default;
+    
     private global::System.Threading.Tasks.Task NotifyWithReturnServerToClientHandler()
     {
         return OnNotifyWithReturnServerToClient?.Invoke() ?? global::System.Threading.Tasks.Task.CompletedTask;

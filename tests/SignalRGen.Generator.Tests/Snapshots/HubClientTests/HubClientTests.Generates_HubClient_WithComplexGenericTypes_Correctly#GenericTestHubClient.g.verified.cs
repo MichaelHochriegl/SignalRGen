@@ -29,7 +29,9 @@ public class GenericTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveGenericList of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnReceiveGenericList = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveGenericListDelegate(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> items);
+    public ReceiveGenericListDelegate? OnReceiveGenericList = default;
+    
     private global::System.Threading.Tasks.Task ReceiveGenericListHandler(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> items)
     {
         return OnReceiveGenericList?.Invoke(items) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -37,7 +39,9 @@ public class GenericTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveDictionary of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<Dictionary<string, int>, global::System.Threading.Tasks.Task>? OnReceiveDictionary = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveDictionaryDelegate(Dictionary<string, int> keyValuePairs);
+    public ReceiveDictionaryDelegate? OnReceiveDictionary = default;
+    
     private global::System.Threading.Tasks.Task ReceiveDictionaryHandler(Dictionary<string, int> keyValuePairs)
     {
         return OnReceiveDictionary?.Invoke(keyValuePairs) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -45,7 +49,9 @@ public class GenericTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method ReceiveNestedGeneric of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>>, global::System.Threading.Tasks.Task>? OnReceiveNestedGeneric = default;
+    public delegate global::System.Threading.Tasks.Task ReceiveNestedGenericDelegate(Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> complexData);
+    public ReceiveNestedGenericDelegate? OnReceiveNestedGeneric = default;
+    
     private global::System.Threading.Tasks.Task ReceiveNestedGenericHandler(Dictionary<string, List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> complexData)
     {
         return OnReceiveNestedGeneric?.Invoke(complexData) ?? global::System.Threading.Tasks.Task.CompletedTask;
@@ -53,7 +59,9 @@ public class GenericTestHubClient : HubClientBase
     /// <summary>
     /// Is invoked whenever the client method SendAndReceiveGeneric of the <see cref = "global::SignalRGen.Clients.IGenericTestHub"/> gets invoked.
     /// </summary>
-    public global::System.Func<List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>, global::System.Threading.Tasks.Task>? OnSendAndReceiveGeneric = default;
+    public delegate global::System.Threading.Tasks.Task SendAndReceiveGenericDelegate(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> input);
+    public SendAndReceiveGenericDelegate? OnSendAndReceiveGeneric = default;
+    
     private global::System.Threading.Tasks.Task SendAndReceiveGenericHandler(List<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> input)
     {
         return OnSendAndReceiveGeneric?.Invoke(input) ?? global::System.Threading.Tasks.Task.CompletedTask;
