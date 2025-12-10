@@ -137,8 +137,8 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
             {{~ for method in client_to_server ~}}
             {{~ if method.return_type != "global::System.Threading.Tasks.Task" ~}}
             case "{{ method.identifier }}":
-                var result = await Handle{{ method.identifier }}(args, cancellationToken);
-                return (TResult)(object)result!;
+                var result{{ method.identifier }} = await Handle{{ method.identifier }}(args, cancellationToken);
+                return (TResult)(object)result{{ method.identifier }}!;
             {{~ end ~}}
             {{~ end ~}}
        
