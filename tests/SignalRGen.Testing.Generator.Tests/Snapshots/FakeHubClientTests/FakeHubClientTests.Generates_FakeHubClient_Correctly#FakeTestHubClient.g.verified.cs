@@ -11,69 +11,61 @@
 #nullable enable
 namespace SignalRGen.Clients.TestFakes;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-using SignalRGen.Testing.Abstractions;
 
 public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
 {
-    private readonly Lock _lock = new();
+    private readonly global::System.Threading.Lock _lock = new();
 
-    public IReadOnlyList<(string rick, int age)> SendClientToServerNoReturnTypeCalls
+    public global::System.Collections.Generic.IReadOnlyList<(string rick, int age)> SendClientToServerNoReturnTypeCalls
     {
-        get { lock (_lock) return _sendClientToServerNoReturnTypeCalls.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_sendClientToServerNoReturnTypeCalls); }
     }
-    private readonly List<(string rick, int age)> _sendClientToServerNoReturnTypeCalls = new();
+    private readonly global::System.Collections.Generic.List<(string rick, int age)> _sendClientToServerNoReturnTypeCalls = new();
     
-    public Func<string, int, CancellationToken, global::System.Threading.Tasks.Task>? SendClientToServerNoReturnTypeHandler { get; set; }
-    
-    
-    public IReadOnlyList<(string morty, bool partOfMission)> SendClientToServerWithReturnTypeCalls
-    {
-        get { lock (_lock) return _sendClientToServerWithReturnTypeCalls.ToList(); }
-    }
-    private readonly List<(string morty, bool partOfMission)> _sendClientToServerWithReturnTypeCalls = new();
-    
-    public Func<string, bool, CancellationToken, global::System.Threading.Tasks.Task<string>>? SendClientToServerWithReturnTypeHandler { get; set; }
+    public global::System.Func<string, int, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task>? SendClientToServerNoReturnTypeHandler { get; set; }
     
     
-
-
-    public IReadOnlyList<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> OnReceiveCustomTypeUpdateEvents
+    public global::System.Collections.Generic.IReadOnlyList<(string morty, bool partOfMission)> SendClientToServerWithReturnTypeCalls
     {
-        get { lock (_lock) return _onReceiveCustomTypeUpdateEvents.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_sendClientToServerWithReturnTypeCalls); }
     }
-    private readonly List<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateEvents = new();
-    private readonly EventChannel<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateChannel = new();
+    private readonly global::System.Collections.Generic.List<(string morty, bool partOfMission)> _sendClientToServerWithReturnTypeCalls = new();
+    
+    public global::System.Func<string, bool, global::System.Threading.CancellationToken, global::System.Threading.Tasks.Task<string>>? SendClientToServerWithReturnTypeHandler { get; set; }
+    
+    
 
 
-    public IReadOnlyList<(string arg1, int arg2)> OnReceiveFooUpdateEvents
+    public global::System.Collections.Generic.IReadOnlyList<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> OnReceiveCustomTypeUpdateEvents
     {
-        get { lock (_lock) return _onReceiveFooUpdateEvents.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onReceiveCustomTypeUpdateEvents); }
     }
-    private readonly List<(string arg1, int arg2)> _onReceiveFooUpdateEvents = new();
-    private readonly EventChannel<(string arg1, int arg2)> _onReceiveFooUpdateChannel = new();
+    private readonly global::System.Collections.Generic.List<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> _onReceiveCustomTypeUpdateChannel = new();
 
 
-    public IReadOnlyList<(string arg1, int arg2)> OnReceiveNormalTypeWithSpecificAttributeAppliedEvents
+    public global::System.Collections.Generic.IReadOnlyList<(string arg1, int arg2)> OnReceiveFooUpdateEvents
     {
-        get { lock (_lock) return _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onReceiveFooUpdateEvents); }
     }
-    private readonly List<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedEvents = new();
-    private readonly EventChannel<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedChannel = new();
+    private readonly global::System.Collections.Generic.List<(string arg1, int arg2)> _onReceiveFooUpdateEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string arg1, int arg2)> _onReceiveFooUpdateChannel = new();
 
 
-    public IReadOnlyList<int> OnReceiveWithArbitraryAttributeEvents
+    public global::System.Collections.Generic.IReadOnlyList<(string arg1, int arg2)> OnReceiveNormalTypeWithSpecificAttributeAppliedEvents
     {
-        get { lock (_lock) return _onReceiveWithArbitraryAttributeEvents.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onReceiveNormalTypeWithSpecificAttributeAppliedEvents); }
     }
-    private readonly List<int> _onReceiveWithArbitraryAttributeEvents = new();
-    private readonly EventChannel<int> _onReceiveWithArbitraryAttributeChannel = new();
+    private readonly global::System.Collections.Generic.List<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<(string arg1, int arg2)> _onReceiveNormalTypeWithSpecificAttributeAppliedChannel = new();
+
+
+    public global::System.Collections.Generic.IReadOnlyList<int> OnReceiveWithArbitraryAttributeEvents
+    {
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_onReceiveWithArbitraryAttributeEvents); }
+    }
+    private readonly global::System.Collections.Generic.List<int> _onReceiveWithArbitraryAttributeEvents = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<int> _onReceiveWithArbitraryAttributeChannel = new();
 
     /// <summary>
     /// When true, the fake client operates in strict mode:
@@ -83,10 +75,10 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     public bool Strict { get; set; }
 
     public FakeTestHubClient(
-             Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
-             Uri? baseHubUri = null,
-             Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration = null)
-             : base(hubConnectionBuilderConfiguration, baseHubUri ?? new Uri("http://localhost/"), httpConnectionOptionsConfiguration)
+             global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
+             global::System.Uri? baseHubUri = null,
+             global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration = null)
+             : base(hubConnectionBuilderConfiguration, baseHubUri ?? new global::System.Uri("http://localhost/"), httpConnectionOptionsConfiguration)
     {
     }
 
@@ -94,18 +86,24 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
     {
     }
 
-    public override Task StartAsync(
-        Dictionary<string, string>? queryStrings = null,
-        Dictionary<string, string>? headers = null,
-        CancellationToken cancellationToken = default)
+    public override global::System.Threading.Tasks.Task StartAsync(
+        global::System.Collections.Generic.Dictionary<string, string>? queryStrings = null,
+        global::System.Collections.Generic.Dictionary<string, string>? headers = null,
+        global::System.Threading.CancellationToken cancellationToken = default)
     {
-        _hubConnection = new HubConnectionBuilder().WithUrl("http://localhost").Build();
-        return Task.CompletedTask;
+        var builder = new global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
+        
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilderHttpExtensions
+                                               .WithUrl(builder, "http://localhost");
+        
+        _hubConnection = builder.Build();
+        
+        return global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    public override global::System.Threading.Tasks.Task StopAsync(global::System.Threading.CancellationToken cancellationToken = default) => global::System.Threading.Tasks.Task.CompletedTask;
 
-    protected override async Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         switch (methodName)
         {
@@ -114,12 +112,12 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
                 return;
        
            default:
-                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                if (Strict) throw new global::System.NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return;
         }
     }
 
-    protected override async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         switch (methodName)
         {
@@ -128,12 +126,12 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
                 return (TResult)(object)result!;
        
            default:
-                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                if (Strict) throw new global::System.NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return default!;
         }
     }
 
-    private async global::System.Threading.Tasks.Task HandleSendClientToServerNoReturnType(object?[] args, CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task HandleSendClientToServerNoReturnType(object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         var rick = (string)args[0]!;
         var age = (int)args[1]!;
@@ -150,12 +148,12 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
         else if (Strict)
         {
-            throw new InvalidOperationException("No behavior configured for SendClientToServerNoReturnType.");
+            throw new global::System.InvalidOperationException("No behavior configured for SendClientToServerNoReturnType.");
         }
         
     }
 
-    private async global::System.Threading.Tasks.Task<string> HandleSendClientToServerWithReturnType(object?[] args, CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task<string> HandleSendClientToServerWithReturnType(object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         var morty = (string)args[0]!;
         var partOfMission = (bool)args[1]!;
@@ -172,13 +170,13 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
         else if (Strict)
         {
-            throw new InvalidOperationException("No behavior configured for SendClientToServerWithReturnType.");
+            throw new global::System.InvalidOperationException("No behavior configured for SendClientToServerWithReturnType.");
         }
         return default!;
     }
 
     
-    public async Task SimulateOnReceiveCustomTypeUpdateAsync(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> arg, CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveCustomTypeUpdateAsync(IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto> arg, global::System.Threading.CancellationToken ct = default)
     {var item = arg;lock (_lock) _onReceiveCustomTypeUpdateEvents.Add(item);
         await _onReceiveCustomTypeUpdateChannel.PublishAsync(item, ct);
 
@@ -189,11 +187,11 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
     }
 
-    public async Task<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> WaitForOnReceiveCustomTypeUpdateAsync(CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<IEnumerable<global::SignalRGen.Generator.Tests.TestData.CustomTypeDto>> WaitForOnReceiveCustomTypeUpdateAsync(global::System.Threading.CancellationToken ct = default)
         => await _onReceiveCustomTypeUpdateChannel.WaitNextAsync(ct);
 
     
-    public async Task SimulateOnReceiveFooUpdateAsync(string arg1, int arg2, CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveFooUpdateAsync(string arg1, int arg2, global::System.Threading.CancellationToken ct = default)
     {var item = (arg1, arg2);lock (_lock) _onReceiveFooUpdateEvents.Add(item);
         await _onReceiveFooUpdateChannel.PublishAsync(item, ct);
 
@@ -204,11 +202,11 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
     }
 
-    public async Task<(string arg1, int arg2)> WaitForOnReceiveFooUpdateAsync(CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<(string arg1, int arg2)> WaitForOnReceiveFooUpdateAsync(global::System.Threading.CancellationToken ct = default)
         => await _onReceiveFooUpdateChannel.WaitNextAsync(ct);
 
     
-    public async Task SimulateOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(string arg1, int arg2, CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(string arg1, int arg2, global::System.Threading.CancellationToken ct = default)
     {var item = (arg1, arg2);lock (_lock) _onReceiveNormalTypeWithSpecificAttributeAppliedEvents.Add(item);
         await _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.PublishAsync(item, ct);
 
@@ -219,11 +217,11 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
     }
 
-    public async Task<(string arg1, int arg2)> WaitForOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<(string arg1, int arg2)> WaitForOnReceiveNormalTypeWithSpecificAttributeAppliedAsync(global::System.Threading.CancellationToken ct = default)
         => await _onReceiveNormalTypeWithSpecificAttributeAppliedChannel.WaitNextAsync(ct);
 
     
-    public async Task SimulateOnReceiveWithArbitraryAttributeAsync(int arg, CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task SimulateOnReceiveWithArbitraryAttributeAsync(int arg, global::System.Threading.CancellationToken ct = default)
     {var item = arg;lock (_lock) _onReceiveWithArbitraryAttributeEvents.Add(item);
         await _onReceiveWithArbitraryAttributeChannel.PublishAsync(item, ct);
 
@@ -234,7 +232,7 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
     }
 
-    public async Task<int> WaitForOnReceiveWithArbitraryAttributeAsync(CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<int> WaitForOnReceiveWithArbitraryAttributeAsync(global::System.Threading.CancellationToken ct = default)
         => await _onReceiveWithArbitraryAttributeChannel.WaitNextAsync(ct);
 
     public void ClearRecorded()

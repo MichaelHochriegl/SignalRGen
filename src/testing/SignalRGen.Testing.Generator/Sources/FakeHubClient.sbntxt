@@ -12,18 +12,10 @@
 namespace {{ namespace_name }}.TestFakes;
 
 {{~ end ~}}
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
-using Microsoft.AspNetCore.Http.Connections.Client;
-using SignalRGen.Testing.Abstractions;
 
 public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_client_name }}
 {
-    private readonly Lock _lock = new();
+    private readonly global::System.Threading.Lock _lock = new();
     {{~ for method in client_to_server ~}}
     {{- $camel = to_camel_case method.identifier -}}
     {{- $params = method.parameters -}}
@@ -39,25 +31,25 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     private int _{{ $camel }}CallCount = 0;
 
     {{ else if $paramCount == 1 }}
-    public IReadOnlyList<{{ $params[0].type }}> {{ method.identifier }}Calls
+    public global::System.Collections.Generic.IReadOnlyList<{{ $params[0].type }}> {{ method.identifier }}Calls
     {
-        get { lock (_lock) return _{{ $camel }}Calls.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_{{ $camel }}Calls); }
     }
-    private readonly List<{{ $params[0].type }}> _{{ $camel }}Calls = new();
+    private readonly global::System.Collections.Generic.List<{{ $params[0].type }}> _{{ $camel }}Calls = new();
 
     {{ else }}
-    public IReadOnlyList<( {{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }})> {{ method.identifier }}Calls
+    public global::System.Collections.Generic.IReadOnlyList<( {{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }})> {{ method.identifier }}Calls
     {
-        get { lock (_lock) return _{{ $camel }}Calls.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_{{ $camel }}Calls); }
     }
-    private readonly List<( {{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }})> _{{ $camel }}Calls = new();
+    private readonly global::System.Collections.Generic.List<( {{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }})> _{{ $camel }}Calls = new();
     {{ end }}
     {{- #endregion }}
     {{- #region Handler delegate -}}
     {{ if $paramCount == 0 }}
-    public Func<CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
+    public global::System.Func<global::System.Threading.CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
     {{ else }}
-    public Func<{{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }}{{- end }}, CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
+    public global::System.Func<{{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }}{{- end }}, global::System.Threading.CancellationToken, {{ $ret }}>? {{ method.identifier }}Handler { get; set; }
     {{ end }}
     {{- #endregion }}
     {{ end }}
@@ -76,12 +68,12 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {{- end -}}
     {{ $tupleType = $tupleType | string.strip }}
 
-    public IReadOnlyList<{{ $tupleType }}> {{ method.identifier }}Events
+    public global::System.Collections.Generic.IReadOnlyList<{{ $tupleType }}> {{ method.identifier }}Events
     {
-        get { lock (_lock) return _{{ $camel }}Events.ToList(); }
+        get { lock (_lock) return global::System.Linq.Enumerable.ToList(_{{ $camel }}Events); }
     }
-    private readonly List<{{ $tupleType }}> _{{ $camel }}Events = new();
-    private readonly EventChannel<{{ $tupleType }}> _{{ $camel }}Channel = new();
+    private readonly global::System.Collections.Generic.List<{{ $tupleType }}> _{{ $camel }}Events = new();
+    private readonly global::SignalRGen.Testing.Abstractions.EventChannel<{{ $tupleType }}> _{{ $camel }}Channel = new();
     {{~ end ~}}
 
     /// <summary>
@@ -92,10 +84,10 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     public bool Strict { get; set; }
 
     public Fake{{ hub_client_name }}(
-             Action<IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
-             Uri? baseHubUri = null,
-             Action<HttpConnectionOptions>? httpConnectionOptionsConfiguration = null)
-             : base(hubConnectionBuilderConfiguration, baseHubUri ?? new Uri("http://localhost/"), httpConnectionOptionsConfiguration)
+             global::System.Action<global::Microsoft.AspNetCore.SignalR.Client.IHubConnectionBuilder>? hubConnectionBuilderConfiguration = null,
+             global::System.Uri? baseHubUri = null,
+             global::System.Action<global::Microsoft.AspNetCore.Http.Connections.Client.HttpConnectionOptions>? httpConnectionOptionsConfiguration = null)
+             : base(hubConnectionBuilderConfiguration, baseHubUri ?? new global::System.Uri("http://localhost/"), httpConnectionOptionsConfiguration)
     {
     }
 
@@ -103,18 +95,24 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {
     }
 
-    public override Task StartAsync(
-        Dictionary<string, string>? queryStrings = null,
-        Dictionary<string, string>? headers = null,
-        CancellationToken cancellationToken = default)
+    public override global::System.Threading.Tasks.Task StartAsync(
+        global::System.Collections.Generic.Dictionary<string, string>? queryStrings = null,
+        global::System.Collections.Generic.Dictionary<string, string>? headers = null,
+        global::System.Threading.CancellationToken cancellationToken = default)
     {
-        _hubConnection = new HubConnectionBuilder().WithUrl("http://localhost").Build();
-        return Task.CompletedTask;
+        var builder = new global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilder();
+        
+        global::Microsoft.AspNetCore.SignalR.Client.HubConnectionBuilderHttpExtensions
+                                               .WithUrl(builder, "http://localhost");
+        
+        _hubConnection = builder.Build();
+        
+        return global::System.Threading.Tasks.Task.CompletedTask;
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken = default) => Task.CompletedTask;
+    public override global::System.Threading.Tasks.Task StopAsync(global::System.Threading.CancellationToken cancellationToken = default) => global::System.Threading.Tasks.Task.CompletedTask;
 
-    protected override async Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         switch (methodName)
         {
@@ -127,12 +125,12 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
             {{~ end ~}}
        
            default:
-                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                if (Strict) throw new global::System.NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return;
         }
     }
 
-    protected override async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         switch (methodName)
         {
@@ -145,7 +143,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
             {{~ end ~}}
        
            default:
-                if (Strict) throw new NotSupportedException($"Method '{methodName}' is not supported by the fake.");
+                if (Strict) throw new global::System.NotSupportedException($"Method '{methodName}' is not supported by the fake.");
                 return default!;
         }
     }
@@ -156,7 +154,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {{- $isVoid = $ret == "global::System.Threading.Tasks.Task" -}}
     {{~ $unwrappedRet = $ret | string.replace "global::System.Threading.Tasks.Task<" "" | string.replace ">" "" ~}}
 
-    private async {{ $ret }} Handle{{ method.identifier }}(object?[] args, CancellationToken cancellationToken)
+    private async {{ $ret }} Handle{{ method.identifier }}(object?[] args, global::System.Threading.CancellationToken cancellationToken)
     {
         {{~ for p in $params ~}}
         var {{ p.name }} = ({{ p.type }})args[{{ for.index }}]!;
@@ -182,7 +180,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
         }
         else if (Strict)
         {
-            throw new InvalidOperationException("No behavior configured for {{ method.identifier }}.");
+            throw new global::System.InvalidOperationException("No behavior configured for {{ method.identifier }}.");
         }
         {{ if !$isVoid }}return default!;{{ end }}
     }
@@ -202,7 +200,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
     {{- end -}}
     {{ $tupleType = $tupleType | string.strip }}
     
-    public async Task Simulate{{ method.identifier }}Async({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }}{{ if $paramCount > 0 }}, {{ end }}CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task Simulate{{ method.identifier }}Async({{- for p in $params -}}{{ if !for.first }}, {{ end }}{{ p.type }} {{ p.name }}{{- end }}{{ if $paramCount > 0 }}, {{ end }}global::System.Threading.CancellationToken ct = default)
     {
         {{- if $paramCount == 0 -}}
         var item = new global::System.ValueTuple();
@@ -222,7 +220,7 @@ public sealed class Fake{{ hub_client_name }} : {{ namespace_name }}.{{ hub_clie
         }
     }
 
-    public async Task<{{ $tupleType }}> WaitFor{{ method.identifier }}Async(CancellationToken ct = default)
+    public async global::System.Threading.Tasks.Task<{{ $tupleType }}> WaitFor{{ method.identifier }}Async(global::System.Threading.CancellationToken ct = default)
         => await _{{ $camel }}Channel.WaitNextAsync(ct);
     {{~ end ~}}
 
