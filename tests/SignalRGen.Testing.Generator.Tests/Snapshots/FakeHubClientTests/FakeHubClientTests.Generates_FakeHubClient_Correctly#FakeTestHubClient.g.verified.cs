@@ -122,8 +122,8 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         switch (methodName)
         {
             case "SendClientToServerWithReturnType":
-                var result = await HandleSendClientToServerWithReturnType(args, cancellationToken);
-                return (TResult)(object)result!;
+                var resultSendClientToServerWithReturnType = await HandleSendClientToServerWithReturnType(args, cancellationToken);
+                return (TResult)(object)resultSendClientToServerWithReturnType!;
        
            default:
                 if (Strict) throw new global::System.NotSupportedException($"Method '{methodName}' is not supported by the fake.");
