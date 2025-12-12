@@ -21,12 +21,13 @@ public class ChatTests : BunitContext, IAsyncLifetime
         var cut = Render<Chat>();
 
         // Act
-        cut.Find("input[placeholder='Enter username']").Change("TestUser");
-        await cut.Find("button").ClickAsync();
+        cut.Find("#username-input").Input("TestUser");
+        await cut.Find("#join-button").ClickAsync();
 
         // Assert
-        cut.Find(".chatting-as-section span").MarkupMatches("<span>TestUser</span>");
-        Assert.NotNull(cut.Find("input[placeholder='Enter message']"));
+        var userName = cut.Find(".chat-header span strong");
+        Assert.Equal("TestUser", userName.TextContent);
+        Assert.NotNull(cut.Find("#message-input"));
     }
 
     [Fact]
@@ -35,8 +36,8 @@ public class ChatTests : BunitContext, IAsyncLifetime
         // Arrange
         await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
-        cut.Find("input[placeholder='Enter username']").Change("Me");
-        await cut.Find("button").ClickAsync();
+        cut.Find("#username-input").Input("Me");
+        await cut.Find("#join-button").ClickAsync();
     
         // Act
         await fakeClient.SimulateOnUserJoinedAsync("NewUser");
@@ -44,7 +45,7 @@ public class ChatTests : BunitContext, IAsyncLifetime
         // Assert
         await fakeClient.WaitForOnUserJoinedAsync();
         await cut.WaitForStateAsync(() => 
-            cut.FindAll(".messages div").Any(m => m.TextContent.Contains("User 'NewUser' joined")));
+            cut.FindAll(".msg").Any(m => m.TextContent.Contains("User 'NewUser' joined")));
     }
 
     
@@ -56,8 +57,8 @@ public class ChatTests : BunitContext, IAsyncLifetime
         
         await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
-        cut.Find("input[placeholder='Enter username']").Change("Me");
-        await cut.Find("button").ClickAsync();
+        cut.Find("#username-input").Input("Me");
+        await cut.Find("#join-button").ClickAsync();
     
         // Act
         await fakeClient.SimulateOnUserLeftAsync("OldUser");
@@ -65,7 +66,7 @@ public class ChatTests : BunitContext, IAsyncLifetime
         // Assert
         await fakeClient.WaitForOnUserLeftAsync();
         await cut.WaitForStateAsync(() => 
-            cut.FindAll(".messages div").Any(m => m.TextContent.Contains("User 'OldUser' left")));
+            cut.FindAll(".msg").Any(m => m.TextContent.Contains("User 'OldUser' left")));
     }
     
     [Fact]
@@ -75,16 +76,19 @@ public class ChatTests : BunitContext, IAsyncLifetime
         
         await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
-        cut.Find("input[placeholder='Enter username']").Change("Me");
-        await cut.Find("button").ClickAsync();
+        cut.Find("#username-input").Input("Me");
+        await cut.Find("#join-button").ClickAsync();
     
         // Act
         await fakeClient.SimulateOnMessageReceivedAsync(new ChatMessage("Alice", "Hello World", DateTime.UtcNow));
     
         // Assert
         await fakeClient.WaitForOnMessageReceivedAsync();
-        await cut.WaitForStateAsync(() => 
-            cut.FindAll(".messages div").Any(m => m.TextContent.Contains("Alice: Hello World")));
+        await cut.WaitForStateAsync(() =>
+        {
+            var readOnlyList = cut.FindAll(".msg");
+            return readOnlyList.Any(m => m.TextContent.Contains("Alice: Hello World"));
+        });
     }
     
     [Fact]
@@ -94,18 +98,18 @@ public class ChatTests : BunitContext, IAsyncLifetime
         
         await using var fakeClient = await GetFake();
         var cut = Render<Chat>();
-        cut.Find("input[placeholder='Enter username']").Change("Me");
-        await cut.Find("button").ClickAsync();
+        cut.Find("#username-input").Input("Me");
+        await cut.Find("#join-button").ClickAsync();
     
         // Act
-        cut.Find("input[placeholder='Enter message']").Change("My secret message");
-        await cut.Find("button").ClickAsync();
+        cut.Find("#message-input").Input("My secret message");
+        await cut.Find("#send-button").ClickAsync();
     
         // Assert
         Assert.Contains("My secret message", fakeClient.SendMessageCalls);
         
         await cut.WaitForStateAsync(() => 
-            cut.FindAll(".messages div").Any(m => m.TextContent.Contains("Me: My secret message")));
+            cut.FindAll(".msg").Any(m => m.TextContent.Contains("Me: My secret message")));
     }
 
     private async Task<FakeChatHubContractClient> GetFake()
