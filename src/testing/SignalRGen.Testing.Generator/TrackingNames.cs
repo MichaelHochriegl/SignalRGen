@@ -1,4 +1,4 @@
-namespace SignalRGen.Generator.Common;
+namespace SignalRGen.Testing.Generator;
 
 internal static class TrackingNames
 {
