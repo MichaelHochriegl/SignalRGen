@@ -5,14 +5,16 @@ on:
   release:
     types:
       - published
+
 env:
   # Stop wasting time caching packages
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: true
   # Disable sending usage data to Microsoft
   DOTNET_CLI_TELEMETRY_OPTOUT: true
-  # Project name to pack and publish
-  PROJECT_NAME: SignalRGen
-  # NUGET_TEST_PROJECT: ./test/SignalRGen.Nuget.Tests.Integration
+  # Projects to pack and publish
+  PACK_PROJECTS: >
+    src/SignalRGen/SignalRGen.csproj
+    src/testing/SignalRGen.Testing/SignalRGen.Testing.csproj
   # GitHub Packages Feed settings
   GITHUB_FEED: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,26 +48,37 @@ jobs:
         run: dotnet test -c Release
       - name: Pack
         if: matrix.os == 'ubuntu-latest'
+        shell: bash
         run: |
           latestTag=$(git describe --tags --abbrev=0 2>/dev/null || echo 0.0.1)
           runId=$GITHUB_RUN_ID
           packageVersion="${latestTag//v}-build.${runId}"
-          dotnet pack -v normal -c Release -o ./artifacts --no-restore --include-symbols --include-source -p:PackageVersion=$packageVersion src/$PROJECT_NAME/$PROJECT_NAME.*proj
-#      - name: Restore Nuget Test Project
-#        if: matrix.os == 'ubuntu-latest'
-#        run: dotnet restore $NUGET_TEST_PROJECT --packages ./packages --configfile "nuget.integration-tests.config"
-#      - name: Build Nuget Test Project
-#        if: matrix.os == 'ubuntu-latest'
-#        run: dotnet build $NUGET_TEST_PROJECT -c Release --packages ./packages --no-restore
-#      - name: Test Nuget Test Project
-#        if: matrix.os == 'ubuntu-latest'
-#        run: dotnet test $NUGET_TEST_PROJECT -c Release --no-build --no-restore
+
+          mkdir -p ./artifacts
+
+          for proj in $PACK_PROJECTS; do
+            echo "Packing $proj with version $packageVersion"
+            dotnet pack -v normal -c Release -o ./artifacts --no-restore \
+              --include-symbols --include-source \
+              -p:PackageVersion=$packageVersion \
+              $proj
+          done
+      #      - name: Restore Nuget Test Project
+      #        if: matrix.os == 'ubuntu-latest'
+      #        run: dotnet restore $NUGET_TEST_PROJECT --packages ./packages --configfile "nuget.integration-tests.config"
+      #      - name: Build Nuget Test Project
+      #        if: matrix.os == 'ubuntu-latest'
+      #        run: dotnet build $NUGET_TEST_PROJECT -c Release --packages ./packages --no-restore
+      #      - name: Test Nuget Test Project
+      #        if: matrix.os == 'ubuntu-latest'
+      #        run: dotnet test $NUGET_TEST_PROJECT -c Release --no-build --no-restore
       - name: Upload Artifact
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
           name: nupkg
           path: ./artifacts/*.nupkg
+
   prerelease:
     needs: build
     if: github.ref == 'refs/heads/main'
@@ -79,6 +92,7 @@ jobs:
         run: dotnet nuget push ./*.nupkg --source $GITHUB_FEED --no-symbols --skip-duplicate --api-key $GITHUB_TOKEN
         env:
           NUGET_AUTH_TOKEN: ${{ github.token }}
+
   deploy:
     needs: build
     if: github.event_name == 'release'
@@ -90,17 +104,25 @@ jobs:
         with:
           dotnet-version: |
             9.x
-      - name: Create Release NuGet package
+      - name: Create Release NuGet packages
+        shell: bash
         run: |
           arrTag=(${GITHUB_REF//\// })
           VERSION="${arrTag[2]}"
           echo Version: $VERSION
           VERSION="${VERSION//v}"
           echo Clean Version: $VERSION
-          dotnet pack -v normal -c Release --include-symbols --include-source \
-            -p:PackageVersion=$VERSION \
-            -p:PackageReleaseNotes="See full release notes at: https://github.com/${{ github.repository }}/releases/tag/v$VERSION}" \
-            -o nupkg src/$PROJECT_NAME/$PROJECT_NAME.*proj
+
+          mkdir -p nupkg
+
+          for proj in $PACK_PROJECTS; do
+            echo "Packing $proj with version $VERSION"
+            dotnet pack -v normal -c Release --include-symbols --include-source \
+              -p:PackageVersion=$VERSION \
+              -p:PackageReleaseNotes="See full release notes at: https://github.com/${{ github.repository }}/releases/tag/v$VERSION" \
+              -o nupkg \
+              $proj
+          done
 
       - name: Push to GitHub Feed
         run: dotnet nuget push ./nupkg/*.nupkg --source $GITHUB_FEED --no-symbols --skip-duplicate --api-key $GITHUB_TOKEN
