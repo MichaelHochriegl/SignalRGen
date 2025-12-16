@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
@@ -11,7 +11,6 @@
         <IsPackable>false</IsPackable>
         <DevelopmentDependency>true</DevelopmentDependency>
     </PropertyGroup>
-    
 
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
@@ -24,19 +23,13 @@
         <EmbeddedResource Include="Sources/*.sbntxt" />
     </ItemGroup>
 
-    <ItemGroup>
-        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-            <_Parameter1>SignalRGen.Generator.Tests</_Parameter1>
-        </AssemblyAttribute>
-    </ItemGroup>
-
     <PropertyGroup>
         <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <Compile Include="../SignalRGen.Shared/**/*.cs"/>
-        <Compile Remove="../SignalRGen.Shared/obj/**/*.cs"/>
+        <Compile Include="../../SignalRGen.Shared/**/*.cs"/>
+        <Compile Remove="../../SignalRGen.Shared/obj/**/*.cs"/>
     </ItemGroup>
 
     <Target Name="GetDependencyTargetPaths">
@@ -44,4 +37,11 @@
             <TargetPathWithTargetPlatformMoniker Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll" IncludeRuntimeDependency="false" />
         </ItemGroup>
     </Target>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>SignalRGen.Testing.Generator.Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
 </Project>

@@ -19,7 +19,7 @@ public interface IChatHubServerToClient
 {
     Task UserJoined(string user);
     Task UserLeft(string user);
-    Task MessageReceived(string user, string message);
+    Task MessageReceived(ChatMessage message);
 }
 
 // This interface describes the flow of data from the client to the server.
@@ -27,3 +27,5 @@ public interface IChatHubClientToServer
 {
     Task SendMessage(string message);
 }
+
+public record ChatMessage(string User, string Message, DateTimeOffset Timestamp);
