@@ -14,7 +14,7 @@ env:
   # Projects to pack and publish
   PACK_PROJECTS: >
     src/SignalRGen/SignalRGen.csproj
-    src/SignalRGen.Testing/SignalRGen.Testing.csproj
+    src/testing/SignalRGen.Testing/SignalRGen.Testing.csproj
   # GitHub Packages Feed settings
   GITHUB_FEED: https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
