@@ -55,6 +55,12 @@ export default defineConfig({
                 ]
             },
             {
+                text: 'Testing',
+                items: [
+                    {text: 'Generated Fakes', link: '/testing/generated-fakes'},
+                ]
+            },
+            {
                 text: 'Advanced Usage',
                 items: [
                     {text: 'Multi-Project Support', link: '/advanced/multi-project-support'},
