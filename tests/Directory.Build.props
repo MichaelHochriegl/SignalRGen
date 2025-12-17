@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <!-- Default: locally we use the latest, properly released dotnet -->
+        <SignalRGenTestFrameworks Condition="'$(SignalRGenTestFrameworks)' == ''">net10.0</SignalRGenTestFrameworks>
+
+        <!-- GitHub Actions default: full matrix -->
+        <SignalRGenTestFrameworks Condition="'$(SignalRGenTestFrameworks)' == '' and '$(GITHUB_ACTIONS)' == 'true'">net8.0;net9.0;net10.0</SignalRGenTestFrameworks>
+        
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+</Project>

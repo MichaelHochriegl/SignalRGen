@@ -39,7 +39,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: |
+            8.x
             9.x
+            10.x
       - name: Restore
         run: dotnet restore
       - name: Build
@@ -103,7 +105,9 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
+            8.x
             9.x
+            10.x
       - name: Create Release NuGet packages
         shell: bash
         run: |
@@ -117,7 +121,7 @@ jobs:
 
           for proj in $PACK_PROJECTS; do
             echo "Packing $proj with version $VERSION"
-            dotnet pack -v normal -c Release --include-symbols --include-source \
+            dotnet pack -v normal -c Release --no-symbols --include-source \
               -p:PackageVersion=$VERSION \
               -p:PackageReleaseNotes="See full release notes at: https://github.com/${{ github.repository }}/releases/tag/v$VERSION" \
               -o nupkg \
