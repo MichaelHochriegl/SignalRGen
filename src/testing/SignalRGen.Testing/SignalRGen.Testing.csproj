@@ -60,7 +60,7 @@
     </ItemGroup>
 
     <!-- Make sure that the abstraction dll is already built -->
-    <Target Name="BuildTestingAbstractionsBeforePack" BeforeTargets="Pack">
+    <Target Name="BuildTestingAbstractionsBeforePack" BeforeTargets="GenerateNuspec;Pack">
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
                  Targets="Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
@@ -73,7 +73,7 @@
     </Target>
 
     <!-- Report error when abstraction dll is missing -->
-    <Target Name="VerifyAbstractionsExist" BeforeTargets="Pack" AfterTargets="BuildTestingAbstractionsBeforePack">
+    <Target Name="VerifyAbstractionsExist" BeforeTargets="GenerateNuspec;Pack" AfterTargets="BuildTestingAbstractionsBeforePack">
         <Error Condition="!Exists('..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net8.0\SignalRGen.Testing.Abstractions.dll')"
                Text="Missing net8.0 abstractions output. Expected: ..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net8.0\SignalRGen.Testing.Abstractions.dll" />
         <Error Condition="!Exists('..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net9.0\SignalRGen.Testing.Abstractions.dll')"
