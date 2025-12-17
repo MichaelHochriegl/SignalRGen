@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp.Testing;
 using Microsoft.CodeAnalysis.Testing;
 using SignalRGen.Abstractions;
 using SignalRGen.Analyzers;
+using SignalRGen.CodeFixes.Tests.Helpers;
 using SignalRGen.Shared;
 
 namespace SignalRGen.CodeFixes.Tests;
@@ -14,7 +15,7 @@ public class HubInterfaceMethodCodeFixProviderTests
         public Test()
         {
             // Add necessary references
-            ReferenceAssemblies = ReferenceAssemblies.Net.Net80;
+            ReferenceAssemblies = ReferenceAssembliesHelper.ForCurrentNet();
             TestState.AdditionalReferences.Add(MetadataReference.CreateFromFile(typeof(IBidirectionalHub<,>).Assembly.Location));
         }
     }

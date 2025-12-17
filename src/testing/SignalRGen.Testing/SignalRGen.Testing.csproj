@@ -39,16 +39,48 @@
         <None Include="../SignalRGen.Testing.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Testing.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
 
         <TfmSpecificPackageFile
-                Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/$(TargetFramework)/SignalRGen.Testing.Abstractions.dll"
+                Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/net8.0/SignalRGen.Testing.Abstractions.dll"
                 Pack="true"
-                PackagePath="lib/$(TargetFramework)" />
+                PackagePath="lib/net8.0" />
+        
+        <TfmSpecificPackageFile
+                Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/net9.0/SignalRGen.Testing.Abstractions.dll"
+                Pack="true"
+                PackagePath="lib/net9.0" />
+
+        <TfmSpecificPackageFile
+                Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/net10.0/SignalRGen.Testing.Abstractions.dll"
+                Pack="true"
+                PackagePath="lib/net10.0" />
     </ItemGroup>
 
     <!-- Project References   -->
     <ItemGroup>
       <ProjectReference Include="..\..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
-      <ProjectReference Include="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj" />
       <ProjectReference Include="..\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" />
     </ItemGroup>
+
+    <!-- Make sure that the abstraction dll is already built -->
+    <Target Name="BuildTestingAbstractionsBeforePack" BeforeTargets="Pack">
+        <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+        <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration);TargetFramework=net9.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+        <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration);TargetFramework=net10.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+    </Target>
+
+    <!-- Report error when abstraction dll is missing -->
+    <Target Name="VerifyAbstractionsExist" BeforeTargets="Pack" AfterTargets="BuildTestingAbstractionsBeforePack">
+        <Error Condition="!Exists('..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net8.0\SignalRGen.Testing.Abstractions.dll')"
+               Text="Missing net8.0 abstractions output. Expected: ..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net8.0\SignalRGen.Testing.Abstractions.dll" />
+        <Error Condition="!Exists('..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net9.0\SignalRGen.Testing.Abstractions.dll')"
+               Text="Missing net9.0 abstractions output. Expected: ..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net9.0\SignalRGen.Testing.Abstractions.dll" />
+        <Error Condition="!Exists('..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net10.0\SignalRGen.Testing.Abstractions.dll')"
+               Text="Missing net10.0 abstractions output. Expected: ..\SignalRGen.Testing.Abstractions\bin\$(Configuration)\net10.0\SignalRGen.Testing.Abstractions.dll" />
+    </Target>
     
 </Project>
