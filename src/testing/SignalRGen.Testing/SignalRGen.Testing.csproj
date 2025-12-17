@@ -23,8 +23,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Description>SignalRGen.Testing simplifies the process of writing tests for SignalR clients.</Description>
         <IncludeContentInPack>true</IncludeContentInPack>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
 
     <!-- Add Metadata to the NuGet Package -->

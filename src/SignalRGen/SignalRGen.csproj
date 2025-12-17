@@ -23,8 +23,7 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <Description>SignalRGen simplifies the process of creating client-side code for interacting with SignalR hubs, providing a seamless experience for developers.</Description>
         <IncludeContentInPack>true</IncludeContentInPack>
-        <IncludeSymbols>true</IncludeSymbols>
-        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+        <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
     
     <!-- Add Metadata to the NuGet Package -->
