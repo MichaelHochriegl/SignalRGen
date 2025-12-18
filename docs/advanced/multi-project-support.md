@@ -27,7 +27,7 @@ allowing you to avoid naming conflicts.
 
 Add the `SignalRModuleName` property to your project file:
 
-```csharp
+```csharp{4,7-10}
     <Project Sdk="Microsoft.NET.Sdk">
       <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -65,7 +65,7 @@ Instead of the default `AddSignalRHubs`.
 Here's how you would set up two projects with different module names:
 
 ### Chat Project (MyApp.Chat.csproj)
-```csharp
+```csharp{4,7-10}
     <Project Sdk="Microsoft.NET.Sdk">
       <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -84,7 +84,7 @@ Here's how you would set up two projects with different module names:
 ```
 
 ### Notifications Project (MyApp.Notifications.csproj)
-```csharp
+```csharp{4,7-10}
     <Project Sdk="Microsoft.NET.Sdk">
       <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -104,7 +104,7 @@ Here's how you would set up two projects with different module names:
 
 ### Registration in Main Application
 
-```csharp
+```csharp{6,11}
     // Program.cs in MyApp.Web
     var builder = WebApplication.CreateBuilder(args);
 

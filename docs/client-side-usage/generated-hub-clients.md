@@ -3,6 +3,12 @@
 When you define a SignalR interface with the `[HubClient]` attribute, `SignalRGen` automatically generates a 
 strongly-typed client class for you. This page explains what gets generated and how to use the resulting client.
 
+:::tip Generated code
+The generated code shown on this page might not directly match the code that is actually generated.
+You can e.g., use Rider to actually see the real generated code:
+![Generated code in Rider](./rider-generated-code.webp)
+:::
+
 ## Interface to Client: The Transformation Process
 
 Let's examine how `SignalRGen` transforms your interface definition into a usable client class.
@@ -78,7 +84,8 @@ For each method in your `TServer` interface (in the example above the `IChatHubS
 // Task UserJoined(string user);
 
 // SignalRGen generates:
-public Func<string, Task>? OnUserJoined = default;
+public delegate global::System.Threading.Tasks.Task UserJoinedDelegate(string user);
+public UserJoinedDelegate? OnUserJoined = default;
 ```
 :::
 
@@ -124,7 +131,7 @@ services.AddSignalRHubs(options =>
 :::tip 💡 Changing `AddSignalRHubs` naming
 You can change the naming of the `AddSignalRHubs` method by supplying a `SignalRModuleName` in your `csproj`:
 
-```csharp
+```csharp{4,7-10}
     <Project Sdk="Microsoft.NET.Sdk">
       <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -138,6 +145,13 @@ You can change the naming of the `AddSignalRHubs` method by supplying a `SignalR
       
       <!-- Your SignalRGen package references -->
     </Project>
+```
+
+With the above change, the register call looks like:
+
+```csharp
+builder.Services
+    .AddChatHubs(c => c.HubBaseUri = new Uri("http://localhost:5155"));
 ```
 
 This also allows you to use the `AddSignalRHubs` method in multiple projects.
@@ -155,7 +169,7 @@ public class ChatService
     private readonly ChatHubContractClient _hubClient;
     private readonly ILogger<ChatService> _logger;
 
-    public ExampleService(ChatHubContractClient hubClient, ILogger<ExampleService> logger)
+    public ChatService(ChatHubContractClient hubClient, ILogger<ChatService> logger)
     {
         _hubClient = hubClient;
         _logger = logger;
@@ -298,6 +312,7 @@ Common issues and solutions:
     - Verify the HubBaseUri is correct
     - Check if the server is running and accessible
     - Ensure proper authentication is configured if required
+    - Check your CORS settings
 
 2. **Events not firing**:
     - Verify you've subscribed to events before starting the connection

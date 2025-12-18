@@ -30,7 +30,8 @@ Create an interface that describes your Hub's communication:
 
 ::: code-group
 ```csharp
-using SignalRGen.Generator;
+using SignalRGen.Abstractions;
+using SignalRGen.Abstractions.Attributes;
 
 namespace MySharedInterface;
 
@@ -158,4 +159,3 @@ app.MapGet("/ping", async ([FromServices] PingPongHubContractClient hub) =>
 ## Complete Example
 
 For the full step-by-step example including project setup, see our [detailed tutorial](./detailed-tutorial.md).
-```

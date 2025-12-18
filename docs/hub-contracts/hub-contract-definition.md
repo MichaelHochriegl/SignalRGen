@@ -66,7 +66,8 @@ public interface ITelemetryHubClientToServer
 Every SignalR interface must be marked with the `[HubClient]` attribute:
 
 ```csharp
-using SignalRGen.Generator;
+using SignalRGen.Abstractions;
+using SignalRGen.Abstractions.Attributes;
 
 namespace MyApp.Contracts;
 
@@ -285,7 +286,8 @@ Task message_received(string message);   // Use PascalCase
 Here's a comprehensive chat hub example:
 
 ```csharp
-using SignalRGen.Generator;
+using SignalRGen.Abstractions;
+using SignalRGen.Abstractions.Attributes;
 
 namespace ChatApp.Contracts;
 

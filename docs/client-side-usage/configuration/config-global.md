@@ -21,7 +21,7 @@ In the example above we define the global URI from the server we want to talk to
 :::tip 💡 Changing `AddSignalRHubs` naming
 You can change the naming of the `AddSignalRHubs` method by supplying a `SignalRModuleName` in your `csproj`:
 
-```csharp
+```csharp{4,7-10}
     <Project Sdk="Microsoft.NET.Sdk">
       <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
@@ -37,6 +37,13 @@ You can change the naming of the `AddSignalRHubs` method by supplying a `SignalR
     </Project>
 ```
 
+With the above change, the register call looks like:
+
+```csharp
+builder.Services
+    .AddChatHubs(c => c.HubBaseUri = new Uri("http://localhost:5155"));
+```
+
 This also allows you to use the `AddSignalRHubs` method in multiple projects.
 See [Multi-Project Support](../../advanced/multi-project-support) for more information.
 :::
@@ -50,7 +57,7 @@ Defines the base URI used for all Hub connections.
 
 | Name | Type | Required? | Default Value |
 |------|:----:|-----------|---------------|
-| `HubBaseUri` | `Uri` | ✅ | `null`, so you must provide a value unless overridden at the Hub level |
+| `HubBaseUri` | `Uri` | ✅ | `null`, so you must provide a value |
 
 ## Usage Notes
 

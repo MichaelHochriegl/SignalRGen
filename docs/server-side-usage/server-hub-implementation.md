@@ -51,12 +51,12 @@ namespace SignalRGen.Example.Server.Api.Hubs;
 public class ChatHub : Hub<IChatHubServerToClient>, IChatHubClientToServer
 {
     // We use the `OnConnectedAsync` method to notify the other clients that a new user joined.
-    public override Task OnConnectedAsync()
+    public override async Task OnConnectedAsync()
     {
         // The `UserJoined` is available as a method because we use the `IChatHubServerToClient` interface
         // in `Hub<IChatHubServerToClient>`
-        Clients.Others.UserJoined(Context.UserIdentifier ?? "Anonymous");
-        return base.OnConnectedAsync();
+        await Clients.Others.UserJoined(Context.UserIdentifier ?? "Anonymous");
+        await base.OnConnectedAsync();
     }
 
     // This method must be implemented here, as we implement the interface `IChatHubClientToServer`
@@ -67,12 +67,12 @@ public class ChatHub : Hub<IChatHubServerToClient>, IChatHubClientToServer
     }
 
     // We use the `OnDisconnectedAsync` method to notify the other clients that a user left.
-    public override Task OnDisconnectedAsync(Exception? exception)
+    public override async Task OnDisconnectedAsync(Exception? exception)
     {
         // The `UserLeft` is available as a method because we use the `IChatHubServerToClient` interface
         // in `Hub<IChatHubServerToClient>`
-        Clients.Others.UserLeft(Context.UserIdentifier ?? "Anonymous");
-        return base.OnDisconnectedAsync(exception);
+        await Clients.Others.UserLeft(Context.UserIdentifier ?? "Anonymous");
+        await base.OnDisconnectedAsync(exception);
     }
 }
 ```

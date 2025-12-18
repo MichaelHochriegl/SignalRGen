@@ -62,7 +62,8 @@ public interface IChatHubClientToServer : IMessageCommands, IModerationCommands
 Use them in your hub contract as usual:
 
 ```csharp
-using SignalRGen.Generator;
+using SignalRGen.Abstractions;
+using SignalRGen.Abstractions.Attributes;
 
 [HubClient(HubUri = "chat")]
 public interface IChatHubContract : IBidirectionalHub<IChatHubServerToClient, IChatHubClientToServer>

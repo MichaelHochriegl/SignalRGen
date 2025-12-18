@@ -67,7 +67,8 @@ Create the interface in your shared project:
 ::: code-group
 ```csharp
 // MySharedInterface/IPingPongHub.cs
-using SignalRGen.Generator;
+using SignalRGen.Abstractions;
+using SignalRGen.Abstractions.Attributes;
 
 namespace MySharedInterface;
 

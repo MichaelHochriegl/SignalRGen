@@ -152,6 +152,8 @@ public class ChatService
         };
     }
     
+    public Task ConnectAsync() => _hub.StartAsync();
+    
     // Connection management handled automatically
     public async Task SendMessageAsync(string message)
     {
