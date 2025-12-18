@@ -62,13 +62,13 @@
     <!-- Make sure that the abstraction dll is already built -->
     <Target Name="BuildTestingAbstractionsBeforePack" BeforeTargets="GenerateNuspec;Pack">
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
-                 Targets="Build"
+                 Targets="Restore;Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
-                 Targets="Build"
+                 Targets="Restore;Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net9.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
-                 Targets="Build"
+                 Targets="Restore;Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net10.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
     </Target>
 
