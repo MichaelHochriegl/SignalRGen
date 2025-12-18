@@ -66,11 +66,20 @@
     <!-- Make sure that the abstraction dll is already built -->
     <Target Name="BuildAbstractionsBeforePack" BeforeTargets="GenerateNuspec;Pack">
         <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
+                 Targets="Restore"
+                 Properties="Configuration=$(Configuration);ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+
+        <!-- Build net8.0 -->
+        <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
                  Targets="Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+
+        <!-- Build net9.0 -->
         <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
                  Targets="Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net9.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+
+        <!-- Build net10.0 -->
         <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
                  Targets="Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net10.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
