@@ -59,7 +59,13 @@
     <!-- Project References   -->
     <ItemGroup>
       <ProjectReference Include="..\..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
-      <ProjectReference Include="..\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" />
+      <ProjectReference Include="..\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" OutputItemType="None" />
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+        <PackageReference Include="SignalRGen" Version="$(PackageVersion)" TargetFramework="net8.0" PrivateAssets="all" />
+        <PackageReference Include="SignalRGen" Version="$(PackageVersion)" TargetFramework="net9.0" PrivateAssets="all" />
+        <PackageReference Include="SignalRGen" Version="$(PackageVersion)" TargetFramework="net10.0" PrivateAssets="all" />
     </ItemGroup>
 
     <!-- Make sure that the abstraction dll is already built -->
