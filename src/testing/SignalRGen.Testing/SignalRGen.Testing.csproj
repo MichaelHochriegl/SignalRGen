@@ -36,6 +36,7 @@
     <!-- Properly store dlls in the NuGet Package   -->
     <ItemGroup>
         <None Include="../SignalRGen.Testing.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Testing.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+        <None Include="../SignalRGen.Testing.Generator/bin/$(Configuration)/netstandard2.0/Scriban.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
 
         <TfmSpecificPackageFile
                 Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/net8.0/SignalRGen.Testing.Abstractions.dll"

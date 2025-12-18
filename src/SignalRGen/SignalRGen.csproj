@@ -38,6 +38,7 @@
         <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
         <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
         <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
+        <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/Scriban.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
 
         <TfmSpecificPackageFile
                 Include="../SignalRGen.Abstractions/bin/$(Configuration)/net8.0/SignalRGen.Abstractions.dll"
