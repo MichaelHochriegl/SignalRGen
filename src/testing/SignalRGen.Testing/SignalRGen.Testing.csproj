@@ -4,6 +4,8 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <IsPackable>true</IsPackable>
         <IncludeBuildOutput>false</IncludeBuildOutput>
+        <LangVersion>latest</LangVersion>
+        <RunAnalyzers>false</RunAnalyzers>
     </PropertyGroup>
 
     <!-- NuGet settings -->
