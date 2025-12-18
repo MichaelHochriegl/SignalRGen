@@ -61,14 +61,28 @@
 
     <!-- Make sure that the abstraction dll is already built -->
     <Target Name="BuildTestingAbstractionsBeforePack" BeforeTargets="GenerateNuspec;Pack">
+        <!-- Restore and Build net8.0 -->
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
-                 Targets="Restore;Build"
+                 Targets="Restore"
                  Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
-                 Targets="Restore;Build"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+
+        <!-- Restore and Build net9.0 -->
+        <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
+                 Targets="Restore"
                  Properties="Configuration=$(Configuration);TargetFramework=net9.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
         <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
-                 Targets="Restore;Build"
+                 Targets="Build"
+                 Properties="Configuration=$(Configuration);TargetFramework=net9.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+
+        <!-- Restore and Build net10.0 -->
+        <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
+                 Targets="Restore"
+                 Properties="Configuration=$(Configuration);TargetFramework=net10.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
+        <MSBuild Projects="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj"
+                 Targets="Build"
                  Properties="Configuration=$(Configuration);TargetFramework=net10.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
     </Target>
 
