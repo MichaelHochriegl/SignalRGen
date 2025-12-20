@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.0</TargetFramework>
+        <TargetFrameworks>net8.0;net9.0;net10.0</TargetFrameworks>
         <IsPackable>true</IsPackable>
         <IncludeBuildOutput>false</IncludeBuildOutput>
     </PropertyGroup>
@@ -25,74 +25,28 @@
         <IncludeContentInPack>true</IncludeContentInPack>
         <IncludeSymbols>false</IncludeSymbols>
     </PropertyGroup>
-    
+
     <!-- Add Metadata to the NuGet Package -->
     <ItemGroup>
-        <None Include="../../LICENSE" Pack="true" PackagePath="\" />
-        <None Include="../../README.md" Pack="true" PackagePath="\" />
-        <None Include="../../assets/logo_128x128.png" Pack="true" PackagePath="\" />
+        <None Include="../../LICENSE" Pack="true" PackagePath="\"/>
+        <None Include="../../README.md" Pack="true" PackagePath="\"/>
+        <None Include="../../assets/logo_128x128.png" Pack="true" PackagePath="\"/>
     </ItemGroup>
 
     <!-- Properly store dlls in the NuGet Package   -->
     <ItemGroup>
-        <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
-        <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
-        <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true" />
-
-        <TfmSpecificPackageFile
-                Include="../SignalRGen.Abstractions/bin/$(Configuration)/net8.0/SignalRGen.Abstractions.dll"
-                Pack="true"
-                PackagePath="lib/net8.0" />
-        
-        <TfmSpecificPackageFile
-                Include="../SignalRGen.Abstractions/bin/$(Configuration)/net9.0/SignalRGen.Abstractions.dll"
-                Pack="true"
-                PackagePath="lib/net9.0" />
-
-        <TfmSpecificPackageFile
-                Include="../SignalRGen.Abstractions/bin/$(Configuration)/net10.0/SignalRGen.Abstractions.dll"
-                Pack="true"
-                PackagePath="lib/net10.0" />
+        <None Include="../SignalRGen.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true"/>
+        <None Include="../SignalRGen.Analyzers/bin/$(Configuration)/netstandard2.0/SignalRGen.Analyzers.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true"/>
+        <None Include="../SignalRGen.CodeFixes/bin/$(Configuration)/netstandard2.0/SignalRGen.CodeFixes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true"/>
     </ItemGroup>
 
     <!-- Project References   -->
     <ItemGroup>
-      <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false" />
-      <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false" />
-      <ProjectReference Include="..\SignalRGen.Generator\SignalRGen.Generator.csproj" ReferenceOutputAssembly="false" />
-      <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" ReferenceOutputAssembly="false" />
+        <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" />
+        <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\SignalRGen.Generator\SignalRGen.Generator.csproj" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
-    <!-- Make sure that the abstraction dll is already built -->
-    <Target Name="BuildAbstractionsBeforePack" BeforeTargets="GenerateNuspec;Pack">
-        <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
-                 Targets="Restore"
-                 Properties="Configuration=$(Configuration);ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
-
-        <!-- Build net8.0 -->
-        <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
-                 Targets="Build"
-                 Properties="Configuration=$(Configuration);TargetFramework=net8.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
-
-        <!-- Build net9.0 -->
-        <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
-                 Targets="Build"
-                 Properties="Configuration=$(Configuration);TargetFramework=net9.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
-
-        <!-- Build net10.0 -->
-        <MSBuild Projects="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj"
-                 Targets="Build"
-                 Properties="Configuration=$(Configuration);TargetFramework=net10.0;ContinuousIntegrationBuild=$(ContinuousIntegrationBuild);PackageVersion=$(PackageVersion)" />
-    </Target>
-
-    <!-- Report error when abstraction dll is missing -->
-    <Target Name="VerifyAbstractionsExist" BeforeTargets="GenerateNuspec;Pack" AfterTargets="BuildAbstractionsBeforePack">
-        <Error Condition="!Exists('..\SignalRGen.Abstractions\bin\$(Configuration)\net8.0\SignalRGen.Abstractions.dll')"
-               Text="Missing net8.0 abstractions output. Expected: ..\SignalRGen.Abstractions\bin\$(Configuration)\net8.0\SignalRGen.Abstractions.dll" />
-        <Error Condition="!Exists('..\SignalRGen.Abstractions\bin\$(Configuration)\net9.0\SignalRGen.Abstractions.dll')"
-               Text="Missing net9.0 abstractions output. Expected: ..\SignalRGen.Abstractions\bin\$(Configuration)\net9.0\SignalRGen.Abstractions.dll" />
-        <Error Condition="!Exists('..\SignalRGen.Abstractions\bin\$(Configuration)\net10.0\SignalRGen.Abstractions.dll')"
-               Text="Missing net10.0 abstractions output. Expected: ..\SignalRGen.Abstractions\bin\$(Configuration)\net10.0\SignalRGen.Abstractions.dll" />
-    </Target>
-    
 </Project>
