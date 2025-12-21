@@ -38,6 +38,12 @@
         <None Include="../SignalRGen.Testing.Generator/bin/$(Configuration)/netstandard2.0/SignalRGen.Testing.Generator.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="true"/>
 
         <TfmSpecificPackageFile
+                Include="$(PkgScriban)/lib/netstandard2.0/Scriban.dll"
+                Pack="true"
+                PackagePath="analyzers/dotnet/cs"
+                Condition=" '$(TargetFramework)' == 'net8.0' " />
+        
+        <TfmSpecificPackageFile
                 Include="../SignalRGen.Testing.Abstractions/bin/$(Configuration)/$(TargetFramework)/SignalRGen.Testing.Abstractions.dll"
                 Pack="true"
                 PackagePath="lib/$(TargetFramework)" />
@@ -50,6 +56,10 @@
     </ItemGroup>
 
     <!-- Ensure Testing package depends on the matching version of the main package -->
+    <ItemGroup>
+        <PackageReference Include="Scriban" Version="6.5.2" PrivateAssets="all" GeneratePathProperty="true" />
+    </ItemGroup>
+    
     <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
         <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.0" PrivateAssets="all" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" PrivateAssets="all" />
