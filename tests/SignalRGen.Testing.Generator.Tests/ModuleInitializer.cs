@@ -1,14 +1,16 @@
 using System.Runtime.CompilerServices;
+using VerifyTests;
+using VerifyXunit;
 
-namespace SignalRGen.Generator.Tests;
+namespace SignalRGen.Testing.Generator.Tests;
 
 public static class ModuleInitializer
 {
     [ModuleInitializer]
     public static void Init()
     {
-        DerivePathInfo(
-            (sourceFile, projectDirectory, type, method) => new(
+        Verifier.DerivePathInfo(
+            (_, projectDirectory, type, method) => new(
                 directory: Path.Combine(projectDirectory, "Snapshots", type.Name),
                 typeName: type.Name,
                 methodName: method.Name));

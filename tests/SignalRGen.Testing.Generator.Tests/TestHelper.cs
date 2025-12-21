@@ -8,6 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 using SignalRGen.Testing.Abstractions.Attributes;
 using SignalRGen.Testing.Generator;
+using VerifyXunit;
 
 namespace SignalRGen.Generator.Tests;
 
