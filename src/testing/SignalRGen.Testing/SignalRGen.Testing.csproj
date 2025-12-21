@@ -51,8 +51,9 @@
 
     <!-- Project References   -->
     <ItemGroup>
-        <ProjectReference Include="..\..\SignalRGen.Shared\SignalRGen.Shared.csproj"/>
-        <ProjectReference Include="..\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" OutputItemType="None"/>
+        <ProjectReference Include="..\..\SignalRGen.Shared\SignalRGen.Shared.csproj" />
+        <ProjectReference Include="..\SignalRGen.Testing.Abstractions\SignalRGen.Testing.Abstractions.csproj" PrivateAssets="all" />
+        <ProjectReference Include="..\SignalRGen.Testing.Generator\SignalRGen.Testing.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
     </ItemGroup>
 
     <!-- Ensure Testing package depends on the matching version of the main package -->

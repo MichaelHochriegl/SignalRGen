@@ -53,6 +53,7 @@
 
     <!-- Project References   -->
     <ItemGroup>
+        <ProjectReference Include="..\SignalRGen.Abstractions\SignalRGen.Abstractions.csproj" PrivateAssets="all" />
         <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
         <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
         <ProjectReference Include="..\SignalRGen.Generator\SignalRGen.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
