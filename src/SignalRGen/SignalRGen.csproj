@@ -47,25 +47,29 @@
 
     <!-- Project References   -->
     <ItemGroup>
-        <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false"/>
-        <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false"/>
-        <ProjectReference Include="..\SignalRGen.Generator\SignalRGen.Generator.csproj" ReferenceOutputAssembly="false"/>
-        <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" ReferenceOutputAssembly="false"/>
+        <ProjectReference Include="..\SignalRGen.Analyzers\SignalRGen.Analyzers.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
+        <ProjectReference Include="..\SignalRGen.CodeFixes\SignalRGen.CodeFixes.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
+        <ProjectReference Include="..\SignalRGen.Generator\SignalRGen.Generator.csproj" ReferenceOutputAssembly="false" OutputItemType="None" />
+        <ProjectReference Include="..\SignalRGen.Shared\SignalRGen.Shared.csproj" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
     <!-- Explicitly declare dependencies for the NuGet package metadata -->
-    <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[8.0.0, 9.0.0)" TargetFramework="net8.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[8.0.0, 9.0.0)" TargetFramework="net8.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="[8.0.0, 9.0.0)" TargetFramework="net8.0" PrivateAssets="all" />
+    <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[8.0.0, 9.0.0)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[8.0.0, 9.0.0)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="[8.0.0, 9.0.0)" PrivateAssets="all" />
+    </ItemGroup>
 
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[9.0.0, 10.0.0)" TargetFramework="net9.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[9.0.0, 10.0.0)" TargetFramework="net9.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="[9.0.0, 10.0.0)" TargetFramework="net9.0" PrivateAssets="all" />
+    <ItemGroup Condition="'$(TargetFramework)' == 'net9.0'">
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[9.0.0, 10.0.0)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[9.0.0, 10.0.0)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="[9.0.0, 10.0.0)" PrivateAssets="all" />
+    </ItemGroup>
 
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[10.0.0, 11.0.0)" TargetFramework="net10.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.0, 11.0.0)" TargetFramework="net10.0" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="[10.0.0, 11.0.0)" TargetFramework="net10.0" PrivateAssets="all" />
+    <ItemGroup Condition="'$(TargetFramework)' == 'net10.0'">
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="[10.0.0, 11.0.0)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="[10.0.0, 11.0.0)" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.Http.Connections.Client" Version="[10.0.0, 11.0.0)" PrivateAssets="all" />
     </ItemGroup>
 
 </Project>
