@@ -60,7 +60,7 @@ jobs:
 
           for proj in $PACK_PROJECTS; do
             echo "Packing $proj with version $packageVersion"
-            dotnet pack -v normal -c Release -o ./artifacts --no-restore \
+            dotnet pack -v normal -c Release -o ./artifacts --no-restore --no-build \
               --include-source \
               -p:PackageVersion=$packageVersion \
               $proj
@@ -108,6 +108,10 @@ jobs:
             8.x
             9.x
             10.x
+      - name: Restore
+        run: dotnet restore
+      - name: Build
+        run: dotnet build -c Release --no-restore
       - name: Create Release NuGet packages
         shell: bash
         run: |
@@ -121,7 +125,7 @@ jobs:
 
           for proj in $PACK_PROJECTS; do
             echo "Packing $proj with version $VERSION"
-            dotnet pack -v normal -c Release --include-source \
+            dotnet pack -v normal -c Release --include-source --no-restore --no-build \
               -p:PackageVersion=$VERSION \
               -p:PackageReleaseNotes="See full release notes at: https://github.com/${{ github.repository }}/releases/tag/v$VERSION" \
               -o nupkg \
