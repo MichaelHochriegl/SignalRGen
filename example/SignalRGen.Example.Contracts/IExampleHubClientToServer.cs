@@ -5,4 +5,5 @@ public interface IExampleHubClientToServer
     Task<string> SendExampleMessage(string myClientMessage);
     
     Task SendWithoutReturnType(string myClientMessage);
+    Task NoParameters();
 }

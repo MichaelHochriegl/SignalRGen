@@ -115,14 +115,14 @@ public abstract partial class HubClientBase : IAsyncDisposable
     /// <param name="args">Arguments serialized by SignalR.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <exception cref="InvalidOperationException">When the hub connection was not started.</exception>
-    protected virtual Task InvokeCoreAsync(string methodName, object?[] args, CancellationToken cancellationToken)
+    protected virtual Task InvokeCoreAsync(string methodName, object?[]? args = null, CancellationToken cancellationToken = default)
     {
         if (_hubConnection is null)
         {
             throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
     
-        return _hubConnection.InvokeCoreAsync(methodName: methodName, returnType: typeof(object), args: args, cancellationToken: cancellationToken);
+        return _hubConnection.InvokeCoreAsync(methodName: methodName, returnType: typeof(object), args: args ?? new object?[0], cancellationToken: cancellationToken);
     }
     
     /// <summary>
@@ -135,13 +135,13 @@ public abstract partial class HubClientBase : IAsyncDisposable
     /// <param name="args">Arguments serialized by SignalR.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <exception cref="InvalidOperationException">When the hub connection was not started.</exception>
-    protected virtual async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, CancellationToken cancellationToken)
+    protected virtual async Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[]? args = null, CancellationToken cancellationToken = default)
     {
         if (_hubConnection is null)
         {
             throw new InvalidOperationException("The HubConnection is not started! Call `StartAsync` before initiating any actions.");
         }
-        return (TResult)(await _hubConnection.InvokeCoreAsync(methodName: methodName, returnType: typeof(TResult), args: args, cancellationToken: cancellationToken))!;
+        return (TResult)(await _hubConnection.InvokeCoreAsync(methodName: methodName, returnType: typeof(TResult), args: args ?? new object?[0], cancellationToken: cancellationToken))!;
     }
 
     /// <summary>

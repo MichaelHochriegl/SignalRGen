@@ -14,6 +14,8 @@
 <button @onclick="SendMessage">Send Message to Server</button>
 <p>@_returnValue</p>
 
+<button id="send-no-params-button" @onclick="SendNoParameters">Send NoParams</button>
+
 @code
 {
     private int _count = 0;
@@ -34,5 +36,10 @@
     private async Task SendMessage()
     {
         _returnValue = await ExampleHubClient.InvokeSendExampleMessageAsync("This is my message from the client to the server");
+    }
+
+    private async Task SendNoParameters()
+    {
+        await ExampleHubClient.InvokeNoParametersAsync();
     }
 }

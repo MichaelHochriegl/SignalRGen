@@ -103,7 +103,7 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
 
     public override global::System.Threading.Tasks.Task StopAsync(global::System.Threading.CancellationToken cancellationToken = default) => global::System.Threading.Tasks.Task.CompletedTask;
 
-    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         switch (methodName)
         {
@@ -117,7 +117,7 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
     }
 
-    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         switch (methodName)
         {
@@ -131,7 +131,7 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         }
     }
 
-    private async global::System.Threading.Tasks.Task HandleSendClientToServerNoReturnType(object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task HandleSendClientToServerNoReturnType(object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         var rick = (string)args[0]!;
         var age = (int)args[1]!;
@@ -153,7 +153,7 @@ public sealed class FakeTestHubClient : SignalRGen.Clients.TestHubClient
         
     }
 
-    private async global::System.Threading.Tasks.Task<string> HandleSendClientToServerWithReturnType(object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task<string> HandleSendClientToServerWithReturnType(object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         var morty = (string)args[0]!;
         var partOfMission = (bool)args[1]!;

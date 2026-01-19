@@ -53,7 +53,7 @@ public sealed class FakeEmptyHubClient : SignalRGen.Clients.EmptyHubClient
 
     public override global::System.Threading.Tasks.Task StopAsync(global::System.Threading.CancellationToken cancellationToken = default) => global::System.Threading.Tasks.Task.CompletedTask;
 
-    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         switch (methodName)
         {
@@ -64,7 +64,7 @@ public sealed class FakeEmptyHubClient : SignalRGen.Clients.EmptyHubClient
         }
     }
 
-    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         switch (methodName)
         {

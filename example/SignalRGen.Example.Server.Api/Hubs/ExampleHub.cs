@@ -18,4 +18,10 @@ public class ExampleHub : Hub<IExampleHubServerToClient>, IExampleHubClientToSer
         Console.WriteLine($"Received: {clientMessage}");
         return Task.CompletedTask;
     }
+
+    public Task NoParameters()
+    {
+        Console.WriteLine("Received no parameters");
+        return Task.CompletedTask;
+    }
 }
