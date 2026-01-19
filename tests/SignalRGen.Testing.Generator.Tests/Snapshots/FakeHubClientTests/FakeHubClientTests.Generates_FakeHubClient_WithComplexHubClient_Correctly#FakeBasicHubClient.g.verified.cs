@@ -116,7 +116,7 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
 
     public override global::System.Threading.Tasks.Task StopAsync(global::System.Threading.CancellationToken cancellationToken = default) => global::System.Threading.Tasks.Task.CompletedTask;
 
-    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task InvokeCoreAsync(string methodName, object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         switch (methodName)
         {
@@ -130,7 +130,7 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         }
     }
 
-    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    protected override async global::System.Threading.Tasks.Task<TResult> InvokeCoreAsync<TResult>(string methodName, object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         switch (methodName)
         {
@@ -150,7 +150,7 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         }
     }
 
-    private async global::System.Threading.Tasks.Task<global::SignalRGen.Clients.BasicReturn> HandleSendFromClientToServerMessage(object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task<global::SignalRGen.Clients.BasicReturn> HandleSendFromClientToServerMessage(object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         var message = (string)args[0]!;
 
@@ -171,7 +171,7 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         return default!;
     }
 
-    private async global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicReturn>> HandleSendFromClientToServerWithList(object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task<global::System.Collections.Generic.List<global::SignalRGen.Clients.BasicReturn>> HandleSendFromClientToServerWithList(object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         var messages = (global::System.Collections.Generic.List<string>)args[0]!;
 
@@ -192,7 +192,7 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         return default!;
     }
 
-    private async global::System.Threading.Tasks.Task HandleSendFromClientToServerWithoutReturnType(object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task HandleSendFromClientToServerWithoutReturnType(object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         var message = (string)args[0]!;
 
@@ -213,7 +213,7 @@ public sealed class FakeBasicHubClient : SignalRGen.Clients.BasicHubClient
         
     }
 
-    private async global::System.Threading.Tasks.Task<bool> HandleSendFromClientToServerPrimitiveTypes(object?[] args, global::System.Threading.CancellationToken cancellationToken)
+    private async global::System.Threading.Tasks.Task<bool> HandleSendFromClientToServerPrimitiveTypes(object?[]? args = null, global::System.Threading.CancellationToken cancellationToken = default)
     {
         var foo = (string)args[0]!;
         var bar = (int)args[1]!;
