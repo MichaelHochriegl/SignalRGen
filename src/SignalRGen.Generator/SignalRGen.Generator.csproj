@@ -16,7 +16,7 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.AnalyzerUtilities" Version="3.3.4" />
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
-        <PackageReference Include="Scriban" Version="6.5.2" PrivateAssets="all" GeneratePathProperty="true" />
+        <PackageReference Include="Scriban" Version="6.6.0" PrivateAssets="all" GeneratePathProperty="true" />
     </ItemGroup>
 
     <ItemGroup>
